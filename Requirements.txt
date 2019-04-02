@@ -1,0 +1,137 @@
+We need an application that can assist a call center agent to take an inbound call and make an outbound call.
+The agent will take the caller through a script, record the call, and save in a database the details of the call.
+The application will use an SDK for placing SIP calls. I am acquiring this SDK in a few days.
+The call center agent will use a Windows Forms application which is built on top of this SDK.
+We need to build a reliable app. Data should be saved in a transaction.
+
+There is a web application which needs to be built for reporting purposes. This is a dashboard style of app,
+where management can see how many calls were made every day, every week, every month, and every year.
+
+There are two types of managers. The call center supervisor(s) and the upper management. 
+Detais for each report below. The language of the app is Romanian. 
+An outbund call can have the following outcomes:
+
+1. Ocupat
+2. Numar inexistent
+3. Neinteresat
+4. Succes (inseamna un call complet in care agentul a vorbit cu o persoana)
+
+
+The call center app is a Windows Forms app. The app:
+- allows the agent to log/enter name in to system. name is cached, it only has to entered once.
+  The reason being that agents have to be "logged" in for periods of time and logged off for the rest of the time.
+
+More statuses to come ....
+
+Outbound Daily Count Report:
+
+Data (Exemplu - 29 martie, 2018)
+Intervalul de timp: 7-8, 8-9, 9-10, 10-11, .... pina la ora 19-20.
+Cite au statusul ocupat
+Cite au numar inexistent
+....
+
+Outbound Weekly Count Report:
+
+Intervalul de timp: Monday, Tuestay, ... Sunday.
+Cite au statusul ocupat
+Cite au numar inexistent
+
+Outbound Monthly Count Report:
+
+Intervalul de timp: Prima saptamina, a doua saptamina
+Cite au statusul ocupat 23
+Cite au numar inexistent 10
+Success 68
+
+Generic raport
+
+Filtru dupa interval de data
+Data (Exemplu - 29 martie, 2018)
+Intervalul de timp: 7-8, 8-9, 9-10, 10-11, .... pina la ora 19-20.
+Cite au statusul ocupat
+Cite au numar inexistent
+
+Examples dashboard
+https://colorlib.com/wp/free-bootstrap-admin-dashboard-templates/
+
+Raport Agenti
+
+Nume agent
+Data
+Cite au statusul ocupat
+Cite au numar inexistent
+....
+
+Si acest report ar trebui sa fie vazut pe saptamina, luna si an.
+
+Petre Petre
+istoria interactiunilor.
+08.02.2019 Nu a raspuns
+09.02.2019 Success - Oradea, Bihor, 40-50 ani. \\fscj\mmdd\a.mp4
+ 
+WIndows Forms => SDK
+Automatul  => SDK
+
+1. Agentul si porneste. Sabin Blejan. Lucrez pe Inbound/Outbound.
+2. Applicatia - da-mi urmatorul nr de telefon din lista care trebuie chemat acum.
+3. Instantiante Call comonent. Fa apel folosind numarul asta.
+4. Call Ansewered => Start Recording
+5. Grupa de virsta 20-60
+6. Localitatea, Judet, Numele
+7. Liceu, Facultate, mulg lapt.
+8. Agentul, Succes | Nu ma intereseaza |.
+9. Save in baza de date. Nume Agent, Agent Id, Satus, Data si ora, path to recording.
+                         Update counts everywhere
+
+daca agentul nu de de -logheaza.
+Jumpt to step #2.
+
+Inbound Call.
+Listener pe linia 2. => InboundCallArrived => Start Recording, convorbirea continua, 
+5. Grupa de virsta 20-60
+6. Localitatea, Judet.
+7. Liceu, Facultate, mulg lapt.
+8. Agentul, Succes | Nu ma intereseaza | Nu e in grupa de virsta.
+9. Save in baza de date. Nume Agent, Agent Id, Satus, Data si ora, path to recording.
+                         Update Db counts in cloud.
+
+
+daca agentul nu de de -logheaza.
+Jumpt to step #2.
+
+Petrica Alexandru
+
+1. Daca am sunat de x ori (configurabil), si nu a rsapuns nimeni, marcheaza acest numar cu Nu Mai Suna.
+2. Outbound call agent, outbound call robot, inbound call.
+3. Incarca lista prioritara. Fisier csv =>.
+4. Scriem 
+
+Polly.NET
+Incearca de 2-3. \\retries\sjsjsj. 
+Salvezi local daca nu s-a putut.
+
+Lookup table cu status call.
+Tabel cu nr prioritare
+Tabel cu toate nr 
+Tabel DailyQueueFor Agent1.
+
+Robot - we need an ap which will run unattended and make outbound call. Here's the flow:
+
+1. Retrieve available number to call.
+2. Make outbound call.
+3. Once call is connected, play recording.
+4. Upon diconnect Save call metadata, including recording of conversation.
+
+Key aspects:
+Uses the same SIP SDK as desktop agent.
+It is transactional.
+It runs between certain WORKDAY hours - configurable.
+The agent should be fully logged.
+
+We need some way to load lists of phone numbers into system. This DOES not need to be handled by Admin.
+It will be handled my me.
+There are two types of lists. Priority and normal. Priority means that once loaded they will be called immediately.
+Normal means regular handling.
+
+
