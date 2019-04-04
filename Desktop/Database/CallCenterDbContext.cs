@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using Entities.Models;
 
-namespace DataAccess
+namespace Database
 {
     using System.Data.Entity.ModelConfiguration.Conventions;
 

@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using DataAccess.Services;
+
+using Entities.Models;
 
 namespace Agent
 {
     public partial class Form1 : Form
     {
+        private readonly UserService userService;
+
         public Form1()
         {
+            this.userService = new UserService();
             InitializeComponent();
         }
 
@@ -34,6 +34,20 @@ namespace Agent
 
         private void label6_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var user = new User
+                           {
+                               Id = 6,
+                               CreatedDate = DateTime.Now,
+                               FirstName = "asd22",
+                               LastName = "asd22"
+                           };
+
+            this.userService.Delete(5);
 
         }
     }

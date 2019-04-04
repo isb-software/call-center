@@ -1,4 +1,4 @@
-namespace DataAccess.Migrations
+namespace Database.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
@@ -44,6 +44,7 @@ namespace DataAccess.Migrations
                         FirstName = c.String(nullable: false, maxLength: 50),
                         LastName = c.String(nullable: false, maxLength: 50),
                         CreatedDate = c.DateTime(nullable: false),
+                        IsActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .Index(t => new { t.FirstName, t.LastName }, unique: true, name: "FullName");
