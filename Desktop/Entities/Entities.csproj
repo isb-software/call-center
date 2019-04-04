@@ -48,9 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\InboundCall.cs" />
+    <Compile Include="Enums\CallType.cs" />
+    <Compile Include="Models\Call.cs" />
     <Compile Include="Models\NormalQueue.cs" />
-    <Compile Include="Models\OutboundCall.cs" />
     <Compile Include="Models\PriorityQueue.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\User.cs" />

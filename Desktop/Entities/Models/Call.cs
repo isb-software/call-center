@@ -1,12 +1,15 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Entities.Enums;
 
 namespace Entities.Models
 {
-    public class OutboundCall
+    using System;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    public class Call
     {
         public int Id { get; set; }
 
+        [Index]
         public int UserId { get; set; }
 
         public User User { get; set; }
@@ -21,5 +24,9 @@ namespace Entities.Models
         public int Duration { get; set; }
 
         public string RecordingPath { get; set; }
+
+        public string Notes { get; set; }
+
+        public CallType CallType { get; set; }
     }
 }

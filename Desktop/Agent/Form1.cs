@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data.Entity.Infrastructure;
 using System.Windows.Forms;
 
 using DataAccess.Services;
 
+using Entities.Enums;
 using Entities.Models;
 
 namespace Agent
@@ -41,14 +43,26 @@ namespace Agent
         {
             var user = new User
                            {
-                               Id = 6,
                                CreatedDate = DateTime.Now,
                                FirstName = "asd22",
                                LastName = "asd22"
                            };
 
-            this.userService.Delete(5);
+            var call = new Call
+                           {
+                               CallType = CallType.Inbound,
+                               DateTimeOfCall = DateTime.Now,
+                               Duration = 444,
+                               Notes = "dadasdasd asjkd kasd klskldn askld klakld mas",
+                               RecordingPath = "asdmk nasj ndjasnd jasj as",
+                               StatusId = 1,
+                               UserId = 1
+                           };
 
+            this.userService.Create(user);
+
+            var callservice = new CallService();
+            callservice.Create(call);
         }
     }
 }

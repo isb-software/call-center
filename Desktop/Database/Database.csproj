@@ -53,6 +53,10 @@
     <Compile Include="Migrations\201904032115124_AddInitialTables.Designer.cs">
       <DependentUpon>201904032115124_AddInitialTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904041712116_mergeInboundOutboundCallsTables.cs" />
+    <Compile Include="Migrations\201904041712116_mergeInboundOutboundCallsTables.Designer.cs">
+      <DependentUpon>201904041712116_mergeInboundOutboundCallsTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,6 +73,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904032115124_AddInitialTables.resx">
       <DependentUpon>201904032115124_AddInitialTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904041712116_mergeInboundOutboundCallsTables.resx">
+      <DependentUpon>201904041712116_mergeInboundOutboundCallsTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

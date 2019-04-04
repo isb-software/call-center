@@ -20,9 +20,7 @@ namespace Database
 
         public DbSet<NormalQueue> NormalQueue { get; set; }
 
-        public DbSet<OutboundCall> OutboundCalls { get; set; }
-
-        public DbSet<InboundCall> InboundCalls { get; set; }
+        public DbSet<Call> Calls { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
