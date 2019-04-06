@@ -1,9 +1,9 @@
+using System;
+using System.Data.Entity.Migrations;
+using Entities.Models;
+
 namespace Database.Migrations
 {
-    using System.Data.Entity.Migrations;
-
-    using Entities.Models;
-
     internal sealed class Configuration : DbMigrationsConfiguration<CallCenterDbContext>
     {
         public Configuration()
@@ -14,6 +14,44 @@ namespace Database.Migrations
         protected override void Seed(CallCenterDbContext context)
         {
             SeedStatusTable(context);
+            SeedProcedures(context);
+        }
+
+        private void SeedProcedures(CallCenterDbContext context)
+        {
+            DeleteStoredProcedures(context);
+            CreateStoredProcedures(context);
+        }
+
+        private void CreateStoredProcedures(CallCenterDbContext context)
+        {
+            try
+            {
+                foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Procedures\\Create"), "*.sql"))
+                {
+                    context.Database.ExecuteSqlCommand(File.ReadAllText(file), new object[0]);
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Procedure already exists");
+            }
+        }
+
+        private void DeleteStoredProcedures(CallCenterDbContext context)
+        {
+            try
+            {
+                foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Procedures\\Delete"), "*.sql"))
+                {
+                    context.Database.ExecuteSqlCommand(File.ReadAllText(file), new object[0]);
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Procedure does not exist");
+            }
+            
         }
 
         private void SeedStatusTable(CallCenterDbContext context)

@@ -52,10 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IServices\ICallService.cs" />
+    <Compile Include="IServices\IPriorityQueueService.cs" />
     <Compile Include="IServices\IStatusService.cs" />
     <Compile Include="IServices\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CallService.cs" />
+    <Compile Include="Services\PriorityQueueService.cs" />
     <Compile Include="Services\StatusService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>

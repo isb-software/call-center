@@ -3,12 +3,12 @@ namespace Database.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddInitialTables : DbMigration
+    public partial class InitialMigration : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.InboundCalls",
+                "dbo.Calls",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -18,6 +18,7 @@ namespace Database.Migrations
                         Duration = c.Int(nullable: false),
                         RecordingPath = c.String(),
                         Notes = c.String(),
+                        CallType = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Status", t => t.StatusId)
@@ -58,53 +59,30 @@ namespace Database.Migrations
                 .PrimaryKey(t => t.PhoneNumber);
             
             CreateTable(
-                "dbo.OutboundCalls",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
-                        StatusId = c.Int(nullable: false),
-                        DateTimeOfCall = c.DateTime(nullable: false),
-                        Duration = c.Int(nullable: false),
-                        RecordingPath = c.String(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Status", t => t.StatusId)
-                .ForeignKey("dbo.Users", t => t.UserId)
-                .Index(t => t.UserId)
-                .Index(t => t.StatusId)
-                .Index(t => t.DateTimeOfCall);
-            
-            CreateTable(
                 "dbo.PriorityQueues",
                 c => new
                     {
-                        PhoneNumber = c.String(nullable: false, maxLength: 15),
+                        Id = c.Int(nullable: false, identity: true),
+                        PhoneNumber = c.String(maxLength: 15),
                     })
-                .PrimaryKey(t => t.PhoneNumber);
+                .PrimaryKey(t => t.Id);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.OutboundCalls", "UserId", "dbo.Users");
-            DropForeignKey("dbo.OutboundCalls", "StatusId", "dbo.Status");
-            DropForeignKey("dbo.InboundCalls", "UserId", "dbo.Users");
-            DropForeignKey("dbo.InboundCalls", "StatusId", "dbo.Status");
-            DropIndex("dbo.OutboundCalls", new[] { "DateTimeOfCall" });
-            DropIndex("dbo.OutboundCalls", new[] { "StatusId" });
-            DropIndex("dbo.OutboundCalls", new[] { "UserId" });
+            DropForeignKey("dbo.Calls", "UserId", "dbo.Users");
+            DropForeignKey("dbo.Calls", "StatusId", "dbo.Status");
             DropIndex("dbo.Users", "FullName");
             DropIndex("dbo.Status", new[] { "Description" });
-            DropIndex("dbo.InboundCalls", new[] { "DateTimeOfCall" });
-            DropIndex("dbo.InboundCalls", new[] { "StatusId" });
-            DropIndex("dbo.InboundCalls", new[] { "UserId" });
+            DropIndex("dbo.Calls", new[] { "DateTimeOfCall" });
+            DropIndex("dbo.Calls", new[] { "StatusId" });
+            DropIndex("dbo.Calls", new[] { "UserId" });
             DropTable("dbo.PriorityQueues");
-            DropTable("dbo.OutboundCalls");
             DropTable("dbo.NormalQueues");
             DropTable("dbo.Users");
             DropTable("dbo.Status");
-            DropTable("dbo.InboundCalls");
+            DropTable("dbo.Calls");
         }
     }
 }

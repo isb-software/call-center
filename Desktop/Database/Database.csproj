@@ -49,13 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CallCenterDbContext.cs" />
-    <Compile Include="Migrations\201904032115124_AddInitialTables.cs" />
-    <Compile Include="Migrations\201904032115124_AddInitialTables.Designer.cs">
-      <DependentUpon>201904032115124_AddInitialTables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904041712116_mergeInboundOutboundCallsTables.cs" />
-    <Compile Include="Migrations\201904041712116_mergeInboundOutboundCallsTables.Designer.cs">
-      <DependentUpon>201904041712116_mergeInboundOutboundCallsTables.cs</DependentUpon>
+    <Compile Include="Migrations\201904061505552_InitialMigration.cs" />
+    <Compile Include="Migrations\201904061505552_InitialMigration.Designer.cs">
+      <DependentUpon>201904061505552_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,12 +67,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904032115124_AddInitialTables.resx">
-      <DependentUpon>201904032115124_AddInitialTables.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904061505552_InitialMigration.resx">
+      <DependentUpon>201904061505552_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904041712116_mergeInboundOutboundCallsTables.resx">
-      <DependentUpon>201904041712116_mergeInboundOutboundCallsTables.cs</DependentUpon>
-    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Procedures\Create\GetNextPriorityPhoneNumber.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Procedures\Delete\GetNextPriorityPhoneNumber.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
