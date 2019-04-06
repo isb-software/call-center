@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 interface AppRoutes {
-  icon?: string
+  icon?: string;
   route?: string;
   title?: string;
 }
