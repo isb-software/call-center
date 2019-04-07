@@ -74,8 +74,17 @@ All requirements below refer to JUST the Desktop WinForm app.
       
          1) The full name of the current agent logged in.
          
-         2) Daca e pe Inbound queue, cite apeluri a primit in ziua respectiva. Daca e pe Outbound queue, cite apeluri raspunse
-            a avut in ziua respectiva.            
+         2) If it is in the Inbound queue, how many calls did he receive that day. If it is in the Outbound queue, 
+            how many outbound calls did he have answered that day.    
+      
+      g) Outbound calls are to be made by an Agent or by the Robot. Regardless, there should be a configurable range
+         of days and hours to call. We make outbound calls Monday to Friday, except legal Holidays, from 8:00 to 20:00.
+         
+      h) A robot is an app which is a Windows Service, which uses the same underlying business logic for making Outbound calls.
+         It's important to note that we can have multiple Robots/Windows services installed on the same computer. 
+         The reason being that we will have multiple outbound lines than computers. 
+         
+      i) Inbound calls routed to the 
 
    Outbound call flows.
    
