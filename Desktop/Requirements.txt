@@ -9,25 +9,37 @@ All requirements below refer to JUST the Desktop WinForm app.
    
    Assumptions: We will have remote access to server running in the CallCenter. This is necessary because of other reasons.
    Like debugging, support, et cetera.
-   So, assume that we (your or I) can remote to this server and drop the dlls of the app to a network share. Also, there's an appSetting
-   in the deployed app confiuration file which points to this network share.
+   So, assume that we (your or I) can remote to this server and drop the dlls of the app to a network share. 
+   Also, there's an appSetting in the deployed app confiuration file which points to this network share.
    
    Options: Create a console app which will do the following:
    
      a) Every time you start it will do a hash of the network share folder which contains the deployable files. 
      And then a hash of the local folder where the app is deployed. Compare these two and if they're different pull the folder
-     from the netwrok share and overwrite the local one. This means that the we have two different apps to deploy, the console app and the 
-     desktop app. Also what this means is that we cannot use the folder (or any of its subfolders) where the app is deployed for logs or    anything else.
+     from the netwrok share and overwrite the local one. This means that the we have two different apps to deploy, 
+     the console app and the 
+     desktop app. Also what this means is that we cannot use the folder (or any of its subfolders) where the app is deployed 
+     for logs or anything else.
      
      b) Research the Publish tab in the Project properties if it can help us solve this. We won't have an FTP or SFTP server.
      
-     c) Store deployed app in an Azure Blob. When app starts request the blob's LastModified property, or Created property if LastModified is null and compare it with the one you stored locally. If different, deploy content of blob.
+     c) Store deployed app in an Azure Blob. When app starts request the blob's LastModified property, or Created property 
+     if LastModified is null and compare it with the one you stored locally. If different, deploy content of blob.
      
 3. We need a way to log all the stuff happening on the Desktop app. The logs must live on a network share. We log Warnings and Errors.
 
 4. Let's make sure we have an Unhandled errors handler for the WinForms app. No error should go unhandled.
 
-5. Call flows. Once an agent starts their app
+5. Since the same computers that will be used by agents over the duration of the program will be the same 
+   the app assumes you are an agent at all times unless there's a configuration value in appSettings
+   which says that you're Admin. Leave this behavior for later.
+
+6. Call flows. 
+   General behavior:
+      a) Once an agent starts their app, they are shown a form containing a drop down where ONLY the agent names are shwon.
+         If they logged in to that station before, they would see the latest name that logged in from that station, selected
+         in the drop down. Then, they would select from a drop down with two choices "Inbound" and "Outbound".
+         Then they would click a button which says Start. This button will bring up the main form.
 
    Outbound call.
    
