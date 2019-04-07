@@ -71,9 +71,10 @@ All requirements below refer to JUST the Desktop WinForm app.
              call. We may not need to do anything, maybe the underlying SIP SDK will take care of that. Need to verify that.
              
       f) After the main form is shown, the status bar at the bottom of the form shows at all times:
+      
          1) The full name of the current agent logged in.
-         2) The duration since last logged in, in the format hours:minutes
-         3) The the last call event triggered. Exale             
+         2) Daca e pe Inbound queue, cite apeluri a primit in ziua respectiva. Daca e pe Outbound queue, cite apeluri raspunse
+            a aviut in ziua respectiva.            
 
    Outbound call.
    
