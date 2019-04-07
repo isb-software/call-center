@@ -84,7 +84,7 @@ All requirements below refer to JUST the Desktop WinForm app.
          It's important to note that we can have multiple Robots/Windows services installed on the same computer. 
          The reason being that we will have multiple outbound lines than computers. 
          
-      i) Inbound calls routed to the 
+      i) Inbound calls will routed to the Agents
 
    Outbound call flows.
    
