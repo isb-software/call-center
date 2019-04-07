@@ -1,0 +1,146 @@
+All requirements below refer to JUST the Desktop WinForm app.
+
+1. You can have just one instance of the Desktop app on a Windows machine running at a time.
+
+   Options: a) Enumerate running processes. If WinForm running, do not start new instance app.
+            b) Mutex - see an example at: https://saebamini.com/Allowing-only-one-instance-of-a-C-app-to-run/ 
+   
+2. We need a way to auto-update Desktop WinForm app.
+   
+   Assumptions: We will have remote access to server running in the CallCenter. This is necessary because of other reasons.
+   Like debugging, support, et cetera.
+   So, assume that we (your or I) can remote to this server and drop the dlls of the app to a network share. 
+   Also, there must be an appSetting in the deployed app confiuration file which points to this network share.
+   
+   Options: Create a console app which will do the following:
+   
+     a) Every time you start it will do a hash of the network share folder which contains the deployable files. 
+     And then a hash of the local folder where the app is deployed. Compare these two and if they're different pull the folder
+     from the netwrok share and overwrite the local one. This means that the we have two different apps to deploy, 
+     the console app and the 
+     desktop app. Also what this means is that we cannot use the folder (or any of its subfolders) where the app is deployed 
+     for logs or anything else.
+     
+     b) Research the Publish tab in the Project properties if it can help us solve this. We won't have an FTP or SFTP server.
+     
+     c) Store deployed app in an Azure Blob. When app starts request the blob's LastModified property, or Created property 
+     if LastModified is null and compare it with the one you stored locally. If different, deploy content of blob.
+     
+3. We need a way to log all the stuff happening on the Desktop app. The logs must live on a network share. We log Warnings and Errors.
+
+4. Let's make sure we have an Unhandled errors handler for the WinForms app. No error should go unhandled.
+
+5. Since the same computers will be used by agents over the duration of the program the app assumes you are an agent 
+   at all times unless there's a configuration value in appSettings which says that you're Admin. Leave this behavior for later.
+
+6. Call flows. 
+   General behavior:
+   
+      a) Once an agent starts the app, they are shown a form containing a drop down where ONLY the agent names are shown.
+         If they logged in to that station before, they would see the latest name that logged in from that station, selected
+         in the drop down. Then, they would select from a drop down with three choices "Inbound", "Outbound", "Manual".
+         Then they would click a button which says Start. This button will bring up the main form. 
+         This way, an agent is assigned to the Inbound or Outbound queue from the start. Manual, means the agent will enter
+         the phone number and will trigger an Outbound call.
+         
+      b) There's no major difference in behavior for Inbound and Outbound. When that's the case it will be explicity
+         pointed out. If the agent is in the outbound queue, once the main form is shown, the app can request number to call
+         and make the call. If the agent is in the Inbound queue, the agent should expect a call at any time.
+         
+      c) There must be a way, regardless you're in the Inbound or Outbound queue, to make an agent Unavailable. 
+         This is necessary, as agent may go on a break, lunch, bathroom, whatever. This is achieved by means of having
+         a button on the main form which does the trick, when clicked. When an agent goes into this "Unavailable" mode,
+         let's close the app. I think it's easiest. 
+         
+      d) When the main form starts and agent is in Inbound queue:
+      
+         i)  Until CallIncoming event triggered the controls involving data collected during a call along with the
+             "Salveaza" button are disabled.
+             
+         ii) After CallIncoming event is triggered, all controls involving data collected during a call along with the
+             "Salveaza" button are enabled. At this time, the app should make that "line" unavailable to any other incoming
+             call. We may not need to do anything, maybe the underlying SIP SDK will take care of that. Need to verify that.
+             
+      e) When the main form starts and agent is in Outbound queue:
+      
+         i)  Until CallAnswered event triggered the controls involving data collected during a call along with the
+             "Salveaza" button are disabled.
+             
+         ii) After CallAnswered event is triggered, all controls involving data collected during a call along with the
+             "Salveaza" button are enabled. At this time, the app should make that "line" unavailable to any other outgoing
+             call. We may not need to do anything, maybe the underlying SIP SDK will take care of that. Need to verify that.
+             
+      f) After the main form is shown, the status bar at the bottom of the form shows at all times:
+      
+         1) The full name of the current agent logged in.
+         
+         2) If it is in the Inbound queue, how many calls did he receive that day. If it is in the Outbound queue, 
+            how many outbound calls did he have answered that day.    
+      
+      g) Outbound calls are to be made by an Agent or by the Robot. Regardless, there should be a configurable range
+         of days and hours to call. We make outbound calls Monday to Friday, except legal Holidays, from 8:00 to 20:00.
+         
+      h) A robot is an app which is a Windows Service, which uses the same underlying business logic for making Outbound calls.
+         It's important to note that we can have multiple Robots/Windows services installed on the same computer. 
+         The reason being that we will have multiple outbound lines than computers. The robot ALWAYS uses the Normal queue.
+         Or if you want, numbers in Priority queue are called by the Agents only.
+         
+      i) Inbound calls will be routed to the available Agents only between a given set of hours. TBD.
+      
+      j) The language of the app is Romanian.
+
+   Outbound Calls.
+   
+   Assumptions:
+   
+     - Any list of numbers loaded in the system is deduped (it means it does not have duplications) and it also does not have
+       invalid numbers (less or more than 10 digits) in it. 
+       
+     - There will be at all times, a Normal queue and a Priority queue. Normal queue means that there's no particular rule as 
+       to when the call will be made. It can be made now or in two weeks time. Priority queue means numbers we need to call right
+       away. There may be a need to set up a time after which a particular number should be called at. 
+       Example: put this number in the priority queue, but don't call it before next business day at 16:00.
+       Priority queue is consumed at all times by all the agents. Also, Priority queue is not consumed by the Robot.
+     
+     - A number will get into the priority queue if the app pushes it into the Priority queue as a result of custom business logic.
+       If a number gets into this Priority queue it is removed from the Normal queue, for the time being. The rules for sending
+       a number into the Priority queue are:
+       
+         1) There will be calls to TelVerde which will not be answered by an Agent. The TelVerde provider will give us
+         in electronic form the phone numbers that called recently. These numbers must be called right away. 
+         How do they get into this priority queue? We have to figure it out. We will set up something in Azure storage
+         and we will monitor that storage ... TBD
+         
+         2) If an Outbound call is made and nobody is answering and it was not called more than the configured number of calls to
+         be made to a phone number, which is 3, it will be pushed into Priority queue. The rule is that we should set the 
+         Priority queue call time at 16:00 for the next business day.
+     
+      - An outbund call can have the following outcomes:
+      
+          1. Ocupat
+          2. Numar inexistent
+          3. Neinteresat
+          4. Succes (inseamna un call complet in care agentul a vorbit cu o persoana)
+  
+    Call Flow:
+    
+       1. Agent starts app, selects Outbound queue, selects its name from agent list.
+       2. App obtains next available number from Priority queue or Normal queue.
+       3. App instantiates SIP component. Registers needed event handlers.
+       4. Call Answered => Refresh form with data obtained from db. Show script. Start Recording
+       5. Agent fills in data during call and click Save call data when ready.
+       6. CallCompleted event triggers stopping the recording.
+       7. Save in db. AgentId, StatusId, DateTime (local, no need for UTC), path to recording.
+                      Update counts everywhere. Suggestion: do it through a Stored Proc which does everything within a Transaction.
+                      
+                      
+    Inbound Calls
+    
+       1. Agent starts app, selects Inbound queue, selects its name from agent list.
+       2. App instantiates SIP component. Registers needed event handlers.
+       4. IncomingCall event => Refresh form with data obtained from db. Show script. Start Recording
+       5. Agent fills in data during call and click Save call data when ready.
+       6. CallCompleted event triggers stopping the recording.
+       7. Save in db. AgentId, StatusId, DateTime (local, no need for UTC), path to recording.
+                      Update counts everywhere. Suggestion: do it through a Stored Proc which does everything within a Transaction.
+     
