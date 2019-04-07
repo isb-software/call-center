@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using DataAccess.Services;
 
 namespace Agent
 {
@@ -35,6 +30,12 @@ namespace Agent
         private void label6_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var priorityQueueService = new PriorityQueueService();
+            string asd = priorityQueueService.GetNextNumber();
         }
     }
 }

@@ -1,0 +1,39 @@
+<!-- <mat-sidenav-container class="sidenav_container">
+    <mat-sidenav mode="side" class="sidenav mat-elevation-z10" opened>
+        Sidenav content
+    </mat-sidenav>
+    <mat-sidenav-content>
+        Main content
+    </mat-sidenav-content>
+</mat-sidenav-container> -->
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" class="mat-elevation-z10" opened>
+
+        <mat-toolbar>
+            <mat-toolbar-row>
+                <h2 class="toolbar-title"> Call Center </h2>
+            </mat-toolbar-row>
+        </mat-toolbar>
+
+        <mat-nav-list>
+            <h2 matSubheader> Rapoarte </h2>
+
+            <a mat-list-item routerLink="/" style="height: 0;"></a>
+
+            <a *ngFor="let item of myWorkRoutes" mat-list-item routerLinkActive
+                #routerLinkActiveInstance="routerLinkActive"
+                [class.list-item-active]="routerLinkActiveInstance.isActive" [routerLink]="[item.route]">
+                <mat-icon matListIcon class="app-nav-list-icon"> {{ item.icon }} </mat-icon>
+                {{item.title}}
+            </a>
+
+        </mat-nav-list>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

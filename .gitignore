@@ -6,3 +6,15 @@
 /Desktop/Agent/obj/Debug
 /Desktop/.vs/Desktop/v15/Server/sqlite3
 /Desktop/.vs/Desktop/v15
+/.vs
+/Desktop/Entities/obj/Debug
+/Desktop/Entities/bin/Debug
+/Desktop/packages/EntityFramework.6.2.0
+/Desktop/DataAccess/obj/Debug
+/Desktop/DataAccess/bin/Debug
+/Desktop/Agent/obj/Release
+/Desktop/Database/bin/Debug
+/Desktop/Database/obj/Debug
+/Desktop/packages/RefactorThis.GraphDiff.3.0.2
+/Desktop/Desktop.sln.DotSettings.user
+/ReportsApp/package-lock.json
