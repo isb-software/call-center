@@ -49,6 +49,10 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnProspectNou = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -110,6 +114,10 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnProspectNou);
+            this.splitContainer1.Panel1.Controls.Add(this.btnSave);
+            this.splitContainer1.Panel1.Controls.Add(this.comboBox4);
+            this.splitContainer1.Panel1.Controls.Add(this.label8);
             this.splitContainer1.Panel1.Controls.Add(this.comboBox3);
             this.splitContainer1.Panel1.Controls.Add(this.label7);
             this.splitContainer1.Panel1.Controls.Add(this.comboBox2);
@@ -129,7 +137,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.button1);
             this.splitContainer1.Size = new System.Drawing.Size(800, 416);
-            this.splitContainer1.SplitterDistance = 52;
+            this.splitContainer1.SplitterDistance = 179;
             this.splitContainer1.TabIndex = 1;
             // 
             // comboBox3
@@ -138,7 +146,7 @@
             this.comboBox3.Location = new System.Drawing.Point(179, 24);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(73, 21);
-            this.comboBox3.TabIndex = 14;
+            this.comboBox3.TabIndex = 7;
             // 
             // label7
             // 
@@ -155,7 +163,7 @@
             this.comboBox2.Location = new System.Drawing.Point(51, 24);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(68, 21);
-            this.comboBox2.TabIndex = 12;
+            this.comboBox2.TabIndex = 6;
             // 
             // label6
             // 
@@ -173,7 +181,7 @@
             this.comboBox1.Location = new System.Drawing.Point(698, 2);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(90, 21);
-            this.comboBox1.TabIndex = 10;
+            this.comboBox1.TabIndex = 5;
             // 
             // label5
             // 
@@ -199,12 +207,12 @@
             this.textBox4.Location = new System.Drawing.Point(552, 3);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 6;
+            this.textBox4.TabIndex = 4;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(258, 6);
+            this.label3.Location = new System.Drawing.Point(259, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 5;
@@ -212,10 +220,10 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(301, 2);
+            this.textBox3.Location = new System.Drawing.Point(304, 2);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(183, 20);
-            this.textBox3.TabIndex = 4;
+            this.textBox3.TabIndex = 3;
             // 
             // label2
             // 
@@ -258,6 +266,43 @@
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Location = new System.Drawing.Point(304, 23);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(183, 21);
+            this.comboBox4.TabIndex = 8;
+            this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(259, 27);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(37, 13);
+            this.label8.TabIndex = 15;
+            this.label8.Text = "Status";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(496, 23);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(131, 23);
+            this.btnSave.TabIndex = 9;
+            this.btnSave.Text = "Salveaza";
+            this.btnSave.UseVisualStyleBackColor = true;
+            // 
+            // btnProspectNou
+            // 
+            this.btnProspectNou.Location = new System.Drawing.Point(651, 24);
+            this.btnProspectNou.Name = "btnProspectNou";
+            this.btnProspectNou.Size = new System.Drawing.Size(137, 23);
+            this.btnProspectNou.TabIndex = 10;
+            this.btnProspectNou.Text = "Adauga numar telefon";
+            this.btnProspectNou.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -304,6 +349,10 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnProspectNou;
     }
 }
 

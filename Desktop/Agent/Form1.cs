@@ -37,5 +37,15 @@ namespace Agent
             var priorityQueueService = new PriorityQueueService();
             string asd = priorityQueueService.GetNextNumber();
         }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
