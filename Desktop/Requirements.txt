@@ -89,7 +89,7 @@ All requirements below refer to JUST the Desktop WinForm app.
       
       j) The language of the app is Romanian.
 
-   Outbound call flows.
+   Outbound Calls.
    
    Assumptions:
    
@@ -122,3 +122,13 @@ All requirements below refer to JUST the Desktop WinForm app.
           3. Neinteresat
           4. Succes (inseamna un call complet in care agentul a vorbit cu o persoana)
   
+    Call Flow:
+    
+       1. Agent starts app, selects Outbound queue, selects its name from agent list.
+       2. App obtains next available number from Priority queue or Normal queue.
+       3. App instantiates SIP component. Registers needed event handlers.
+       4. Call Answered => Refresh form with data obtained from db. Show script. Start Recording
+       5. Agent fills in data during call and click Save call data when ready.
+       6. CallCompleted event triggers stopping the recording.
+       7. Save in db. AgentId, StatusId, DateTime (local, no need for UTC), path to recording.
+                      Update counts everywhere. Suggestion: do it through a Stored Proc which does everything.
