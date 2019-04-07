@@ -30,9 +30,8 @@ All requirements below refer to JUST the Desktop WinForm app.
 
 4. Let's make sure we have an Unhandled errors handler for the WinForms app. No error should go unhandled.
 
-5. Since the same computers that will be used by agents over the duration of the program will be the same 
-   the app assumes you are an agent at all times unless there's a configuration value in appSettings
-   which says that you're Admin. Leave this behavior for later.
+5. Since the same computers will be used by agents over the duration of the program the app assumes you are an agent 
+   at all times unless there's a configuration value in appSettings which says that you're Admin. Leave this behavior for later.
 
 6. Call flows. 
    General behavior:
@@ -41,7 +40,8 @@ All requirements below refer to JUST the Desktop WinForm app.
          If they logged in to that station before, they would see the latest name that logged in from that station, selected
          in the drop down. Then, they would select from a drop down with three choices "Inbound", "Outbound", "Manual".
          Then they would click a button which says Start. This button will bring up the main form. 
-         This way, an agent is assigned to the Inbound or Outbound queue from the start.
+         This way, an agent is assigned to the Inbound or Outbound queue from the start. Manual, means the agent will enter
+         the phone number and will trigger an Outbound call.
          
       b) There's no major difference in behavior for Inbound and Outbound. When that's the case it will be explicity
          pointed out. If the agent is in the outbound queue, once the main form is shown, the app can request number to call
@@ -88,7 +88,15 @@ All requirements below refer to JUST the Desktop WinForm app.
        to when the call will be made. It can be made now or in two weeks time.
      
      - A number will get into the priority queue if the app pushes it into the Priority queue as a result of custom business logic.
-       If a number gets into this Priority queue it is removed from the Normal queue, for the time being.
+       If a number gets into this Priority queue it is removed from the Normal queue, for the time being. The rules for sending
+       a number into the Priority queue are:
+       
+         1) There will be calls to TelVerde which will not be answered by an Agent. The TelVerde provider will give us
+         in electronic form the phone numbers that called recently. These numbers must be called right away. 
+         How do they get into this priority queue? We have to figure it out. We will set up something in Azure storage
+         and we will monitor that storage ... TBD
+         
+         2) If an Outbound call is made and nobody is answering.
      
       
   
