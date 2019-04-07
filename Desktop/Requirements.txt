@@ -36,10 +36,23 @@ All requirements below refer to JUST the Desktop WinForm app.
 
 6. Call flows. 
    General behavior:
-      a) Once an agent starts their app, they are shown a form containing a drop down where ONLY the agent names are shwon.
+   
+      a) Once an agent starts the app, they are shown a form containing a drop down where ONLY the agent names are shown.
          If they logged in to that station before, they would see the latest name that logged in from that station, selected
          in the drop down. Then, they would select from a drop down with two choices "Inbound" and "Outbound".
-         Then they would click a button which says Start. This button will bring up the main form.
+         Then they would click a button which says Start. This button will bring up the main form. 
+         This way, an agent is assigned to the Inbound or Outbound queue from the start.
+         
+      b) There's no major difference in behavior for Inbound and Outbound. When that's the case it will be explicity
+         pointed out. If the agent is in the outbound queue, once the main form is shown, the app can request number to call
+         and make the call. If the agent is in the Inbound queue, the agent should expect a call at any time.
+         
+      c) There must be a way, regardless you're in the Inbound or Outbound queue, to make an agent Unavailable. 
+         This is necessary, as agent may go on a break, lunch, bathroom, whatever. This is achieved by means of having
+         a button on the main form which does the trick, when clicked. When an agent goes into this "Unavailable" mode,
+         let's close the app. I think it's easiest. 
+         
+      d) 
 
    Outbound call.
    
