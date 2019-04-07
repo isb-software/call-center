@@ -39,7 +39,7 @@ All requirements below refer to JUST the Desktop WinForm app.
    
       a) Once an agent starts the app, they are shown a form containing a drop down where ONLY the agent names are shown.
          If they logged in to that station before, they would see the latest name that logged in from that station, selected
-         in the drop down. Then, they would select from a drop down with two choices "Inbound" and "Outbound".
+         in the drop down. Then, they would select from a drop down with three choices "Inbound", "Outbound", "Manual".
          Then they would click a button which says Start. This button will bring up the main form. 
          This way, an agent is assigned to the Inbound or Outbound queue from the start.
          
@@ -73,8 +73,22 @@ All requirements below refer to JUST the Desktop WinForm app.
       f) After the main form is shown, the status bar at the bottom of the form shows at all times:
       
          1) The full name of the current agent logged in.
+         
          2) Daca e pe Inbound queue, cite apeluri a primit in ziua respectiva. Daca e pe Outbound queue, cite apeluri raspunse
-            a aviut in ziua respectiva.            
+            a avut in ziua respectiva.            
 
-   Outbound call.
+   Outbound call flows.
    
+   Assumptions:
+   
+     - Any list of numbers loaded in the system is deduped (it means it does not have duplications) and it also does not have
+       invalid numbers (less or more than 10 digits) in it. 
+       
+     - There will be at all times, a Normal queue and a Priority queue. Normal queue means that there's no particular rule as 
+       to when the call will be made. It can be made now or in two weeks time.
+     
+     - A number will get into the priority queue if the app pushes it into the Priority queue as a result of custom business logic.
+       If a number gets into this Priority queue it is removed from the Normal queue, for the time being.
+     
+      
+  
