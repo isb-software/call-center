@@ -132,3 +132,15 @@ All requirements below refer to JUST the Desktop WinForm app.
        6. CallCompleted event triggers stopping the recording.
        7. Save in db. AgentId, StatusId, DateTime (local, no need for UTC), path to recording.
                       Update counts everywhere. Suggestion: do it through a Stored Proc which does everything within a Transaction.
+                      
+                      
+    Inbound Calls
+    
+       1. Agent starts app, selects Inbound queue, selects its name from agent list.
+       2. App instantiates SIP component. Registers needed event handlers.
+       4. IncomingCall event => Refresh form with data obtained from db. Show script. Start Recording
+       5. Agent fills in data during call and click Save call data when ready.
+       6. CallCompleted event triggers stopping the recording.
+       7. Save in db. AgentId, StatusId, DateTime (local, no need for UTC), path to recording.
+                      Update counts everywhere. Suggestion: do it through a Stored Proc which does everything within a Transaction.
+     
