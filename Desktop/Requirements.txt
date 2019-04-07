@@ -99,7 +99,9 @@ All requirements below refer to JUST the Desktop WinForm app.
          How do they get into this priority queue? We have to figure it out. We will set up something in Azure storage
          and we will monitor that storage ... TBD
          
-         2) If an Outbound call is made and nobody is answering. It will be oushed into 
+         2) If an Outbound call is made and nobody is answering and it was not called more than the configured number of calles to
+         be made to a phone number, which is 3, it will be pushed into Priority queue. The rule is that we should set the 
+         Priority queue call time at 18:00 for the next business day.
      
       
   
