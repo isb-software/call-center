@@ -82,9 +82,11 @@ All requirements below refer to JUST the Desktop WinForm app.
          
       h) A robot is an app which is a Windows Service, which uses the same underlying business logic for making Outbound calls.
          It's important to note that we can have multiple Robots/Windows services installed on the same computer. 
-         The reason being that we will have multiple outbound lines than computers. 
+         The reason being that we will have multiple outbound lines than computers. The robot ALWAYS uses the Normal queue.
+         Or if you want, numbers in Priority queue are t
          
-      i) Inbound calls will routed to the Agents
+      i) Inbound calls will be routed to the available Agents only between a given set of hours. TBD.
+      
 
    Outbound call flows.
    
