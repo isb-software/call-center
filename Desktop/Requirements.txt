@@ -1,6 +1,6 @@
 All requirements below refer to JUST the Desktop WinForm app.
 
-1. You can have just one instance of the Desktop app on a Windows machine running at a time.
+1. [DONE]You can have just one instance of the Desktop app on a Windows machine running at a time.
 
    Options: a) Enumerate running processes. If WinForm running, do not start new instance app.
             b) Mutex - see an example at: https://saebamini.com/Allowing-only-one-instance-of-a-C-app-to-run/ 
