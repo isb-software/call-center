@@ -83,7 +83,7 @@ All requirements below refer to JUST the Desktop WinForm app.
       h) A robot is an app which is a Windows Service, which uses the same underlying business logic for making Outbound calls.
          It's important to note that we can have multiple Robots/Windows services installed on the same computer. 
          The reason being that we will have multiple outbound lines than computers. The robot ALWAYS uses the Normal queue.
-         Or if you want, numbers in Priority queue are t
+         Or if you want, numbers in Priority queue are called by the Agents only.
          
       i) Inbound calls will be routed to the available Agents only between a given set of hours. TBD.
       
@@ -112,7 +112,7 @@ All requirements below refer to JUST the Desktop WinForm app.
          
          2) If an Outbound call is made and nobody is answering and it was not called more than the configured number of calles to
          be made to a phone number, which is 3, it will be pushed into Priority queue. The rule is that we should set the 
-         Priority queue call time at 18:00 for the next business day.
+         Priority queue call time at 16:00 for the next business day.
      
       
   
