@@ -50,9 +50,7 @@
   <ItemGroup>
     <Compile Include="CallCenterDbContext.cs" />
     <Compile Include="Migrations\201904061505552_InitialMigration.cs" />
-    <Compile Include="Migrations\201904061505552_InitialMigration.Designer.cs">
-      <DependentUpon>201904061505552_InitialMigration.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Migrations\201904061505552_InitialMigration.Designer.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,17 +65,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904061505552_InitialMigration.resx">
-      <DependentUpon>201904061505552_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Procedures\Create\GetNextPriorityPhoneNumber.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Procedures\Delete\GetNextPriorityPhoneNumber.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201904061505552_InitialMigration.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
