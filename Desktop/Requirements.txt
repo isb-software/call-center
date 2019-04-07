@@ -87,6 +87,7 @@ All requirements below refer to JUST the Desktop WinForm app.
          
       i) Inbound calls will be routed to the available Agents only between a given set of hours. TBD.
       
+      j) The language of the app is Romanian.
 
    Outbound call flows.
    
@@ -110,9 +111,14 @@ All requirements below refer to JUST the Desktop WinForm app.
          How do they get into this priority queue? We have to figure it out. We will set up something in Azure storage
          and we will monitor that storage ... TBD
          
-         2) If an Outbound call is made and nobody is answering and it was not called more than the configured number of calles to
+         2) If an Outbound call is made and nobody is answering and it was not called more than the configured number of calls to
          be made to a phone number, which is 3, it will be pushed into Priority queue. The rule is that we should set the 
          Priority queue call time at 16:00 for the next business day.
      
+      - An outbund call can have the following outcomes:
       
+          1. Ocupat
+          2. Numar inexistent
+          3. Neinteresat
+          4. Succes (inseamna un call complet in care agentul a vorbit cu o persoana)
   
