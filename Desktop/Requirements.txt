@@ -85,7 +85,10 @@ All requirements below refer to JUST the Desktop WinForm app.
        invalid numbers (less or more than 10 digits) in it. 
        
      - There will be at all times, a Normal queue and a Priority queue. Normal queue means that there's no particular rule as 
-       to when the call will be made. It can be made now or in two weeks time.
+       to when the call will be made. It can be made now or in two weeks time. Priority queue means numbers we need to call right
+       away. There may be a need to set up a time after which a particular number should be called at. 
+       Example: put this number in the priority queue, but don't call it before next business day at 16:00.
+       Priority queue is consumed at all times by all the agents. Also, Priority queue is not consumed by the Robot.
      
      - A number will get into the priority queue if the app pushes it into the Priority queue as a result of custom business logic.
        If a number gets into this Priority queue it is removed from the Normal queue, for the time being. The rules for sending
@@ -96,7 +99,7 @@ All requirements below refer to JUST the Desktop WinForm app.
          How do they get into this priority queue? We have to figure it out. We will set up something in Azure storage
          and we will monitor that storage ... TBD
          
-         2) If an Outbound call is made and nobody is answering.
+         2) If an Outbound call is made and nobody is answering. It will be oushed into 
      
       
   
