@@ -5,7 +5,7 @@ using Entities.Models;
 
 namespace Database.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<CallCenterDbContext>
+    public class Configuration : DbMigrationsConfiguration<CallCenterDbContext>
     {
         public Configuration()
         {

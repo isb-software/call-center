@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 using System.IO;
 using System.Linq;
 using Common.Utils;
@@ -26,7 +28,18 @@ namespace UpdateAgent
             if (IsUpdateAvailable())
             {
                 CopyUpdateFiles();
+                MigrateDatabase();
             }
+        }
+
+        private void MigrateDatabase()
+        {
+            var migrationConfiguration = new Database.Migrations.Configuration
+                                             {
+                                                 TargetDatabase = new DbConnectionInfo("DefaultConnection")
+                                             };
+            var migrator = new DbMigrator(migrationConfiguration);
+            migrator.Update();
         }
 
         private List<FileInfo> GetFilesForUpdate(string path)

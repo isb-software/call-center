@@ -35,6 +35,8 @@ namespace Agent
         private void button1_Click(object sender, EventArgs e)
         {
             StatusService asd = new StatusService();
+
+            asd.GetAll();
         }
 
         private void label8_Click(object sender, EventArgs e)
