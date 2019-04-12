@@ -122,7 +122,7 @@ All requirements below refer to JUST the Desktop WinForm app.
           3. Neinteresat
           4. Succes (inseamna un call complet in care agentul a vorbit cu o persoana)
   
-    Call Flow:
+    Agent Outbound Call Flow
     
        1. Agent starts app, selects Outbound queue, selects its name from agent list.
        2. App obtains next available number from Priority queue or Normal queue.
@@ -132,9 +132,18 @@ All requirements below refer to JUST the Desktop WinForm app.
        6. CallCompleted event triggers stopping the recording.
        7. Save in db. AgentId, StatusId, DateTime (local, no need for UTC), path to recording.
                       Update counts everywhere. Suggestion: do it through a Stored Proc which does everything within a Transaction.
+    
+    Robot Outbound Call Flow
+    
+       1. Robot App obtains next available number from Priority queue or Normal queue.
+       2. App instantiates SIP component. Registers needed event handlers.
+       3. Call Answered => Start Recording
+       4. CallCompleted event triggers stopping the recording.
+       5. Save in db. AgentId, StatusId, DateTime (local, no need for UTC), path to recording.
+                      Update counts everywhere. Suggestion: do it through a Stored Proc which does everything within a Transaction.
+    
                       
-                      
-    Inbound Calls
+    Inbound Call Flow
     
        1. Agent starts app, selects Inbound queue, selects its name from agent list.
        2. App instantiates SIP component. Registers needed event handlers.
