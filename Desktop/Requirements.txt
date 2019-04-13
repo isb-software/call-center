@@ -121,6 +121,9 @@ All requirements below refer to JUST the Desktop WinForm app.
           2. Numar inexistent
           3. Neinteresat
           4. Succes (inseamna un call complet in care agentul a vorbit cu o persoana)
+          5. Nu raspunde
+          6. Fax
+          7. Casuta
   
     Agent Outbound Call Flow
     
