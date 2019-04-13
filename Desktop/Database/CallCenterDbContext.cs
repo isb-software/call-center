@@ -22,6 +22,8 @@ namespace Database
 
         public DbSet<Call> Calls { get; set; }
 
+        public DbSet<CallCount> CallCounts { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();

@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\CallCountDto.cs" />
+    <Compile Include="Dtos\CallDashboardDto.cs" />
     <Compile Include="Enums\CallType.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\CallCount.cs" />

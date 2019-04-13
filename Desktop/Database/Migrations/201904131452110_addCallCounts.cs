@@ -1,9 +1,9 @@
-namespace AzureDatabase.Migrations
+namespace Database.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class addCallCounts : DbMigration
     {
         public override void Up()
         {
@@ -21,25 +21,13 @@ namespace AzureDatabase.Migrations
                 .Index(t => t.Date)
                 .Index(t => t.StatusId);
             
-            CreateTable(
-                "dbo.Status",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Description = c.String(maxLength: 50),
-                    })
-                .PrimaryKey(t => t.Id)
-                .Index(t => t.Description, unique: true);
-            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.CallCounts", "StatusId", "dbo.Status");
-            DropIndex("dbo.Status", new[] { "Description" });
             DropIndex("dbo.CallCounts", new[] { "StatusId" });
             DropIndex("dbo.CallCounts", new[] { "Date" });
-            DropTable("dbo.Status");
             DropTable("dbo.CallCounts");
         }
     }

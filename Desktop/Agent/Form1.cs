@@ -34,9 +34,73 @@ namespace Agent
 
         private void button1_Click(object sender, EventArgs e)
         {
-            StatusService asd = new StatusService();
+            var asd = new CallCountService();
 
-            asd.GetAll();
+            asd.IncreaseCount(DateTime.Now, 1);
+            asd.IncreaseCount(DateTime.Now, 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(-1), 1);
+            asd.IncreaseCount(DateTime.Now.AddDays(-2), 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(10), 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(-5), 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(-3), 5);
+            asd.IncreaseCount(DateTime.Now.AddDays(-1), 5);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 5);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 4);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 4);
+            asd.IncreaseCount(DateTime.Now.AddMonths(-1), 3);
+            asd.IncreaseCount(DateTime.Now.AddMonths(-1), 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(12), 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(22), 1);
+            asd.IncreaseCount(DateTime.Now.AddDays(6), 1);
+            asd.IncreaseCount(DateTime.Now.AddDays(9), 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(11), 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(15), 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(18), 5);
+            asd.IncreaseCount(DateTime.Now.AddDays(21), 5);
+
+            asd.IncreaseCount(DateTime.Now, 2);
+            asd.IncreaseCount(DateTime.Now, 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(-1), 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(-2), 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(10), 5);
+            asd.IncreaseCount(DateTime.Now.AddDays(-5), 5);
+            asd.IncreaseCount(DateTime.Now.AddDays(-3), 1);
+            asd.IncreaseCount(DateTime.Now.AddDays(-1), 1);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 1);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 5);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 5);
+            asd.IncreaseCount(DateTime.Now.AddMonths(-1), 4);
+            asd.IncreaseCount(DateTime.Now.AddMonths(-1), 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(12), 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(22), 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(6), 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(9), 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(11), 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(15), 5);
+            asd.IncreaseCount(DateTime.Now.AddDays(18), 1);
+            asd.IncreaseCount(DateTime.Now.AddDays(21), 1);
+
+            asd.IncreaseCount(DateTime.Now, 3);
+            asd.IncreaseCount(DateTime.Now, 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(-1), 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(-2), 5);
+            asd.IncreaseCount(DateTime.Now.AddDays(10), 1);
+            asd.IncreaseCount(DateTime.Now.AddDays(-5), 1);
+            asd.IncreaseCount(DateTime.Now.AddDays(-3), 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(-1), 2);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 2);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 1);
+            asd.IncreaseCount(DateTime.Now.AddMonths(1), 1);
+            asd.IncreaseCount(DateTime.Now.AddMonths(-1), 5);
+            asd.IncreaseCount(DateTime.Now.AddMonths(-1), 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(12), 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(22), 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(6), 3);
+            asd.IncreaseCount(DateTime.Now.AddDays(9), 5);
+            asd.IncreaseCount(DateTime.Now.AddDays(11), 4);
+            asd.IncreaseCount(DateTime.Now.AddDays(15), 1);
+            asd.IncreaseCount(DateTime.Now.AddDays(18), 2);
+            asd.IncreaseCount(DateTime.Now.AddDays(21), 2);
         }
 
         private void label8_Click(object sender, EventArgs e)

@@ -51,17 +51,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IServices\ICallCountService.cs" />
     <Compile Include="IServices\ICallService.cs" />
     <Compile Include="IServices\IPriorityQueueService.cs" />
     <Compile Include="IServices\IStatusService.cs" />
     <Compile Include="IServices\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CallCountService.cs" />
     <Compile Include="Services\CallService.cs" />
     <Compile Include="Services\PriorityQueueService.cs" />
     <Compile Include="Services\StatusService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{bea62c13-bea0-4a91-8bb8-a8de9bc4adb7}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Database\Database.csproj">
       <Project>{68d6df46-8952-4dfb-bcca-0e1003436771}</Project>
       <Name>Database</Name>

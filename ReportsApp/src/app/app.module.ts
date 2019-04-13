@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CallCountsComponent } from './components/call-counts/call-counts.component';
+import { CallCountService } from './services/call-count.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,9 +17,12 @@ import { CallCountsComponent } from './components/call-counts/call-counts.compon
     BrowserModule,
     MaterialModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    CallCountService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

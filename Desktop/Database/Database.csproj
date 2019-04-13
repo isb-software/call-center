@@ -53,6 +53,14 @@
     <Compile Include="Migrations\201904071850281_AddInitialMigration.Designer.cs">
       <DependentUpon>201904071850281_AddInitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904131448374_AddNewColumnsToCalls.cs" />
+    <Compile Include="Migrations\201904131448374_AddNewColumnsToCalls.Designer.cs">
+      <DependentUpon>201904131448374_AddNewColumnsToCalls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904131452110_addCallCounts.cs" />
+    <Compile Include="Migrations\201904131452110_addCallCounts.Designer.cs">
+      <DependentUpon>201904131452110_addCallCounts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -77,6 +85,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904071850281_AddInitialMigration.resx">
       <DependentUpon>201904071850281_AddInitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904131448374_AddNewColumnsToCalls.resx">
+      <DependentUpon>201904131448374_AddNewColumnsToCalls.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904131452110_addCallCounts.resx">
+      <DependentUpon>201904131452110_addCallCounts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

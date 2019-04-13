@@ -25,8 +25,22 @@ namespace Entities.Models
 
         public string RecordingPath { get; set; }
 
+        public CallType CallType { get; set; }
+
         public string Notes { get; set; }
 
-        public CallType CallType { get; set; }
+        public string PhoneNumber { get; set; }
+
+        public string Name { get; set; }
+
+        public string Forename { get; set; }
+
+        public string County { get; set; }
+
+        public string Localitate { get; set; }
+
+        public int Age { get; set; }
+
+        public string Education { get; set; }
     }
 }
