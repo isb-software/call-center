@@ -1,10 +1,9 @@
-﻿using Entities.Enums;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using Entities.Enums;
 
 namespace Entities.Models
 {
-    using System;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     public class Call
     {
         public int Id { get; set; }
@@ -37,7 +36,7 @@ namespace Entities.Models
 
         public string County { get; set; }
 
-        public string Localitate { get; set; }
+        public string City { get; set; }
 
         public int Age { get; set; }
 

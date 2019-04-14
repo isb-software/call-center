@@ -4,7 +4,6 @@
     grid-gap: 0;
 
     .count-wrapper {
-        height: 110px;
         padding: 15px;
 
         &:last-child>.count-details {
@@ -13,7 +12,7 @@
 
         .count-details {
             height: inherit;
-            border-right: 1.5px solid rgba(0, 0, 0, 0.54);
+            border-right: 1px solid rgba(0, 0, 0, 0.12);
             text-align: center;
 
 
@@ -29,6 +28,10 @@
 
             .details-body {
                 padding-top: 3px;
+
+                &>div {
+                    padding-top: 3px
+                }
             }
         }
     }

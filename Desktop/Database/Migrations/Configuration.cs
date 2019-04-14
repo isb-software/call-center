@@ -94,7 +94,23 @@ namespace Database.Migrations
                 new Status
                     {
                         Id = 5,
-                        Description = "Nu este in grupa de varsta"
+                        Description = "Nu raspunde"
+                    });
+
+            context.Statuses.AddOrUpdate(
+                x => x.Id,
+                new Status
+                    {
+                        Id = 6,
+                        Description = "Fax"
+                    });
+
+            context.Statuses.AddOrUpdate(
+                x => x.Id,
+                new Status
+                    {
+                        Id = 7,
+                        Description = "Casuta"
                     });
 
             context.SaveChanges();

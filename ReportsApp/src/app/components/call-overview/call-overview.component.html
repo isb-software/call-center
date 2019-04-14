@@ -1,0 +1,72 @@
+<mat-card class="call-overview-wrapper">
+  <div class="spinner-container" *ngIf="callsDataSource.loading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-form-field class="full-width">
+    <input matInput #filterInput placeholder="Cauta">
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="callsDataSource" matSort matSortDisableClear matSortActive="DateTimeOfCall"
+      matSortDirection="desc">
+
+      <ng-container matColumnDef="UserName">
+        <th mat-header-cell *matHeaderCellDef> Receptionist </th>
+        <td mat-cell *matCellDef="let element"> {{element.UserName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="PersonName">
+        <th mat-header-cell *matHeaderCellDef> Persoana </th>
+        <td mat-cell *matCellDef="let element"> {{element.PersonName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="PhoneNumber">
+        <th mat-header-cell *matHeaderCellDef> Telefon </th>
+        <td mat-cell *matCellDef="let element"> {{element.PhoneNumber}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="StatusName">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.StatusName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Notes">
+        <th mat-header-cell *matHeaderCellDef> Observatii </th>
+        <td mat-cell *matCellDef="let element"> {{element.Notes}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="DateTimeOfCall">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Data apelului </th>
+        <td mat-cell *matCellDef="let element"> {{element.DateTimeOfCall | date:'dd.MM.yyyy'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="County">
+        <th mat-header-cell *matHeaderCellDef> Judet </th>
+        <td mat-cell *matCellDef="let element"> {{element.County}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="City">
+        <th mat-header-cell *matHeaderCellDef> Oras </th>
+        <td mat-cell *matCellDef="let element"> {{element.City}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Education">
+        <th mat-header-cell *matHeaderCellDef> Educatie </th>
+        <td mat-cell *matCellDef="let element"> {{element.Education}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Age">
+        <th mat-header-cell *matHeaderCellDef> Varsta </th>
+        <td mat-cell *matCellDef="let element"> {{element.Age}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [length]="totalRecords" [pageSizeOptions]="[5, 10, 20]" [pageSize]="10"
+      [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+</mat-card>

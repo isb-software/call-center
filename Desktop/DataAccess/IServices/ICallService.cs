@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+
+using Entities.Dtos;
 using Entities.Models;
+using Entities.QueryOptions;
 
 namespace DataAccess.IServices
 {
@@ -7,6 +10,6 @@ namespace DataAccess.IServices
     {
         void Create(Call call);
 
-        List<Call> GetAll();
+        CallDatasourceDto GetDatasource(TableQueryOptions queryOptions);
     }
 }

@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="Dtos\CallCountDto.cs" />
     <Compile Include="Dtos\CallDashboardDto.cs" />
+    <Compile Include="Dtos\CallDatasourceDto.cs" />
+    <Compile Include="Dtos\CallDto.cs" />
     <Compile Include="Enums\CallType.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\CallCount.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryOptions\TableQueryOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,62 +1,74 @@
-<div class="call-counts" *ngIf="dashboardCallCount">
-  <div class="count-wrapper">
-    <div class="count-details">
-      <div class="details-header">
-        <mat-icon class="app-nav-list-icon"> call </mat-icon>
-        <div>Nr. Apeluri Astazi</div>
+<mat-card>
+  <div class="call-counts" *ngIf="dashboardCallCount">
+    <div class="count-wrapper">
+      <div class="count-details">
+        <div class="details-header">
+          <mat-icon class="app-nav-list-icon"> call </mat-icon>
+          <div>Nr. Apeluri Astazi</div>
+        </div>
+        <div class="details-body">
+          <div>Success: {{getDailyCallsByStatus(StatusEnum.Succes)}}</div>
+          <div>Ocupat: {{getDailyCallsByStatus(StatusEnum.Ocupat)}}</div>
+          <div>Numar Inexistent: {{getDailyCallsByStatus(StatusEnum.NumarInexistent)}}</div>
+          <div>Neinteresat: {{getDailyCallsByStatus(StatusEnum.Neinteresat)}}</div>
+          <div>Nu raspunde: {{getDailyCallsByStatus(StatusEnum.NuRaspunde)}}</div>
+          <div>Fax: {{getDailyCallsByStatus(StatusEnum.Fax)}}</div>
+          <div>Casuta: {{getDailyCallsByStatus(StatusEnum.Casuta)}}</div>
+        </div>
       </div>
-      <div class="details-body">
-        <div>Success: {{getDailyCallsByStatus(StatusEnum.Succes)}}</div>
-        <div>Ocupat: {{getDailyCallsByStatus(StatusEnum.Ocupat)}}</div>
-        <div>Numar Inexistent: {{getDailyCallsByStatus(StatusEnum.NumarInexistent)}}</div>
-        <div>Neinteresat: {{getDailyCallsByStatus(StatusEnum.Neinteresat)}}</div>
-        <div>Nu este in grupa de varsta: {{getDailyCallsByStatus(StatusEnum.NuEsteInGrupaDeVarsta)}}</div>
+    </div>
+    <div class="count-wrapper">
+      <div class="count-details">
+        <div class="details-header">
+          <mat-icon class="app-nav-list-icon"> call </mat-icon>
+          <div>Nr. Apeluri Sapatamna Aceasta</div>
+        </div>
+        <div class="details-body">
+          <div>Success: {{getWeeklyCallsByStatus(StatusEnum.Succes)}}</div>
+          <div>Ocupat: {{getWeeklyCallsByStatus(StatusEnum.Ocupat)}}</div>
+          <div>Numar Inexistent: {{getWeeklyCallsByStatus(StatusEnum.NumarInexistent)}}</div>
+          <div>Neinteresat: {{getWeeklyCallsByStatus(StatusEnum.Neinteresat)}}</div>
+          <div>Nu raspunde: {{getWeeklyCallsByStatus(StatusEnum.NuRaspunde)}}</div>
+          <div>Fax: {{getWeeklyCallsByStatus(StatusEnum.Fax)}}</div>
+          <div>Casuta: {{getWeeklyCallsByStatus(StatusEnum.Casuta)}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="count-wrapper">
+      <div class="count-details">
+        <div class="details-header">
+          <mat-icon class="app-nav-list-icon"> call </mat-icon>
+          <div>Nr. Apeluri Luna Aceasta</div>
+        </div>
+        <div class="details-body">
+          <div>Success: {{getMonthlyCallsByStatus(StatusEnum.Succes)}}</div>
+          <div>Ocupat: {{getMonthlyCallsByStatus(StatusEnum.Ocupat)}}</div>
+          <div>Numar Inexistent: {{getMonthlyCallsByStatus(StatusEnum.NumarInexistent)}}</div>
+          <div>Neinteresat: {{getMonthlyCallsByStatus(StatusEnum.Neinteresat)}}</div>
+          <div>Nu raspunde: {{getMonthlyCallsByStatus(StatusEnum.NuRaspunde)}}</div>
+          <div>Fax: {{getMonthlyCallsByStatus(StatusEnum.Fax)}}</div>
+          <div>Casuta: {{getMonthlyCallsByStatus(StatusEnum.Casuta)}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="count-wrapper">
+      <div class="count-details">
+        <div class="details-header">
+          <mat-icon class="app-nav-list-icon"> call </mat-icon>
+          <div>Nr. Apeluri Anul Acesta</div>
+        </div>
+        <div class="details-body">
+          <div>Success: {{getYearlyCallsByStatus(StatusEnum.Succes)}}</div>
+          <div>Ocupat: {{getYearlyCallsByStatus(StatusEnum.Ocupat)}}</div>
+          <div>Numar Inexistent: {{getYearlyCallsByStatus(StatusEnum.NumarInexistent)}}</div>
+          <div>Neinteresat: {{getYearlyCallsByStatus(StatusEnum.Neinteresat)}}</div>
+          <div>Nu raspunde: {{getYearlyCallsByStatus(StatusEnum.NuRaspunde)}}</div>
+          <div>Fax: {{getYearlyCallsByStatus(StatusEnum.Fax)}}</div>
+          <div>Casuta: {{getYearlyCallsByStatus(StatusEnum.Casuta)}}</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="count-wrapper">
-    <div class="count-details">
-      <div class="details-header">
-        <mat-icon class="app-nav-list-icon"> call </mat-icon>
-        <div>Nr. Apeluri Sapatamna Aceasta</div>
-      </div>
-      <div class="details-body">
-        <div>Success: {{getWeeklyCallsByStatus(StatusEnum.Succes)}}</div>
-        <div>Ocupat: {{getWeeklyCallsByStatus(StatusEnum.Ocupat)}}</div>
-        <div>Numar Inexistent: {{getWeeklyCallsByStatus(StatusEnum.NumarInexistent)}}</div>
-        <div>Neinteresat: {{getWeeklyCallsByStatus(StatusEnum.Neinteresat)}}</div>
-        <div>Nu este in grupa de varsta: {{getWeeklyCallsByStatus(StatusEnum.NuEsteInGrupaDeVarsta)}}</div>
-      </div>
-    </div>
-  </div>
-  <div class="count-wrapper">
-    <div class="count-details">
-      <div class="details-header">
-        <mat-icon class="app-nav-list-icon"> call </mat-icon>
-        <div>Nr. Apeluri Luna Aceasta</div>
-      </div>
-      <div class="details-body">
-        <div>Success: {{getMonthlyCallsByStatus(StatusEnum.Succes)}}</div>
-        <div>Ocupat: {{getMonthlyCallsByStatus(StatusEnum.Ocupat)}}</div>
-        <div>Numar Inexistent: {{getMonthlyCallsByStatus(StatusEnum.NumarInexistent)}}</div>
-        <div>Neinteresat: {{getMonthlyCallsByStatus(StatusEnum.Neinteresat)}}</div>
-        <div>Nu este in grupa de varsta: {{getMonthlyCallsByStatus(StatusEnum.NuEsteInGrupaDeVarsta)}}</div>
-      </div>
-    </div>
-  </div>
-  <div class="count-wrapper">
-    <div class="count-details">
-      <div class="details-header">
-        <mat-icon class="app-nav-list-icon"> call </mat-icon>
-        <div>Nr. Apeluri Anul Acesta</div>
-      </div>
-      <div class="details-body">
-        <div>Success: {{getYearlyCallsByStatus(StatusEnum.Succes)}}</div>
-        <div>Ocupat: {{getYearlyCallsByStatus(StatusEnum.Ocupat)}}</div>
-        <div>Numar Inexistent: {{getYearlyCallsByStatus(StatusEnum.NumarInexistent)}}</div>
-        <div>Neinteresat: {{getYearlyCallsByStatus(StatusEnum.Neinteresat)}}</div>
-        <div>Nu este in grupa de varsta: {{getYearlyCallsByStatus(StatusEnum.NuEsteInGrupaDeVarsta)}}</div>
-      </div>
-    </div>
-  </div>
-</div>
+</mat-card>
+
+<app-call-overview></app-call-overview>

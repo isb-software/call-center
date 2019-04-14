@@ -8,5 +8,7 @@ export enum StatusEnum {
     NumarInexistent = 2,
     Neinteresat = 3,
     Succes = 4,
-    NuEsteInGrupaDeVarsta = 5
+    NuRaspunde = 5,
+    Fax = 6,
+    Casuta = 7
 }

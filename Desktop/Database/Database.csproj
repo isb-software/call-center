@@ -61,6 +61,10 @@
     <Compile Include="Migrations\201904131452110_addCallCounts.Designer.cs">
       <DependentUpon>201904131452110_addCallCounts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904140047380_changeColumnName.cs" />
+    <Compile Include="Migrations\201904140047380_changeColumnName.Designer.cs">
+      <DependentUpon>201904140047380_changeColumnName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -91,6 +95,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904131452110_addCallCounts.resx">
       <DependentUpon>201904131452110_addCallCounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904140047380_changeColumnName.resx">
+      <DependentUpon>201904140047380_changeColumnName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
