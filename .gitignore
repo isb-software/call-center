@@ -40,3 +40,10 @@
 /Desktop/.vs/config
 /SipWrapper/obj/Debug
 /SipWrapper/bin/Debug
+/Desktop/Common/obj/Release
+/Desktop/Common/bin/Release
+/Desktop/WebApi/obj/Release
+/SipWrapper/obj/Release
+/SipWrapper/bin/Release/SipWrapper.pdb
+/SipWrapper/bin/Release/SipWrapper.dll
+/SipWrapper/bin/Release
