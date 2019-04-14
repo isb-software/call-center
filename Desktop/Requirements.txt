@@ -5,7 +5,7 @@ All requirements below refer to JUST the Desktop WinForm app.
    Options: a) Enumerate running processes. If WinForm running, do not start new instance app.
             b) Mutex - see an example at: https://saebamini.com/Allowing-only-one-instance-of-a-C-app-to-run/ 
    
-2. We need a way to auto-update Desktop WinForm app.
+2. [DONE]We need a way to auto-update Desktop WinForm app.
    
    Assumptions: We will have remote access to server running in the CallCenter. This is necessary because of other reasons.
    Like debugging, support, et cetera.
