@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+
 using Agent;
 
-namespace UpdateAgent
+namespace AgentClient
 {
     class Program
     {

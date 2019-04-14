@@ -4,9 +4,8 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.IO;
 using System.Linq;
-using Common.Utils;
 
-namespace UpdateAgent
+namespace AgentClient
 {
     public class UpdateAgent
     {
@@ -19,16 +18,16 @@ namespace UpdateAgent
 
         public UpdateAgent()
         {
-            currentDirectoryPath = Directory.GetCurrentDirectory();
-            updateDirectoryPath = ConfigurationManager.AppSettings[updateDirectoryPathKey];
+            this.currentDirectoryPath = Directory.GetCurrentDirectory();
+            this.updateDirectoryPath = ConfigurationManager.AppSettings[this.updateDirectoryPathKey];
         }
 
         public void Update()
         {
-            if (IsUpdateAvailable())
+            if (this.IsUpdateAvailable())
             {
-                CopyUpdateFiles();
-                MigrateDatabase();
+                this.CopyUpdateFiles();
+                this.MigrateDatabase();
             }
         }
 
@@ -56,20 +55,20 @@ namespace UpdateAgent
 
         private bool IsUpdateAvailable()
         {
-            currentDirectoryFiles = GetFilesForUpdate(currentDirectoryPath);
-            updateDirectoryFiles = GetFilesForUpdate(updateDirectoryPath);
+            this.currentDirectoryFiles = this.GetFilesForUpdate(this.currentDirectoryPath);
+            this.updateDirectoryFiles = this.GetFilesForUpdate(this.updateDirectoryPath);
 
             FileCompare myFileCompare = new FileCompare();
 
-            return !currentDirectoryFiles.SequenceEqual(updateDirectoryFiles, myFileCompare);
+            return !this.currentDirectoryFiles.SequenceEqual(this.updateDirectoryFiles, myFileCompare);
         }
 
         private void CopyUpdateFiles()
         {
-            foreach (FileInfo fileInfo in updateDirectoryFiles)
+            foreach (FileInfo fileInfo in this.updateDirectoryFiles)
             {
-                string updateFileLocation = fileInfo.FullName.Replace(updateDirectoryPath, string.Empty);
-                string location = Path.Combine(currentDirectoryPath, updateFileLocation);
+                string updateFileLocation = fileInfo.FullName.Replace(this.updateDirectoryPath, string.Empty);
+                string location = Path.Combine(this.currentDirectoryPath, updateFileLocation);
 
                 new FileInfo(location).Directory.Create();
 

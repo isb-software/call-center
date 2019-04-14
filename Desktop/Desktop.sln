@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Databa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{E379CA41-A72A-4B02-9D20-948A3D17DD91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateAgent", "UpdateAgent\UpdateAgent.csproj", "{7EFD4AA4-7D2E-4890-8BEB-631799A7BF6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentClient", "UpdateAgent\AgentClient.csproj", "{7EFD4AA4-7D2E-4890-8BEB-631799A7BF6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{BEA62C13-BEA0-4A91-8BB8-A8DE9BC4ADB7}"
 EndProject
