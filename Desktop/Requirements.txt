@@ -26,9 +26,9 @@ All requirements below refer to JUST the Desktop WinForm app.
      c) Store deployed app in an Azure Blob. When app starts request the blob's LastModified property, or Created property 
      if LastModified is null and compare it with the one you stored locally. If different, deploy content of blob.
      
-3. We need a way to log all the stuff happening on the Desktop app. The logs must live on a network share. We log Warnings and Errors.
+3. [DONE]We need a way to log all the stuff happening on the Desktop app. The logs must live on a network share. We log Warnings and Errors.
 
-4. Let's make sure we have an Unhandled errors handler for the WinForms app. No error should go unhandled.
+4. [DONE]Let's make sure we have an Unhandled errors handler for the WinForms app. No error should go unhandled.
 
 5. Since the same computers will be used by agents over the duration of the program the app assumes you are an agent 
    at all times unless there's a configuration value in appSettings which says that you're Admin. Leave this behavior for later.
