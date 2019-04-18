@@ -6,6 +6,8 @@ using Agent;
 
 using log4net;
 
+using Polly;
+
 namespace AgentClient
 {
     class Program

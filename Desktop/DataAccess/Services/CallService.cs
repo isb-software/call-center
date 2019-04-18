@@ -19,21 +19,19 @@ namespace DataAccess.Services
         public void Create(Call call)
         {
             using (var context = new CallCenterDbContext())
+            using (var dbContextTransaction = context.Database.BeginTransaction())
             {
-                using (var dbContextTransaction = context.Database.BeginTransaction())
+                try
                 {
-                    try
-                    {
-                        context.Calls.Add(call);
+                    context.Calls.Add(call);
 
-                        context.SaveChanges();
-                        dbContextTransaction.Commit();
-                    }
-                    catch (Exception exception)
-                    {
-                        Log.Error($"Error on creating a new call for {call.PhoneNumber} - {call.Name} {call.Forename}", exception);
-                        dbContextTransaction.Rollback();
-                    }
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    Log.Error($"Error on creating a new call for {call.PhoneNumber} - {call.Name} {call.Forename}", exception);
+                    dbContextTransaction.Rollback();
                 }
             }
         }

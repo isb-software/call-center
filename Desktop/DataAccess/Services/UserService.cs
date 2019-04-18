@@ -53,21 +53,19 @@ namespace DataAccess.Services
         public void Create(User user)
         {
             using (var context = new CallCenterDbContext())
+            using (var dbContextTransaction = context.Database.BeginTransaction())
             {
-                using (var dbContextTransaction = context.Database.BeginTransaction())
+                try
                 {
-                    try
-                    {
-                        context.Users.Add(user);
+                    context.Users.Add(user);
 
-                        context.SaveChanges();
-                        dbContextTransaction.Commit();
-                    }
-                    catch (Exception exception)
-                    {
-                        Log.Error($"Error creating the user {user.FirstName} {user.LastName}", exception);
-                        dbContextTransaction.Rollback();
-                    }
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    Log.Error($"Error creating the user {user.FirstName} {user.LastName}", exception);
+                    dbContextTransaction.Rollback();
                 }
             }
         }
@@ -75,21 +73,19 @@ namespace DataAccess.Services
         public void Update(User user)
         {
             using (var context = new CallCenterDbContext())
+            using (var dbContextTransaction = context.Database.BeginTransaction())
             {
-                using (var dbContextTransaction = context.Database.BeginTransaction())
+                try
                 {
-                    try
-                    {
-                        context.UpdateGraph(user);
+                    context.UpdateGraph(user);
 
-                        context.SaveChanges();
-                        dbContextTransaction.Commit();
-                    }
-                    catch (Exception exception)
-                    {
-                        Log.Error($"Error updating the user with id {user.Id}", exception);
-                        dbContextTransaction.Rollback();
-                    }
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    Log.Error($"Error updating the user with id {user.Id}", exception);
+                    dbContextTransaction.Rollback();
                 }
             }
         }
@@ -97,30 +93,28 @@ namespace DataAccess.Services
         public void Delete(int userId)
         {
             using (var context = new CallCenterDbContext())
+            using (var dbContextTransaction = context.Database.BeginTransaction())
             {
-                using (var dbContextTransaction = context.Database.BeginTransaction())
+                try
                 {
-                    try
+                    var user = context.Users.FirstOrDefault(x => x.Id == userId);
+
+                    if (user == null)
                     {
-                        var user = context.Users.FirstOrDefault(x => x.Id == userId);
-
-                        if (user == null)
-                        {
-                            string message = $"No users found by id {userId} when deleting by id";
-                            Log.Error(message);
-                            throw new Exception(message);
-                        }
-
-                        context.Users.Remove(user);
-                        context.SaveChanges();
-
-                        dbContextTransaction.Commit();
+                        string message = $"No users found by id {userId} when deleting by id";
+                        Log.Error(message);
+                        throw new Exception(message);
                     }
-                    catch (Exception exception)
-                    {
-                        Log.Error($"Error deleting the user with id {userId}", exception);
-                        dbContextTransaction.Rollback();
-                    }
+
+                    context.Users.Remove(user);
+                    context.SaveChanges();
+
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                    Log.Error($"Error deleting the user with id {userId}", exception);
+                    dbContextTransaction.Rollback();
                 }
             }
         }

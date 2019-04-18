@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
+
+using CsvHelper;
+
 using DataAccess.IServices;
+using DataAccess.PollyPolicies;
+using DataAccess.Utils;
+
 using Database;
 using Entities.Dtos;
 using Entities.Models;
 using log4net;
+
+using Polly;
 
 namespace DataAccess.Services
 {
@@ -19,12 +27,11 @@ namespace DataAccess.Services
         {
             var callDashboardDto = new CallDashboardDto
                                                     {
-                                                        DailyCalls = this.GetDailyCallCounts(),
-                                                        WeeklyCalls = this.GetWeeklyCallCounts(),
-                                                        MonthlyCalls = this.GetMonthlyCallCounts(),
-                                                        YearlyCalls = this.GetYearlyCallCounts()
+                                                        DailyCalls = GetDailyCallCounts(),
+                                                        WeeklyCalls = GetWeeklyCallCounts(),
+                                                        MonthlyCalls = GetMonthlyCallCounts(),
+                                                        YearlyCalls = GetYearlyCallCounts()
                                                     };
-
 
             return callDashboardDto;
         }
@@ -33,39 +40,49 @@ namespace DataAccess.Services
         {
             using (var context = new CallCenterDbContext())
             {
-                using (var dbContextTransaction = context.Database.BeginTransaction())
+                DbContextTransaction dbContextTransaction = null;
+
+                try
                 {
-                    try
+                    using (dbContextTransaction = context.Database.BeginTransaction())
                     {
-                        var countOfDate = context.CallCounts
-                            .FirstOrDefault(x => DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(date) && x.StatusId == statusId);
-
-                        if (countOfDate == null)
-                        {
-                            var newCallCount = new CallCount
-                                                   {
-                                                       Count = 1,
-                                                       Date = date,
-                                                       StatusId = statusId
-                                                   };
-
-                            context.CallCounts.Add(newCallCount);
-                        }
-                        else
-                        {
-                            countOfDate.Count = countOfDate.Count + 1;
-                        }
-
-                        context.SaveChanges();
-                        dbContextTransaction.Commit();
-                    }
-                    catch (Exception exception)
-                    {
-                        Log.Error($"Error increasing the count at date {date} for status id {statusId}", exception);
-                        dbContextTransaction.Rollback();
+                        PollyPolicy.WaitAndRetryThreeTimes.Execute(() => TryIncreaseCount(date, statusId, context, dbContextTransaction));
                     }
                 }
+                catch (Exception exception)
+                {
+                    Log.Error($"Error increasing the count at date {date} for status id {statusId}", exception);
+
+                    CsvWriterWrapper.WriteCall();
+
+                    dbContextTransaction?.Rollback();
+                }
             }
+        }
+
+        private void TryIncreaseCount(DateTime date, int statusId, CallCenterDbContext context, DbContextTransaction dbContextTransaction)
+        {
+            var countOfDate = context.CallCounts.FirstOrDefault(x => DbFunctions.TruncateTime(x.Date) == DbFunctions.TruncateTime(date) && x.StatusId == statusId);
+
+            if (countOfDate == null)
+            {
+                var newCallCount = new CallCount
+                                       {
+                                           Count = 1,
+                                           Date = date,
+                                           StatusId = 12
+                                       };
+
+                context.CallCounts.Add(newCallCount);
+            }
+            else
+            {
+                countOfDate.Count = countOfDate.Count + 1;
+                countOfDate.StatusId = 12;
+            }
+
+            context.SaveChanges();
+            dbContextTransaction.Commit();
         }
 
         private List<CallCountDto> GetDailyCallCounts()
