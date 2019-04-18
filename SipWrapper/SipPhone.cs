@@ -41,11 +41,14 @@ namespace SipWrapper
         const string SIP_USER = "9905100039005";
         const string SIP_PWD = "5QDkSgfSm8AN7j";
 
+        private Object notifiMe;
 
-        public SipPhone()
+        public SipPhone(Object notifyMe)
         {
             abtoPhone = new CAbtoPhone();
             phoneCfg = abtoPhone.Config;
+
+            this.notifiMe = notifyMe;
         }
 
         public bool Initialize()
@@ -54,7 +57,7 @@ namespace SipWrapper
 
             phoneCfg.LicenseUserId = LICENSE_USER_ID;
             phoneCfg.LicenseKey = LICENSE_KEY;
-
+            phoneCfg.log
             //phoneCfg.AdditionalDnsServer = ADDITIONAL_DNS_SERVER;
             phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
@@ -64,6 +67,11 @@ namespace SipWrapper
                 abtoPhone.ApplyConfig();
                 abtoPhone.Initialize();
 
+                this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
+                // handle OnEstablishedConnection, OnClearedConnection, OnIncomingCall, OnEstablishedCall, OnClearedCall, 
+                // OnPlayFinished, OnToneReceived, OnDetectedAnswerTime 
+                //
+
                 return true;
             }
             catch (Exception e)
@@ -71,6 +79,23 @@ namespace SipWrapper
                 return false;
             }
         }
+
+        //public event EventArgs OnClearedCall
+
+            // pe outbound call trebuie sa fie un timer care daca nu raspunde nimeni si expira
+            // pui call status "Nu a raspuns"
+
+
+            // la outbound call trebuie sa incepi inregistrarea call -ului in momentul CallAnswered
+            // la fel si la inbound se inregsitreaza.
+
+        private void AbtoPhone_OnClearedCall(string Msg, int status, int LineId)
+        {
+            //notifyMe.ClearCall(Msg, status, LineId);
+            //OnClearedCall();
+        }
+
+        public void StartCall() { }
 
         private void AbtoPhone_OnIncomingCall(string adress, int lineId)
         {
