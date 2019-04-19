@@ -165,7 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SipWrapper\SipWrapper.csproj">
-      <Project>{9BC89DE3-E2E2-4F7A-A5D2-C7D5F321935D}</Project>
+      <Project>{9bc89de3-e2e2-4f7a-a5d2-c7d5f321935d}</Project>
       <Name>SipWrapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">

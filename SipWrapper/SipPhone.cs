@@ -1,34 +1,14 @@
 ﻿using System;
-using System.Reflection;
-
-using log4net;
-
+using System.IO;
 using SIPVoipSDK;
+
 
 namespace SipWrapper
 {
     public class SipPhone
     {
-        private const string LicenseUserId = "{Licensed_for_ISB_Software_Consulting-A4D8-475A-9AC9A63D-E2FD-1AC3-2B95-71CE19A3A3F1}";
-
-        private const string LicenseKey = "{T+C/ve2txl8Gucgify5BcUuyEWXPdlxeHMI4ageygVBGGMRK0wdrGwg8IjGDTcOGUQj7YDL9lJSdSoCbQ4d86A==}";
-
-        private const bool AutoRecord = true;
-
-        private const string SipUser = "9905100039005";
-
-        private const string SipPassword = "5QDkSgfSm8AN7j";
-
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        /* const string ADDITIONAL_DNS_SERVER = "8.8.8.8";
-        const int TONE_TYPE_TO_DETECT = 1; */
-
-        private readonly CAbtoPhone abtoPhone;
-
-        private readonly CConfig phoneCfg;
-
-        #region Comments
+        private CAbtoPhone abtoPhone;
+        private CConfig phoneCfg;
 
         /**
          * Logging levels for underlying SIP SDK.
@@ -40,26 +20,20 @@ namespace SipWrapper
          eLogDebug = 7
         */
 
-        /**
-         * eToneDtmf = 1,
-            eToneBaudot = 2,
-            eToneSIT = 4,
-            eToneMF = 8,
-            eToneEnergy = 16
-         * */
+        const string LICENSE_USER_ID = "{Licensed_for_ISB_Software_Consulting-A4D8-475A-9AC9A63D-E2FD-1AC3-2B95-71CE19A3A3F1}";
+        const string LICENSE_KEY = "{T+C/ve2txl8Gucgify5BcUuyEWXPdlxeHMI4ageygVBGGMRK0wdrGwg8IjGDTcOGUQj7YDL9lJSdSoCbQ4d86A==}";
 
-        // handle OnEstablishedConnection, OnClearedConnection, OnIncomingCall, OnEstablishedCall, OnClearedCall, 
-        // OnPlayFinished, OnToneReceived, OnDetectedAnswerTime 
-        //
+        //TODO: point to network share.
+        static readonly string RECORDINGS_PATH = @"c:\temp\recordings\";
+        static readonly string STAR_RECORDING_PATH = @"c:\temp\starrecordings\mozart.wav";
 
-        // pe outbound call trebuie sa fie un timer care daca nu raspunde nimeni si expira
-        // pui call status "Nu a raspuns"
+        const string SIP_USER = "99051000507121";
+        const string SIP_PWD = "5FSzPGcamwvhfw";
 
-
-        // la outbound call trebuie sa incepi inregistrarea call -ului in momentul CallAnswered
-        // la fel si la inbound se inregsitreaza.
-
-        #endregion
+        private string phoneNumber;
+        private bool recordingStarted;
+        private int currentLineId;
+        private bool playFinished;
 
         public SipPhone()
         {
@@ -67,112 +41,133 @@ namespace SipWrapper
             phoneCfg = abtoPhone.Config;
         }
 
-        #region EventHandlers
-
-        public event EventHandler IncomingCall;
-
-        public event EventHandler ClearedCall;
-
-        public event EventHandler EstablishedConnection;
-
-        public event EventHandler EstablishedCall;
-
-        public event EventHandler ClearedConnection;
-
-        public event EventHandler PlayFinished;
-
-        public event EventHandler ToneReceived;
-
-        public event EventHandler DetectedAnswerTime;
-
-        #endregion
-
-
         public bool Initialize()
         {
             phoneCfg.MP3RecordingEnabled = 1;
 
-            phoneCfg.LicenseUserId = LicenseUserId;
-            phoneCfg.LicenseKey = LicenseKey;
+            phoneCfg.LicenseUserId = LICENSE_USER_ID;
+            phoneCfg.LicenseKey = LICENSE_KEY;
+            phoneCfg.RegDomain = "sip.skype.com";
+            phoneCfg.RegUser = SIP_USER;
+            phoneCfg.RegPass = SIP_PWD;
 
-            phoneCfg.AdditionalDnsServer = "8.8.8.8";
+            //phoneCfg.log
+            //phoneCfg.AdditionalDnsServer = ADDITIONAL_DNS_SERVER;
             phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
             try
             {
-                // Apply modified config
                 abtoPhone.ApplyConfig();
                 abtoPhone.Initialize();
-                RegisterEventHandlerForSip();
+
+                this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
+                this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
+                this.abtoPhone.OnIncomingCall += AbtoPhone_OnIncomingCall;
+                this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
+                this.abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
+                this.abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
 
                 return true;
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                Log.Error("Could not initialize the SipPhone", exception);
                 return false;
             }
         }
 
-        private void RegisterEventHandlerForSip()
+        #region events
+        protected virtual void OnAnsweringMachine(EventArgs e)
         {
-            abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
-            abtoPhone.OnIncomingCall += AbtoPhone_OnIncomingCall;
-            abtoPhone.OnEstablishedConnection += AbtoPhone_OnEstablishedConnection;
-            abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
-            abtoPhone.OnClearedConnection += AbtoPhone_OnClearedConnection;
-            abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
-            abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
-            abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
+            EventHandler handler = AnsweringMachine;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
+        public event EventHandler AnsweringMachine;
 
-        public void StartCall()
+        protected virtual void OnFaxMachine(EventArgs e)
         {
+            EventHandler handler = FaxMachine;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
-        #region SipEventHandlers
+        public event EventHandler FaxMachine;
+        
+        #endregion events
 
-        private void AbtoPhone_OnIncomingCall(string adress, int lineId)
+        private void AbtoPhone_OnDetectedAnswerTime(int timeSpanMs, int connectionId)
         {
-            this.IncomingCall?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void AbtoPhone_OnClearedCall(string message, int status, int lineId)
-        {
-            this.ClearedCall?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void AbtoPhone_OnEstablishedConnection(string addrFrom, string addrTo, int connectionId, int lineId)
-        {
-            this.EstablishedConnection?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void AbtoPhone_OnEstablishedCall(string adress, int lineId)
-        {
-            this.EstablishedCall?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void AbtoPhone_OnClearedConnection(int connectionId, int lineId)
-        {
-            this.ClearedConnection?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void AbtoPhone_OnPlayFinished(string message)
-        {
-            this.PlayFinished?.Invoke(this, EventArgs.Empty);
+            if (timeSpanMs > 3000) {
+                // means Answering Machine
+                OnAnsweringMachine(EventArgs.Empty);
+            }
+            else
+            {
+                // human
+            }
         }
 
         private void AbtoPhone_OnToneReceived(int tone, int connectionId, int lineId)
         {
-            this.ToneReceived?.Invoke(this, EventArgs.Empty);
+            if (tone == 70) {
+                this.abtoPhone.HangUpCallLine(lineId);
+                OnFaxMachine(EventArgs.Empty);
+            }// means Fax Machine
         }
 
-        private void AbtoPhone_OnDetectedAnswerTime(int timespaneMiliseconds, int connectionId)
+        private void AbtoPhone_OnPlayFinished(string msg)
         {
-            this.DetectedAnswerTime?.Invoke(this, EventArgs.Empty);
+            this.playFinished = true;
         }
 
-        #endregion
+        private void AbtoPhone_OnEstablishedCall(string msg, int lineId)
+        {
+            this.currentLineId = lineId;
+            var filename = $"{this.phoneNumber}_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")}.mp3";
+
+            var filePath = Path.Combine(RECORDINGS_PATH, filename);
+            this.abtoPhone.StartRecording(filePath);
+            recordingStarted = true;
+
+            //this.abtoPhone.PlayFileLine(STAR_RECORDING_PATH, lineId);
+        }
+
+        private void AbtoPhone_OnClearedCall(string msg, int status, int lineId)
+        {
+            if (!playFinished) {
+                this.abtoPhone.StopPlaybackLine(lineId);
+            }
+
+            if (recordingStarted)
+            {
+                this.abtoPhone.StopRecording();
+                recordingStarted = false;
+            }
+        }
+
+        public void StartCall(string phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            this.abtoPhone.StartCall(phoneNumber);
+        }
+
+        public void HangUp()
+        {
+            if(this.abtoPhone.IsLineOccupied(this.currentLineId) != 0)
+            {
+                this.abtoPhone.HangUpCallLine(this.currentLineId);
+            }
+            
+        }
+
+        private void AbtoPhone_OnIncomingCall(string adress, int lineId)
+        {
+            //AbtoPhone.AnswerCallLine(lineId);
+            //else AbtoPhone.RejectCallLine(lineId);
+        }
     }
 }
