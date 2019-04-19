@@ -47,3 +47,15 @@
 /SipWrapper/bin/Release/SipWrapper.pdb
 /SipWrapper/bin/Release/SipWrapper.dll
 /SipWrapper/bin/Release
+/SipWrapper/obj
+/SipWrapper/bin
+/Desktop/Agent/obj
+/Desktop/Agent/bin
+/Desktop/Common/obj/x86/Debug
+/Desktop/Common/bin/x86/Debug
+/Desktop/DataAccess/obj/x86/Debug
+/Desktop/DataAccess/bin/x86/Debug
+/Desktop/Database/obj/x86/Debug
+/Desktop/Database/bin/x86/Debug
+/Desktop/Entities/obj/x86/Debug
+/Desktop/Entities/bin/x86/Debug

@@ -53,8 +53,6 @@ namespace DataAccess.Services
                 {
                     Log.Error($"Error increasing the count at date {date} for status id {statusId}", exception);
 
-                    CsvWriterWrapper.WriteCall();
-
                     dbContextTransaction?.Rollback();
                 }
             }
