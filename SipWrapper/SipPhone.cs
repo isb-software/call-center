@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using SIPVoipSDK;
 
 
@@ -29,6 +30,10 @@ namespace SipWrapper
 
         const string LICENSE_USER_ID = "{Licensed_for_ISB_Software_Consulting-A4D8-475A-9AC9A63D-E2FD-1AC3-2B95-71CE19A3A3F1}";
         const string LICENSE_KEY = "{T+C/ve2txl8Gucgify5BcUuyEWXPdlxeHMI4ageygVBGGMRK0wdrGwg8IjGDTcOGUQj7YDL9lJSdSoCbQ4d86A==}";
+
+        //TODO: point to network share.
+        static readonly string RECORDINGS_PATH = @"c:\temp\recordings\";
+
         //const string ADDITIONAL_DNS_SERVER = "8.8.8.8";
         //const int TONE_TYPE_TO_DETECT = 1;
         // sip.skype.com
@@ -40,14 +45,13 @@ namespace SipWrapper
         const string SIP_USER = "99051000507121";
         const string SIP_PWD = "5FSzPGcamwvhfw";
 
-        private Object notifiMe;
+        private string phoneNumber;
+        private bool recordingStarted;
 
-        public SipPhone(Object notifyMe)
+        public SipPhone()
         {
             abtoPhone = new CAbtoPhone();
             phoneCfg = abtoPhone.Config;
-
-            this.notifiMe = notifyMe;
         }
 
         public bool Initialize()
@@ -58,7 +62,7 @@ namespace SipWrapper
             phoneCfg.LicenseKey = LICENSE_KEY;
             //phoneCfg.log
             //phoneCfg.AdditionalDnsServer = ADDITIONAL_DNS_SERVER;
-            //phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
+            phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
             try
             {
@@ -67,7 +71,7 @@ namespace SipWrapper
 
                 this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
                 this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
-                this.abtoPhone.OnIncomingCall += AbtoPhone_OnIncomingCall1;
+                this.abtoPhone.OnIncomingCall += AbtoPhone_OnIncomingCall;
                 this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
                 this.abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
                 this.abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
@@ -80,10 +84,36 @@ namespace SipWrapper
             }
         }
 
+        #region events
+        protected virtual void OnAnsweringMachine(EventArgs e)
+        {
+            EventHandler handler = AnsweringMachine;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public event EventHandler AnsweringMachine;
+
+        protected virtual void OnFaxMachine(EventArgs e)
+        {
+            EventHandler handler = FaxMachine;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public event EventHandler FaxMachine;
+        
+        #endregion events
+
         private void AbtoPhone_OnDetectedAnswerTime(int timeSpanMs, int connectionId)
         {
             if (timeSpanMs > 3000) {
                 // means Answering Machine
+                OnAnsweringMachine(EventArgs.Empty);
             }
             else
             {
@@ -95,6 +125,7 @@ namespace SipWrapper
         {
             if (tone == 70) {
                 this.abtoPhone.HangUpCallLine(lineId);
+                OnFaxMachine(EventArgs.Empty);
             }// means Fax Machine
         }
 
@@ -105,25 +136,29 @@ namespace SipWrapper
 
         private void AbtoPhone_OnEstablishedCall(string msg, int lineId)
         {
-            //throw new NotImplementedException();
+            //TimeSpan sinceMidnight = DateTime.Now - DateTime.Today;
+            //double secs = sinceMidnight.TotalSeconds;
+
+            var filename = $"{this.phoneNumber}_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")}.mp3";
+
+            var filePath = Path.Combine(RECORDINGS_PATH, filename);
+            this.abtoPhone.StartRecording(filePath);
+            recordingStarted = true;
         }
-
-        //public event EventArgs OnClearedCall
-
-        // pe outbound call trebuie sa fie un timer care daca nu raspunde nimeni si expira
-        // pui call status "Nu a raspuns"
-
-
-        // la outbound call trebuie sa incepi inregistrarea call -ului in momentul CallAnswered
-        // la fel si la inbound se inregsitreaza.
 
         private void AbtoPhone_OnClearedCall(string msg, int status, int lineId)
         {
-            //notifyMe.ClearCall(Msg, status, LineId);
-            //OnClearedCall();
+            if (recordingStarted)
+            {
+                this.abtoPhone.StopRecording();
+                recordingStarted = false;
+            }
         }
 
-        public void StartCall() { }
+        public void StartCall(string phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            this.abtoPhone.StartCall(phoneNumber);
+        }
 
         private void AbtoPhone_OnIncomingCall(string adress, int lineId)
         {
