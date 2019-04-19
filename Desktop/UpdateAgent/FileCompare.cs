@@ -5,9 +5,6 @@ using System.Text;
 
 namespace AgentClient
 {
-    // This implementation defines a very simple comparison  
-    // between two FileInfo objects. It only compares the name  
-    // of the files being compared and their length in bytes.  
     public class FileCompare : IEqualityComparer<FileInfo>
     {
         public FileCompare()
