@@ -1,4 +1,4 @@
-All requirements below refer to JUST the Desktop WinForm app.
+All requirements below refer to JUST the Desktop WinForm app and the Robot app.
 
 1. [DONE]You can have just one instance of the Desktop app on a Windows machine running at a time.
 
