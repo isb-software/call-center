@@ -62,14 +62,15 @@ namespace SipWrapper
 
             try
             {
-                //Apply modified config
                 abtoPhone.ApplyConfig();
                 abtoPhone.Initialize();
 
                 this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
-                // handle OnEstablishedConnection, OnClearedConnection, OnIncomingCall, OnEstablishedCall, OnClearedCall, 
-                // OnPlayFinished, OnToneReceived, OnDetectedAnswerTime 
-                //
+                this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
+                this.abtoPhone.OnIncomingCall += AbtoPhone_OnIncomingCall1;
+                this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
+                this.abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
+                this.abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
 
                 return true;
             }
@@ -79,16 +80,44 @@ namespace SipWrapper
             }
         }
 
+        private void AbtoPhone_OnDetectedAnswerTime(int timeSpanMs, int connectionId)
+        {
+            if (timeSpanMs > 3000) {
+                // means Answering Machine
+            }
+            else
+            {
+                // human
+            }
+        }
+
+        private void AbtoPhone_OnToneReceived(int tone, int connectionId, int lineId)
+        {
+            if (tone == 70) {
+                this.abtoPhone.HangUpCallLine(lineId);
+            }// means Fax Machine
+        }
+
+        private void AbtoPhone_OnPlayFinished(string msg)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void AbtoPhone_OnEstablishedCall(string msg, int lineId)
+        {
+            //throw new NotImplementedException();
+        }
+
         //public event EventArgs OnClearedCall
 
-            // pe outbound call trebuie sa fie un timer care daca nu raspunde nimeni si expira
-            // pui call status "Nu a raspuns"
+        // pe outbound call trebuie sa fie un timer care daca nu raspunde nimeni si expira
+        // pui call status "Nu a raspuns"
 
 
-            // la outbound call trebuie sa incepi inregistrarea call -ului in momentul CallAnswered
-            // la fel si la inbound se inregsitreaza.
+        // la outbound call trebuie sa incepi inregistrarea call -ului in momentul CallAnswered
+        // la fel si la inbound se inregsitreaza.
 
-        private void AbtoPhone_OnClearedCall(string Msg, int status, int LineId)
+        private void AbtoPhone_OnClearedCall(string msg, int status, int lineId)
         {
             //notifyMe.ClearCall(Msg, status, LineId);
             //OnClearedCall();
