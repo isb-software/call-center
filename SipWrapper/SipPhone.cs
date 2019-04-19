@@ -47,6 +47,10 @@ namespace SipWrapper
 
             phoneCfg.LicenseUserId = LICENSE_USER_ID;
             phoneCfg.LicenseKey = LICENSE_KEY;
+            phoneCfg.RegDomain = "sip.skype.com";
+            phoneCfg.RegUser = SIP_USER;
+            phoneCfg.RegPass = SIP_PWD;
+
             //phoneCfg.log
             //phoneCfg.AdditionalDnsServer = ADDITIONAL_DNS_SERVER;
             phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
