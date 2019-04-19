@@ -33,6 +33,7 @@ namespace SipWrapper
 
         //TODO: point to network share.
         static readonly string RECORDINGS_PATH = @"c:\temp\recordings\";
+        static readonly string STAR_RECORDING_PATH = @"c:\temp\starrecordings\mozart.wav";
 
         //const string ADDITIONAL_DNS_SERVER = "8.8.8.8";
         //const int TONE_TYPE_TO_DETECT = 1;
@@ -47,6 +48,7 @@ namespace SipWrapper
 
         private string phoneNumber;
         private bool recordingStarted;
+        private int currentLineId;
 
         public SipPhone()
         {
@@ -136,18 +138,20 @@ namespace SipWrapper
 
         private void AbtoPhone_OnEstablishedCall(string msg, int lineId)
         {
-            //TimeSpan sinceMidnight = DateTime.Now - DateTime.Today;
-            //double secs = sinceMidnight.TotalSeconds;
-
+            this.currentLineId = lineId;
             var filename = $"{this.phoneNumber}_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")}.mp3";
 
             var filePath = Path.Combine(RECORDINGS_PATH, filename);
             this.abtoPhone.StartRecording(filePath);
             recordingStarted = true;
+
+            this.abtoPhone.PlayFileLine(STAR_RECORDING_PATH, lineId);
         }
 
         private void AbtoPhone_OnClearedCall(string msg, int status, int lineId)
         {
+            this.abtoPhone.StopPlaybackLine(lineId);
+
             if (recordingStarted)
             {
                 this.abtoPhone.StopRecording();
@@ -158,6 +162,11 @@ namespace SipWrapper
         public void StartCall(string phoneNumber) {
             this.phoneNumber = phoneNumber;
             this.abtoPhone.StartCall(phoneNumber);
+        }
+
+        public void HangUp()
+        {
+            this.abtoPhone.HangUpCallLine(this.currentLineId);
         }
 
         private void AbtoPhone_OnIncomingCall(string adress, int lineId)
