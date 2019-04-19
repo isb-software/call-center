@@ -20,14 +20,6 @@ namespace SipWrapper
          eLogDebug = 7
         */
 
-        /**
-         * eToneDtmf = 1,
-            eToneBaudot = 2,
-            eToneSIT = 4,
-            eToneMF = 8,
-            eToneEnergy = 16
-         * */
-
         const string LICENSE_USER_ID = "{Licensed_for_ISB_Software_Consulting-A4D8-475A-9AC9A63D-E2FD-1AC3-2B95-71CE19A3A3F1}";
         const string LICENSE_KEY = "{T+C/ve2txl8Gucgify5BcUuyEWXPdlxeHMI4ageygVBGGMRK0wdrGwg8IjGDTcOGUQj7YDL9lJSdSoCbQ4d86A==}";
 
@@ -35,20 +27,13 @@ namespace SipWrapper
         static readonly string RECORDINGS_PATH = @"c:\temp\recordings\";
         static readonly string STAR_RECORDING_PATH = @"c:\temp\starrecordings\mozart.wav";
 
-        //const string ADDITIONAL_DNS_SERVER = "8.8.8.8";
-        //const int TONE_TYPE_TO_DETECT = 1;
-        // sip.skype.com
-        // 99051000507121
-        // QpqkhCJRXUhHzx
-
-
-        const bool AUTO_RECORD = true;
         const string SIP_USER = "99051000507121";
         const string SIP_PWD = "5FSzPGcamwvhfw";
 
         private string phoneNumber;
         private bool recordingStarted;
         private int currentLineId;
+        private bool playFinished;
 
         public SipPhone()
         {
@@ -133,7 +118,7 @@ namespace SipWrapper
 
         private void AbtoPhone_OnPlayFinished(string msg)
         {
-            //throw new NotImplementedException();
+            this.playFinished = true;
         }
 
         private void AbtoPhone_OnEstablishedCall(string msg, int lineId)
@@ -145,12 +130,14 @@ namespace SipWrapper
             this.abtoPhone.StartRecording(filePath);
             recordingStarted = true;
 
-            this.abtoPhone.PlayFileLine(STAR_RECORDING_PATH, lineId);
+            //this.abtoPhone.PlayFileLine(STAR_RECORDING_PATH, lineId);
         }
 
         private void AbtoPhone_OnClearedCall(string msg, int status, int lineId)
         {
-            this.abtoPhone.StopPlaybackLine(lineId);
+            if (!playFinished) {
+                this.abtoPhone.StopPlaybackLine(lineId);
+            }
 
             if (recordingStarted)
             {
@@ -166,7 +153,11 @@ namespace SipWrapper
 
         public void HangUp()
         {
-            this.abtoPhone.HangUpCallLine(this.currentLineId);
+            if(this.abtoPhone.IsLineOccupied(this.currentLineId) != 0)
+            {
+                this.abtoPhone.HangUpCallLine(this.currentLineId);
+            }
+            
         }
 
         private void AbtoPhone_OnIncomingCall(string adress, int lineId)
