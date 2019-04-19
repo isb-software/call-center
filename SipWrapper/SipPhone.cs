@@ -36,10 +36,14 @@ namespace SipWrapper
         const string LICENSE_KEY = "{T+C/ve2txl8Gucgify5BcUuyEWXPdlxeHMI4ageygVBGGMRK0wdrGwg8IjGDTcOGUQj7YDL9lJSdSoCbQ4d86A==}";
         //const string ADDITIONAL_DNS_SERVER = "8.8.8.8";
         //const int TONE_TYPE_TO_DETECT = 1;
+        // sip.skype.com
+        // 99051000507121
+        // QpqkhCJRXUhHzx
+
 
         const bool AUTO_RECORD = true;
-        const string SIP_USER = "9905100039005";
-        const string SIP_PWD = "5QDkSgfSm8AN7j";
+        const string SIP_USER = "99051000507121";
+        const string SIP_PWD = "5FSzPGcamwvhfw";
 
         private Object notifiMe;
 
@@ -57,9 +61,9 @@ namespace SipWrapper
 
             phoneCfg.LicenseUserId = LICENSE_USER_ID;
             phoneCfg.LicenseKey = LICENSE_KEY;
-            phoneCfg.log
+            //phoneCfg.log
             //phoneCfg.AdditionalDnsServer = ADDITIONAL_DNS_SERVER;
-            phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
+            //phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
             try
             {
