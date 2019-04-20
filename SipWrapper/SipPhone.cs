@@ -26,6 +26,7 @@ namespace SipWrapper
         //TODO: point to network share.
         static readonly string RECORDINGS_PATH = @"c:\temp\recordings\";
         static readonly string STAR_RECORDING_PATH = @"c:\temp\starrecordings\mozart.wav";
+        private string cfgFileName = "phoneCfg.ini";
 
         const string SIP_USER = "99051000507121";
         const string SIP_PWD = "5FSzPGcamwvhfw";
@@ -38,11 +39,27 @@ namespace SipWrapper
         public SipPhone()
         {
             abtoPhone = new CAbtoPhone();
-            phoneCfg = abtoPhone.Config;
+            if(!this.Initialize())
+            {
+                throw new Exception("Ünable to initialize line");
+            }
         }
 
         public bool Initialize()
         {
+            this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
+            this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
+            this.abtoPhone.OnRegistered += AbtoPhone_OnRegistered;
+            this.abtoPhone.OnIncomingCall += AbtoPhone_OnIncomingCall;
+            this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
+            this.abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
+            this.abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
+            this.abtoPhone.OnPhoneNotify += AbtoPhone_OnPhoneNotify;
+            this.abtoPhone.OnSubscribeStatus += AbtoPhone_OnSubscribeStatus;
+
+            phoneCfg = abtoPhone.Config;
+            phoneCfg.Load(cfgFileName);
+
             phoneCfg.MP3RecordingEnabled = 1;
 
             phoneCfg.LicenseUserId = LICENSE_USER_ID;
@@ -50,6 +67,7 @@ namespace SipWrapper
             phoneCfg.RegDomain = "sip.skype.com";
             phoneCfg.RegUser = SIP_USER;
             phoneCfg.RegPass = SIP_PWD;
+            phoneCfg.ListenPort = 5060;
 
             //phoneCfg.log
             //phoneCfg.AdditionalDnsServer = ADDITIONAL_DNS_SERVER;
@@ -60,19 +78,27 @@ namespace SipWrapper
                 abtoPhone.ApplyConfig();
                 abtoPhone.Initialize();
 
-                this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
-                this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
-                this.abtoPhone.OnIncomingCall += AbtoPhone_OnIncomingCall;
-                this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
-                this.abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
-                this.abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
-
                 return true;
             }
             catch (Exception e)
             {
                 return false;
             }
+        }
+
+        private void AbtoPhone_OnSubscribeStatus(int subscriptionId, int statusCode, string statusMsg)
+        {
+            int a = 23;
+        }
+
+        private void AbtoPhone_OnPhoneNotify(string Msg)
+        {
+            int a = 23;
+        }
+
+        private void AbtoPhone_OnRegistered(string Msg)
+        {
+            int a = 23;
         }
 
         #region events
@@ -152,7 +178,7 @@ namespace SipWrapper
 
         public void StartCall(string phoneNumber) {
             this.phoneNumber = phoneNumber;
-            this.abtoPhone.StartCall(phoneNumber);
+            this.abtoPhone.StartCall2(phoneNumber);
         }
 
         public void HangUp()

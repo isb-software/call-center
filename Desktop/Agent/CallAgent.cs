@@ -19,12 +19,8 @@ namespace Agent
         {
             StatusService asd = new StatusService();
 
-            SipPhone da = new SipPhone();
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            SipWrapper wrapper = new SipWrapper();
+            SipPhone sipPhone = new SipPhone();
+            sipPhone.StartCall("40746294444");
         }
     }
 }
