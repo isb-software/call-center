@@ -92,5 +92,17 @@ namespace DataAccess.Services
             datasource.TotalRecords = totalRecords;
             return datasource;
         }
+
+        public Call GetByPhoneNumber(string phoneNumber)
+        {
+            Call call = null;
+
+            using (var context = new CallCenterDbContext())
+            {
+                call = context.Calls.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            }
+
+            return call;
+        }
     }
 }

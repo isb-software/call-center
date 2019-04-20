@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Database;
+using log4net;
+using System;
 using System.Linq;
 using System.Reflection;
-using DataAccess.IServices;
-using Database;
-using log4net;
 
 namespace DataAccess.Services
 {
-    public class PriorityQueueService : IPriorityQueueService
+    public class NormalQueueService
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -19,7 +18,7 @@ namespace DataAccess.Services
 
                 using (var context = new CallCenterDbContext())
                 {
-                    number = context.Database.SqlQuery<string>("GetNextPriorityPhoneNumber").FirstOrDefault();
+                    number = context.Database.SqlQuery<string>("GetNextNormalPhoneNumber").FirstOrDefault();
                 }
 
                 return number;

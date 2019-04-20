@@ -21,7 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -102,6 +103,10 @@
     <Compile Include="Migrations\201904140047380_changeColumnName.Designer.cs">
       <DependentUpon>201904140047380_changeColumnName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904201754222_UpdateNormalQueueTable.cs" />
+    <Compile Include="Migrations\201904201754222_UpdateNormalQueueTable.Designer.cs">
+      <DependentUpon>201904201754222_UpdateNormalQueueTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -110,13 +115,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Entities\Entities.csproj">
-      <Project>{52d370d1-2f12-4c53-a774-fa3087bd6bd8}</Project>
-      <Name>Entities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="Procedures\Create\GetNextNormalPhoneNumber.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Procedures\Create\GetNextPriorityPhoneNumber.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Procedures\Delete\GetNextNormalPhoneNumber.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Procedures\Delete\GetNextPriorityPhoneNumber.sql">
@@ -136,6 +141,15 @@
     <EmbeddedResource Include="Migrations\201904140047380_changeColumnName.resx">
       <DependentUpon>201904140047380_changeColumnName.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904201754222_UpdateNormalQueueTable.resx">
+      <DependentUpon>201904201754222_UpdateNormalQueueTable.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{52d370d1-2f12-4c53-a774-fa3087bd6bd8}</Project>
+      <Name>Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
