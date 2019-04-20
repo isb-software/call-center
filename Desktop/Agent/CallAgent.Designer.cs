@@ -34,6 +34,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.notificationsListBox = new System.Windows.Forms.ListBox();
             this.label9 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.SaveButton = new System.Windows.Forms.Button();
@@ -53,6 +54,7 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.CallHangUpButton = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -113,6 +115,8 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.CallHangUpButton);
+            this.splitContainer1.Panel1.Controls.Add(this.notificationsListBox);
             this.splitContainer1.Panel1.Controls.Add(this.label9);
             this.splitContainer1.Panel1.Controls.Add(this.textBox5);
             this.splitContainer1.Panel1.Controls.Add(this.SaveButton);
@@ -136,10 +140,19 @@
             this.splitContainer1.SplitterDistance = 174;
             this.splitContainer1.TabIndex = 1;
             // 
+            // notificationsListBox
+            // 
+            this.notificationsListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.notificationsListBox.FormattingEnabled = true;
+            this.notificationsListBox.Location = new System.Drawing.Point(405, 91);
+            this.notificationsListBox.Name = "notificationsListBox";
+            this.notificationsListBox.Size = new System.Drawing.Size(383, 80);
+            this.notificationsListBox.TabIndex = 18;
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 53);
+            this.label9.Location = new System.Drawing.Point(6, 48);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(54, 13);
             this.label9.TabIndex = 17;
@@ -147,10 +160,10 @@
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(9, 72);
+            this.textBox5.Location = new System.Drawing.Point(9, 64);
             this.textBox5.Multiline = true;
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(779, 72);
+            this.textBox5.Size = new System.Drawing.Size(367, 107);
             this.textBox5.TabIndex = 16;
             // 
             // SaveButton
@@ -319,6 +332,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Telefon";
             // 
+            // CallHangUpButton
+            // 
+            this.CallHangUpButton.Location = new System.Drawing.Point(713, 62);
+            this.CallHangUpButton.Name = "CallHangUpButton";
+            this.CallHangUpButton.Size = new System.Drawing.Size(75, 23);
+            this.CallHangUpButton.TabIndex = 19;
+            this.CallHangUpButton.Text = "Suna";
+            this.CallHangUpButton.UseVisualStyleBackColor = true;
+            this.CallHangUpButton.Click += new System.EventHandler(this.CallHangUpButtonClick);
+            // 
             // CallAgent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -368,6 +391,8 @@
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.ListBox notificationsListBox;
+        private System.Windows.Forms.Button CallHangUpButton;
     }
 }
 
