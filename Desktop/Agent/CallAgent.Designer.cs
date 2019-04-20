@@ -133,7 +133,7 @@
             this.splitContainer1.Panel1.Controls.Add(this.textBox1);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Size = new System.Drawing.Size(800, 411);
-            this.splitContainer1.SplitterDistance = 175;
+            this.splitContainer1.SplitterDistance = 174;
             this.splitContainer1.TabIndex = 1;
             // 
             // label9
@@ -326,7 +326,7 @@
             this.ClientSize = new System.Drawing.Size(800, 441);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip);
-            this.MinimumSize = new System.Drawing.Size(639, 479);
+            this.MinimumSize = new System.Drawing.Size(638, 478);
             this.Name = "CallAgent";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Desktop Agent";

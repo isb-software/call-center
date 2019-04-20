@@ -19,8 +19,13 @@ namespace Agent
         {
             StatusService asd = new StatusService();
 
+<<<<<<< HEAD
             SipPhone da = new SipPhone();
             da.StartCall("40766614431");
+=======
+            SipPhone sipPhone = new SipPhone();
+            sipPhone.StartCall("40746294444");
+>>>>>>> a96682e08b957708d159b0351c1273b1e8641bff
         }
     }
 }
