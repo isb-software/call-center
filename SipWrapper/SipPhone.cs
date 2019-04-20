@@ -39,6 +39,8 @@ namespace SipWrapper
         {
             abtoPhone = new CAbtoPhone();
             phoneCfg = abtoPhone.Config;
+
+            this.Initialize();
         }
 
         public bool Initialize()
@@ -50,9 +52,6 @@ namespace SipWrapper
             phoneCfg.RegDomain = "sip.skype.com";
             phoneCfg.RegUser = SIP_USER;
             phoneCfg.RegPass = SIP_PWD;
-
-            //phoneCfg.log
-            //phoneCfg.AdditionalDnsServer = ADDITIONAL_DNS_SERVER;
             phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
             try
@@ -67,6 +66,9 @@ namespace SipWrapper
                 this.abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
                 this.abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
 
+                this.abtoPhone.OnPhoneNotify += AbtoPhone_OnPhoneNotify;
+                this.abtoPhone.OnRegistered += AbtoPhone_OnRegistered;
+
                 return true;
             }
             catch (Exception e)
@@ -74,6 +76,15 @@ namespace SipWrapper
                 return false;
             }
         }
+
+        private void AbtoPhone_OnRegistered(string message)
+        {
+        }
+
+        private void AbtoPhone_OnPhoneNotify(string message)
+        {
+        }
+
 
         #region events
         protected virtual void OnAnsweringMachine(EventArgs e)
@@ -102,7 +113,8 @@ namespace SipWrapper
 
         private void AbtoPhone_OnDetectedAnswerTime(int timeSpanMs, int connectionId)
         {
-            if (timeSpanMs > 3000) {
+            if (timeSpanMs > 3000)
+            {
                 // means Answering Machine
                 OnAnsweringMachine(EventArgs.Empty);
             }
@@ -114,10 +126,11 @@ namespace SipWrapper
 
         private void AbtoPhone_OnToneReceived(int tone, int connectionId, int lineId)
         {
-            if (tone == 70) {
+            if (tone == 70)
+            {
                 this.abtoPhone.HangUpCallLine(lineId);
                 OnFaxMachine(EventArgs.Empty);
-            }// means Fax Machine
+            } // means Fax Machine
         }
 
         private void AbtoPhone_OnPlayFinished(string msg)
@@ -139,7 +152,8 @@ namespace SipWrapper
 
         private void AbtoPhone_OnClearedCall(string msg, int status, int lineId)
         {
-            if (!playFinished) {
+            if (!playFinished)
+            {
                 this.abtoPhone.StopPlaybackLine(lineId);
             }
 
@@ -150,9 +164,11 @@ namespace SipWrapper
             }
         }
 
-        public void StartCall(string phoneNumber) {
+        public void StartCall(string phoneNumber)
+        {
+            this.abtoPhone.SetCurrentLine(1);
             this.phoneNumber = phoneNumber;
-            this.abtoPhone.StartCall(phoneNumber);
+            this.abtoPhone.StartCall2(phoneNumber);
         }
 
         public void HangUp()
