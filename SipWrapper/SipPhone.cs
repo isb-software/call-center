@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+
+using SipWrapper.EventHandlers;
+
 using SIPVoipSDK;
 
 
@@ -39,9 +42,9 @@ namespace SipWrapper
         public SipPhone()
         {
             abtoPhone = new CAbtoPhone();
-            if(!this.Initialize())
+            if (!this.Initialize())
             {
-                throw new Exception("Ünable to initialize line");
+                throw new Exception("Unable to initialize line");
             }
         }
 
@@ -56,6 +59,7 @@ namespace SipWrapper
             this.abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
             this.abtoPhone.OnPhoneNotify += AbtoPhone_OnPhoneNotify;
             this.abtoPhone.OnSubscribeStatus += AbtoPhone_OnSubscribeStatus;
+            this.abtoPhone.OnInitialized += AbtoPhone_OnInitialized;
 
             phoneCfg = abtoPhone.Config;
             phoneCfg.Load(cfgFileName);
@@ -68,9 +72,8 @@ namespace SipWrapper
             phoneCfg.RegUser = SIP_USER;
             phoneCfg.RegPass = SIP_PWD;
             phoneCfg.ListenPort = 5060;
+            phoneCfg.RegExpire = 300;
 
-            //phoneCfg.log
-            //phoneCfg.AdditionalDnsServer = ADDITIONAL_DNS_SERVER;
             phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
             try
@@ -80,7 +83,7 @@ namespace SipWrapper
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
                 return false;
             }
@@ -91,44 +94,88 @@ namespace SipWrapper
             int a = 23;
         }
 
-        private void AbtoPhone_OnPhoneNotify(string Msg)
+        private void AbtoPhone_OnPhoneNotify(string message)
         {
-            int a = 23;
+            MessageEventArgs eventArgs = new MessageEventArgs { Message = message };
+            this.OnSipPhoneNotify(eventArgs);
         }
 
-        private void AbtoPhone_OnRegistered(string Msg)
+        private void AbtoPhone_OnRegistered(string message)
         {
-            int a = 23;
+            MessageEventArgs eventArgs = new MessageEventArgs { Message = message };
+            this.OnSipRegistered(eventArgs);
         }
 
         #region events
-        protected virtual void OnAnsweringMachine(EventArgs e)
+
+        private void OnAnsweringMachine(EventArgs e)
         {
             EventHandler handler = AnsweringMachine;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
         public event EventHandler AnsweringMachine;
 
-        protected virtual void OnFaxMachine(EventArgs e)
+        private void OnFaxMachine(EventArgs e)
         {
             EventHandler handler = FaxMachine;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
         public event EventHandler FaxMachine;
-        
+
+        private void OnSipInitialize(MessageEventArgs e)
+        {
+            EventHandler<MessageEventArgs> handler = SipInitialize;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler<MessageEventArgs> SipInitialize;
+
+        private void OnSipRegistered(MessageEventArgs e)
+        {
+            EventHandler<MessageEventArgs> handler = SipRegistered;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler<MessageEventArgs> SipRegistered;
+
+        private void OnSipPhoneNotify(MessageEventArgs e)
+        {
+            EventHandler<MessageEventArgs> handler = SipPhoneNotify;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler<MessageEventArgs> SipPhoneNotify;
+
+        private void OnSipEstablishedCall(MessageEventArgs e)
+        {
+            EventHandler<MessageEventArgs> handler = SipEstablishedCall;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler<MessageEventArgs> SipEstablishedCall;
+
+        private void OnSipClearedCall(EventArgs e)
+        {
+            EventHandler handler = SipClearedCall;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler SipClearedCall;
+
         #endregion events
+
+        private void AbtoPhone_OnInitialized(string message)
+        {
+            MessageEventArgs eventArgs = new MessageEventArgs { Message = message };
+            OnSipInitialize(eventArgs);
+        }
 
         private void AbtoPhone_OnDetectedAnswerTime(int timeSpanMs, int connectionId)
         {
-            if (timeSpanMs > 3000) {
+            if (timeSpanMs > 3000)
+            {
                 // means Answering Machine
                 OnAnsweringMachine(EventArgs.Empty);
             }
@@ -140,10 +187,11 @@ namespace SipWrapper
 
         private void AbtoPhone_OnToneReceived(int tone, int connectionId, int lineId)
         {
-            if (tone == 70) {
+            if (tone == 70)
+            {
                 this.abtoPhone.HangUpCallLine(lineId);
                 OnFaxMachine(EventArgs.Empty);
-            }// means Fax Machine
+            } // means Fax Machine
         }
 
         private void AbtoPhone_OnPlayFinished(string msg)
@@ -151,7 +199,7 @@ namespace SipWrapper
             this.playFinished = true;
         }
 
-        private void AbtoPhone_OnEstablishedCall(string msg, int lineId)
+        private void AbtoPhone_OnEstablishedCall(string message, int lineId)
         {
             this.currentLineId = lineId;
             var filename = $"{this.phoneNumber}_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")}.mp3";
@@ -160,12 +208,16 @@ namespace SipWrapper
             this.abtoPhone.StartRecording(filePath);
             recordingStarted = true;
 
+            MessageEventArgs eventArgs = new MessageEventArgs { Message = filePath };
+            this.OnSipEstablishedCall(eventArgs);
+
             //this.abtoPhone.PlayFileLine(STAR_RECORDING_PATH, lineId);
         }
 
         private void AbtoPhone_OnClearedCall(string msg, int status, int lineId)
         {
-            if (!playFinished) {
+            if (!playFinished)
+            {
                 this.abtoPhone.StopPlaybackLine(lineId);
             }
 
@@ -173,21 +225,35 @@ namespace SipWrapper
             {
                 this.abtoPhone.StopRecording();
                 recordingStarted = false;
+                this.OnSipClearedCall(EventArgs.Empty);
+            }
+
+            bool lineIsBusy = status == 480 && !recordingStarted;
+            bool callEndedByAgent = status == 487 && !recordingStarted;
+
+            if (lineIsBusy || callEndedByAgent)
+            {
+                //TODO: save the phone number to call again
             }
         }
 
-        public void StartCall(string phoneNumber) {
+        public void StartCall(string phoneNumber)
+        {
             this.phoneNumber = phoneNumber;
             this.abtoPhone.StartCall2(phoneNumber);
         }
 
         public void HangUp()
         {
-            if(this.abtoPhone.IsLineOccupied(this.currentLineId) != 0)
+            if (this.abtoPhone.IsLineOccupied(this.currentLineId) != 0)
             {
                 this.abtoPhone.HangUpCallLine(this.currentLineId);
             }
-            
+            else
+            {
+                // in case the user does not answear the phone and we watn the close the call
+                this.abtoPhone.HangUpLastCall();
+            }
         }
 
         private void AbtoPhone_OnIncomingCall(string adress, int lineId)

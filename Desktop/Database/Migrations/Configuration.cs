@@ -20,39 +20,40 @@ namespace Database.Migrations
 
         private void SeedProcedures(CallCenterDbContext context)
         {
+            if (!System.Diagnostics.Debugger.IsAttached)
+                System.Diagnostics.Debugger.Launch();
             DeleteStoredProcedures(context);
             CreateStoredProcedures(context);
         }
 
         private void CreateStoredProcedures(CallCenterDbContext context)
         {
-            try
+            foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Procedures\\Create"), "*.sql"))
             {
-                foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Procedures\\Create"), "*.sql"))
+                try
                 {
                     context.Database.ExecuteSqlCommand(File.ReadAllText(file), new object[0]);
                 }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Procedure already exists");
+                catch (Exception exception)
+                {
+                    Console.WriteLine($"Procedure already exists {file}");
+                }
             }
         }
 
         private void DeleteStoredProcedures(CallCenterDbContext context)
         {
-            try
+            foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Procedures\\Delete"), "*.sql"))
             {
-                foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Procedures\\Delete"), "*.sql"))
+                try
                 {
                     context.Database.ExecuteSqlCommand(File.ReadAllText(file), new object[0]);
                 }
+                catch (Exception exception)
+                {
+                    Console.WriteLine($"Procedure does not exist {file}");
+                }
             }
-            catch (Exception)
-            {
-                Console.WriteLine("Procedure does not exist");
-            }
-            
         }
 
         private void SeedStatusTable(CallCenterDbContext context)

@@ -19,7 +19,7 @@ namespace DataAccess.Services
 
                 using (var context = new CallCenterDbContext())
                 {
-                    number = context.Database.SqlQuery<string>("GetNextPriorityPhoneNumber").First();
+                    number = context.Database.SqlQuery<string>("GetNextPriorityPhoneNumber").FirstOrDefault();
                 }
 
                 return number;

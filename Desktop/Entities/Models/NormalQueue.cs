@@ -4,7 +4,8 @@ namespace Entities.Models
 {
     public class NormalQueue
     {
-        [Key]
+        public int Id { get; set; }
+
         [MaxLength(15)]
         public string PhoneNumber { get; set; }
     }
