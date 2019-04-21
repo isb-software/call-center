@@ -30,13 +30,14 @@
         {
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblName = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblLoggedSince = new System.Windows.Forms.ToolStripStatusLabel();
+            this.LoggedSinceLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.CallCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.CountyTextBox = new System.Windows.Forms.TextBox();
             this.EducationTextBox = new System.Windows.Forms.TextBox();
             this.AgeTextBox = new System.Windows.Forms.TextBox();
-            this.CallHangUpButton = new System.Windows.Forms.Button();
+            this.CallButton = new System.Windows.Forms.Button();
             this.notificationsListBox = new System.Windows.Forms.ListBox();
             this.label9 = new System.Windows.Forms.Label();
             this.NotesTextBox = new System.Windows.Forms.TextBox();
@@ -56,9 +57,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.HangUpButton = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -67,9 +67,10 @@
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblName,
-            this.lblLoggedSince,
+            this.LoggedSinceLabel,
             this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2});
+            this.toolStripStatusLabel2,
+            this.CallCountLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 564);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(1008, 30);
@@ -82,13 +83,13 @@
             this.lblName.Size = new System.Drawing.Size(91, 25);
             this.lblName.Text = "Nume agent";
             // 
-            // lblLoggedSince
+            // LoggedSinceLabel
             // 
-            this.lblLoggedSince.AutoSize = false;
-            this.lblLoggedSince.Name = "lblLoggedSince";
-            this.lblLoggedSince.Size = new System.Drawing.Size(110, 25);
-            this.lblLoggedSince.Text = "De la: 08:50";
-            this.lblLoggedSince.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LoggedSinceLabel.AutoSize = false;
+            this.LoggedSinceLabel.Name = "LoggedSinceLabel";
+            this.LoggedSinceLabel.Size = new System.Drawing.Size(110, 25);
+            this.LoggedSinceLabel.Text = "De la: 08:50";
+            this.LoggedSinceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStripStatusLabel1
             // 
@@ -105,6 +106,14 @@
             this.toolStripStatusLabel2.Text = "Apeluri initiate:";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolStripStatusLabel2.ToolTipText = "Apeluri initiate";
+            // 
+            // CallCountLabel
+            // 
+            this.CallCountLabel.Name = "CallCountLabel";
+            this.CallCountLabel.Size = new System.Drawing.Size(17, 25);
+            this.CallCountLabel.Text = "0";
+            this.CallCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.CallCountLabel.ToolTipText = "Apeluri initiate";
             // 
             // CountyTextBox
             // 
@@ -128,15 +137,15 @@
             this.AgeTextBox.TabIndex = 4;
             this.AgeTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AgeTextBox_KeyPress);
             // 
-            // CallHangUpButton
+            // CallButton
             // 
-            this.CallHangUpButton.Location = new System.Drawing.Point(581, 18);
-            this.CallHangUpButton.Name = "CallHangUpButton";
-            this.CallHangUpButton.Size = new System.Drawing.Size(75, 43);
-            this.CallHangUpButton.TabIndex = 40;
-            this.CallHangUpButton.Text = "Suna";
-            this.CallHangUpButton.UseVisualStyleBackColor = true;
-            this.CallHangUpButton.Click += new System.EventHandler(this.CallHangUpButtonClick);
+            this.CallButton.Location = new System.Drawing.Point(581, 18);
+            this.CallButton.Name = "CallButton";
+            this.CallButton.Size = new System.Drawing.Size(75, 43);
+            this.CallButton.TabIndex = 40;
+            this.CallButton.Text = "Apeleaza";
+            this.CallButton.UseVisualStyleBackColor = true;
+            this.CallButton.Click += new System.EventHandler(this.CallButtonClick);
             // 
             // notificationsListBox
             // 
@@ -324,25 +333,28 @@
             this.label11.Size = new System.Drawing.Size(1008, 2);
             this.label11.TabIndex = 45;
             // 
-            // numericUpDown1
+            // HangUpButton
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(411, 344);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 46;
+            this.HangUpButton.Location = new System.Drawing.Point(671, 18);
+            this.HangUpButton.Name = "HangUpButton";
+            this.HangUpButton.Size = new System.Drawing.Size(75, 43);
+            this.HangUpButton.TabIndex = 46;
+            this.HangUpButton.Text = "Inchide";
+            this.HangUpButton.UseVisualStyleBackColor = true;
+            this.HangUpButton.Click += new System.EventHandler(this.HangUpButtonClick);
             // 
             // CallAgent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 594);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.HangUpButton);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.CountyTextBox);
             this.Controls.Add(this.EducationTextBox);
             this.Controls.Add(this.AgeTextBox);
-            this.Controls.Add(this.CallHangUpButton);
+            this.Controls.Add(this.CallButton);
             this.Controls.Add(this.notificationsListBox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.NotesTextBox);
@@ -367,7 +379,6 @@
             this.Text = "Desktop Agent";
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,13 +388,13 @@
 
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lblName;
-        private System.Windows.Forms.ToolStripStatusLabel lblLoggedSince;
+        private System.Windows.Forms.ToolStripStatusLabel LoggedSinceLabel;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel CallCountLabel;
         private System.Windows.Forms.TextBox CountyTextBox;
         private System.Windows.Forms.TextBox EducationTextBox;
         private System.Windows.Forms.TextBox AgeTextBox;
-        private System.Windows.Forms.Button CallHangUpButton;
+        private System.Windows.Forms.Button CallButton;
         private System.Windows.Forms.ListBox notificationsListBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox NotesTextBox;
@@ -403,7 +414,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.Button HangUpButton;
     }
 }
 

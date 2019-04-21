@@ -1,7 +1,11 @@
-﻿namespace DataAccess.IServices
+﻿using Entities.Models;
+
+namespace DataAccess.IServices
 {
     public interface IPriorityQueueService
     {
-        string GetNextNumber();
+        void Create(QueuePhoneNumber call);
+
+        QueuePhoneNumber GetNextNumber();
     }
 }

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using DataAccess.IServices;
+using DataAccess.PollyPolicies;
 using Database;
 using Entities.Dtos;
 using Entities.Models;
@@ -19,22 +20,32 @@ namespace DataAccess.Services
         public void Create(Call call)
         {
             using (var context = new CallCenterDbContext())
-            using (var dbContextTransaction = context.Database.BeginTransaction())
             {
+                DbContextTransaction dbContextTransaction = null;
                 try
                 {
-                    context.Calls.Add(call);
-
-                    context.SaveChanges();
-                    dbContextTransaction.Commit();
+                    using (dbContextTransaction = context.Database.BeginTransaction())
+                    {
+                        PollyPolicy.WaitAndRetryThreeTimes.Execute(() => TryCreate(call, context, dbContextTransaction));
+                    }
                 }
                 catch (Exception exception)
                 {
-                    Log.Error($"Error on creating a new call for {call.PhoneNumber} - {call.Name} {call.Forename}", exception);
-                    dbContextTransaction.Rollback();
+                    Log.Error($"Error on creating a new call for {call?.PhoneNumber} - {call?.Name} {call?.Forename}", exception);
+
+                    dbContextTransaction?.Rollback();
                 }
             }
         }
+
+        private static void TryCreate(Call call, CallCenterDbContext context, DbContextTransaction dbContextTransaction)
+        {
+            context.Calls.Add(call);
+
+            context.SaveChanges();
+            dbContextTransaction.Commit();
+        }
+
 
         public CallDatasourceDto GetDatasource(TableQueryOptions queryOptions)
         {

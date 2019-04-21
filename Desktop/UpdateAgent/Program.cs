@@ -3,10 +3,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Agent;
-
 using log4net;
-
-using Polly;
 
 namespace AgentClient
 {

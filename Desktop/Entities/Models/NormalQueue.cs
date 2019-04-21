@@ -1,12 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace Entities.Models
 {
-    public class NormalQueue
+    public class NormalQueue : QueuePhoneNumber
     {
         public int Id { get; set; }
 
-        [MaxLength(15)]
-        public string PhoneNumber { get; set; }
+        public DateTime NextTimeCall { get; set; }
     }
 }

@@ -91,9 +91,12 @@
     <Compile Include="Dtos\CallDatasourceDto.cs" />
     <Compile Include="Dtos\CallDto.cs" />
     <Compile Include="Enums\CallType.cs" />
+    <Compile Include="Enums\QueueEnum.cs" />
+    <Compile Include="Enums\StatusEnum.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\CallCount.cs" />
     <Compile Include="Models\NormalQueue.cs" />
+    <Compile Include="Models\PhoneNumber.cs" />
     <Compile Include="Models\PriorityQueue.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\User.cs" />

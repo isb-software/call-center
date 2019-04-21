@@ -8,6 +8,6 @@ namespace DataAccess.IServices
     {
         CallDashboardDto GetDashboardCalls();
 
-        void IncreaseCount(DateTime date, int statusId);
+        void IncreaseCount(int statusId);
     }
 }

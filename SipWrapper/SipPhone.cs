@@ -89,21 +89,23 @@ namespace SipWrapper
             }
         }
 
-        private void AbtoPhone_OnSubscribeStatus(int subscriptionId, int statusCode, string statusMsg)
+        public void StartCall(string phoneNumber)
         {
-            int a = 23;
+            this.phoneNumber = phoneNumber;
+            this.abtoPhone.StartCall2(phoneNumber);
         }
 
-        private void AbtoPhone_OnPhoneNotify(string message)
+        public void HangUp()
         {
-            MessageEventArgs eventArgs = new MessageEventArgs { Message = message };
-            this.OnSipPhoneNotify(eventArgs);
-        }
-
-        private void AbtoPhone_OnRegistered(string message)
-        {
-            MessageEventArgs eventArgs = new MessageEventArgs { Message = message };
-            this.OnSipRegistered(eventArgs);
+            if (this.abtoPhone.IsLineOccupied(this.currentLineId) != 0)
+            {
+                this.abtoPhone.HangUpCallLine(this.currentLineId);
+            }
+            else
+            {
+                // in case the user does not answear the phone and we watn the close the call
+                this.abtoPhone.HangUpLastCall();
+            }
         }
 
         #region events
@@ -164,7 +166,32 @@ namespace SipWrapper
 
         public event EventHandler SipClearedCall;
 
+        private void OnSipLineBusy(EventArgs e)
+        {
+            EventHandler handler = SipLineBusy;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler SipLineBusy;
+
         #endregion events
+
+        private void AbtoPhone_OnSubscribeStatus(int subscriptionId, int statusCode, string statusMsg)
+        {
+            int a = 23;
+        }
+
+        private void AbtoPhone_OnPhoneNotify(string message)
+        {
+            MessageEventArgs eventArgs = new MessageEventArgs { Message = message };
+            this.OnSipPhoneNotify(eventArgs);
+        }
+
+        private void AbtoPhone_OnRegistered(string message)
+        {
+            MessageEventArgs eventArgs = new MessageEventArgs { Message = message };
+            this.OnSipRegistered(eventArgs);
+        }
 
         private void AbtoPhone_OnInitialized(string message)
         {
@@ -229,30 +256,10 @@ namespace SipWrapper
             }
 
             bool lineIsBusy = status == 480 && !recordingStarted;
-            bool callEndedByAgent = status == 487 && !recordingStarted;
 
-            if (lineIsBusy || callEndedByAgent)
+            if (lineIsBusy)
             {
-                //TODO: save the phone number to call again
-            }
-        }
-
-        public void StartCall(string phoneNumber)
-        {
-            this.phoneNumber = phoneNumber;
-            this.abtoPhone.StartCall2(phoneNumber);
-        }
-
-        public void HangUp()
-        {
-            if (this.abtoPhone.IsLineOccupied(this.currentLineId) != 0)
-            {
-                this.abtoPhone.HangUpCallLine(this.currentLineId);
-            }
-            else
-            {
-                // in case the user does not answear the phone and we watn the close the call
-                this.abtoPhone.HangUpLastCall();
+                this.OnSipLineBusy(EventArgs.Empty);
             }
         }
 

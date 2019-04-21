@@ -20,8 +20,6 @@ namespace Database.Migrations
 
         private void SeedProcedures(CallCenterDbContext context)
         {
-            if (!System.Diagnostics.Debugger.IsAttached)
-                System.Diagnostics.Debugger.Launch();
             DeleteStoredProcedures(context);
             CreateStoredProcedures(context);
         }

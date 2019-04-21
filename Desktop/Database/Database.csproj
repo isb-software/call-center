@@ -107,6 +107,10 @@
     <Compile Include="Migrations\201904201754222_UpdateNormalQueueTable.Designer.cs">
       <DependentUpon>201904201754222_UpdateNormalQueueTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904202041145_AddCallAtemptsAndNextTimeCall.cs" />
+    <Compile Include="Migrations\201904202041145_AddCallAtemptsAndNextTimeCall.Designer.cs">
+      <DependentUpon>201904202041145_AddCallAtemptsAndNextTimeCall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -143,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904201754222_UpdateNormalQueueTable.resx">
       <DependentUpon>201904201754222_UpdateNormalQueueTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904202041145_AddCallAtemptsAndNextTimeCall.resx">
+      <DependentUpon>201904202041145_AddCallAtemptsAndNextTimeCall.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
