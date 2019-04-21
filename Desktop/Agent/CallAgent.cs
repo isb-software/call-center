@@ -20,7 +20,7 @@ namespace Agent
             StatusService asd = new StatusService();
 
             SipPhone sipPhone = new SipPhone();
-            sipPhone.StartCall("40746294444");
+            sipPhone.StartCall("40746294444"); // fax machine 40368401114
         }
     }
 }
