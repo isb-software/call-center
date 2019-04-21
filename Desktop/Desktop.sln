@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipWrapper", "..\SipWrapper\SipWrapper.csproj", "{9BC89DE3-E2E2-4F7A-A5D2-C7D5F321935D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotService", "RobotService\RobotService.csproj", "{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,18 @@ Global
 		{9BC89DE3-E2E2-4F7A-A5D2-C7D5F321935D}.Release|x64.Build.0 = Release|x64
 		{9BC89DE3-E2E2-4F7A-A5D2-C7D5F321935D}.Release|x86.ActiveCfg = Release|x86
 		{9BC89DE3-E2E2-4F7A-A5D2-C7D5F321935D}.Release|x86.Build.0 = Release|x86
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Debug|x64.ActiveCfg = Debug|x64
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Debug|x64.Build.0 = Debug|x64
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Debug|x86.Build.0 = Debug|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Release|x64.ActiveCfg = Release|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Release|x64.Build.0 = Release|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{8CBBEE3B-563D-411D-A3FF-99BF0897F8C5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
