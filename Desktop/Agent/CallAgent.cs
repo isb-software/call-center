@@ -39,6 +39,12 @@ namespace Agent
 
         private void SaveButtonClick(object sender, EventArgs e)
         {
+            if(StatusComboBox.SelectedIndex == -1)
+            {
+                this.StatusErrorLabel.Visible = true;
+                return;
+            }
+
             this.SaveCall();
             this.IncrementCallCount();
 
@@ -196,6 +202,8 @@ namespace Agent
             EducationTextBox.Enabled = true;
             CityTextBox.Enabled = true;
             CountyTextBox.Enabled = true;
+
+            this.StatusErrorLabel.Visible = false;
         }
 
         private void InitializeSipPhone()
@@ -269,8 +277,8 @@ namespace Agent
         {
             Call call = new Call
             {
-                Age = Convert.ToInt32(AgeTextBox.Text),
-                CallType = Entities.Enums.CallType.Outbound,
+                Age = string.IsNullOrEmpty(AgeTextBox.Text) ? 0 : Convert.ToInt32(AgeTextBox.Text),
+                CallType = CallType.Outbound,
                 City = CityTextBox.Text,
                 County = CountyTextBox.Text,
                 DateTimeOfCall = DateTime.Now.AddSeconds(-callDuration),

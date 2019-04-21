@@ -84,7 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventHandlers\MessageEventArgs.cs" />
-    <Compile Include="LineInfo.cs" />
     <Compile Include="AutoPhone.cs" />
     <Compile Include="SipPhone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -58,6 +58,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.HangUpButton = new System.Windows.Forms.Button();
+            this.StatusErrorLabel = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -343,11 +344,23 @@
             this.HangUpButton.UseVisualStyleBackColor = true;
             this.HangUpButton.Click += new System.EventHandler(this.HangUpButtonClick);
             // 
+            // StatusErrorLabel
+            // 
+            this.StatusErrorLabel.AutoSize = true;
+            this.StatusErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.StatusErrorLabel.Location = new System.Drawing.Point(96, 242);
+            this.StatusErrorLabel.Name = "StatusErrorLabel";
+            this.StatusErrorLabel.Size = new System.Drawing.Size(145, 13);
+            this.StatusErrorLabel.TabIndex = 47;
+            this.StatusErrorLabel.Text = "Va rog sa completati statusul!";
+            this.StatusErrorLabel.Visible = false;
+            // 
             // CallAgent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 594);
+            this.Controls.Add(this.StatusErrorLabel);
             this.Controls.Add(this.HangUpButton);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
@@ -416,6 +429,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.Button HangUpButton;
+        private System.Windows.Forms.Label StatusErrorLabel;
     }
 }
 
