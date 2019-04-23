@@ -16,6 +16,7 @@ namespace Database.Migrations
         {
             SeedStatusTable(context);
             SeedProcedures(context);
+            SeedUsersTable(context);
         }
 
         private void SeedProcedures(CallCenterDbContext context)
@@ -111,6 +112,22 @@ namespace Database.Migrations
                         Id = 7,
                         Description = "Casuta"
                     });
+
+            context.SaveChanges();
+        }
+
+        private void SeedUsersTable(CallCenterDbContext context)
+        {
+            context.Users.AddOrUpdate(
+                x => x.Id,
+                new User
+                {
+                    Id = 1,
+                    CreatedDate = DateTime.Now,
+                    FirstName = "Test",
+                    IsActive = true,
+                    LastName = "User"
+                });
 
             context.SaveChanges();
         }

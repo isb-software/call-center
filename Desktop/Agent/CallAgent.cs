@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using DataAccess.Services;
@@ -16,6 +17,7 @@ namespace Agent
         private int callDuration = 0;
         private string recordingPath = string.Empty;
         private int currentCallAtempts = 0;
+        private int currentUserId = 0;
 
         private Timer timer;
         private SipPhone sipPhone;
@@ -27,14 +29,17 @@ namespace Agent
         private NormalQueueService normalQueueService;
         private CallCountService callCountService;
 
-        public CallAgent()
+        public CallAgent(int userId, string userName)
         {
             InitializeComponent();
             this.InitializeServices();
             this.InitializeSipPhone();
             this.InitializeStatus();
 
+            this.DocumentRichTextBox.LoadFile(ConfigurationManager.AppSettings["DocumentFileLocation"], RichTextBoxStreamType.RichText);
             this.LoggedSinceLabel.Text = $"De La: {DateTime.Now.ToString("HH:mm")}";
+            this.currentUserId = userId;
+            this.UserNameLabel.Text = userName;
         }
 
         private void SaveButtonClick(object sender, EventArgs e)
@@ -289,7 +294,7 @@ namespace Agent
                 Notes = NotesTextBox.Text,
                 PhoneNumber = this.phoneNumber,
                 StatusId = Convert.ToInt32(this.StatusComboBox.SelectedValue),
-                UserId = 2, //TODO: Add real user when available
+                UserId = this.currentUserId,
                 RecordingPath = recordingPath
             };
             callService.Create(call);
@@ -318,6 +323,11 @@ namespace Agent
             HangUpButton.Enabled = isHangUpButtonEnabled;
             CallButton.Enabled = isCallButtonEnabled;
             SaveButton.Enabled = isSaveButtonEnabled;
+        }
+
+        private void CallAgent_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

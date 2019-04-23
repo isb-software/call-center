@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.lblName = new System.Windows.Forms.ToolStripStatusLabel();
+            this.UserNameLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.LoggedSinceLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -59,6 +59,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.HangUpButton = new System.Windows.Forms.Button();
             this.StatusErrorLabel = new System.Windows.Forms.Label();
+            this.DocumentRichTextBox = new System.Windows.Forms.RichTextBox();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,22 +68,22 @@
             this.statusStrip.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblName,
+            this.UserNameLabel,
             this.LoggedSinceLabel,
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2,
             this.CallCountLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 564);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1008, 30);
+            this.statusStrip.Size = new System.Drawing.Size(905, 30);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // lblName
+            // UserNameLabel
             // 
-            this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(91, 25);
-            this.lblName.Text = "Nume agent";
+            this.UserNameLabel.Name = "UserNameLabel";
+            this.UserNameLabel.Size = new System.Drawing.Size(91, 25);
+            this.UserNameLabel.Text = "Nume agent";
             // 
             // LoggedSinceLabel
             // 
@@ -154,7 +155,7 @@
             this.notificationsListBox.FormattingEnabled = true;
             this.notificationsListBox.Location = new System.Drawing.Point(581, 83);
             this.notificationsListBox.Name = "notificationsListBox";
-            this.notificationsListBox.Size = new System.Drawing.Size(383, 132);
+            this.notificationsListBox.Size = new System.Drawing.Size(303, 132);
             this.notificationsListBox.TabIndex = 39;
             // 
             // label9
@@ -336,6 +337,7 @@
             // 
             // HangUpButton
             // 
+            this.HangUpButton.Enabled = false;
             this.HangUpButton.Location = new System.Drawing.Point(671, 18);
             this.HangUpButton.Name = "HangUpButton";
             this.HangUpButton.Size = new System.Drawing.Size(75, 43);
@@ -355,11 +357,21 @@
             this.StatusErrorLabel.Text = "Va rog sa completati statusul!";
             this.StatusErrorLabel.Visible = false;
             // 
+            // DocumentRichTextBox
+            // 
+            this.DocumentRichTextBox.Location = new System.Drawing.Point(15, 288);
+            this.DocumentRichTextBox.Name = "DocumentRichTextBox";
+            this.DocumentRichTextBox.ReadOnly = true;
+            this.DocumentRichTextBox.Size = new System.Drawing.Size(869, 260);
+            this.DocumentRichTextBox.TabIndex = 48;
+            this.DocumentRichTextBox.Text = "";
+            // 
             // CallAgent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 594);
+            this.ClientSize = new System.Drawing.Size(905, 594);
+            this.Controls.Add(this.DocumentRichTextBox);
             this.Controls.Add(this.StatusErrorLabel);
             this.Controls.Add(this.HangUpButton);
             this.Controls.Add(this.label11);
@@ -390,6 +402,7 @@
             this.Name = "CallAgent";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Desktop Agent";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CallAgent_FormClosed);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -400,7 +413,7 @@
         #endregion
 
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel lblName;
+        private System.Windows.Forms.ToolStripStatusLabel UserNameLabel;
         private System.Windows.Forms.ToolStripStatusLabel LoggedSinceLabel;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel CallCountLabel;
@@ -430,6 +443,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.Button HangUpButton;
         private System.Windows.Forms.Label StatusErrorLabel;
+        private System.Windows.Forms.RichTextBox DocumentRichTextBox;
     }
 }
 

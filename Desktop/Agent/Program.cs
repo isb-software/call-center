@@ -20,7 +20,7 @@ namespace Agent
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new CallAgent());
+                Application.Run(new LoginForm());
             }
         }
     }
