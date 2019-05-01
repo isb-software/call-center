@@ -89,7 +89,8 @@ namespace DataAccess.Services
                                      County = x.County,
                                      PersonName = x.Name + " " + x.Forename,
                                      StatusName = x.Status.Description,
-                                     UserName = x.User.FirstName + " " + x.User.LastName
+                                     UserName = x.User.FirstName + " " + x.User.LastName,
+                                     Duration = x.Duration
                                  }).ToList();
 
                 }

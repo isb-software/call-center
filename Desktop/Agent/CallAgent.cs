@@ -15,11 +15,14 @@ namespace Agent
     {
         private string phoneNumber = string.Empty;
         private int callDuration = 0;
+        private int callStartDuration = 0;
         private string recordingPath = string.Empty;
         private int currentCallAtempts = 0;
         private int currentUserId = 0;
+        private int callStartDurationThreshold = 0;
 
-        private Timer timer;
+        private Timer callDurationTimer;
+        private Timer callStartDurationTimer;
         private SipPhone sipPhone;
         private QueueEnum currentQueue;
 
@@ -36,6 +39,7 @@ namespace Agent
             this.InitializeSipPhone();
             this.InitializeStatus();
 
+            this.callStartDurationThreshold = Convert.ToInt32(ConfigurationManager.AppSettings["SipCallStartThreshold"]);
             this.DocumentRichTextBox.LoadFile(ConfigurationManager.AppSettings["DocumentFileLocation"], RichTextBoxStreamType.RichText);
             this.LoggedSinceLabel.Text = $"De La: {DateTime.Now.ToString("HH:mm")}";
             this.currentUserId = userId;
@@ -54,7 +58,8 @@ namespace Agent
             this.IncrementCallCount();
 
             if((int)StatusComboBox.SelectedValue == (int)StatusEnum.NuRaspunde ||
-                (int)StatusComboBox.SelectedValue == (int)StatusEnum.Ocupat)
+                (int)StatusComboBox.SelectedValue == (int)StatusEnum.Ocupat || 
+                (int)StatusComboBox.SelectedValue == (int)StatusEnum.Casuta)
             {
                 this.SaveQueuePhoneNumber();
             }
@@ -66,6 +71,7 @@ namespace Agent
 
         private void CallButtonClick(object sender, EventArgs e)
         {
+            this.StartCallStartDurationTimer();
             this.GetNextPhoneNumber();
             PhoneNumberTextBox.Text = phoneNumber;
             this.LoadDetailsForPhoneNumber();
@@ -78,6 +84,11 @@ namespace Agent
         private void HangUpButtonClick(object sender, EventArgs e)
         {
             sipPhone.HangUp();
+            if (callStartDurationTimer != null)
+            {
+                callStartDurationTimer.Stop();
+            }
+
             DisplayNotificationMessage($"Apel inchis");
             SetCallHangUpSaveButtonState(false, false, true);
         }
@@ -109,17 +120,30 @@ namespace Agent
             this.DisplayNotificationMessage("A raspuns");
             this.DisplayNotificationMessage("Incepe inregistrarea");
             recordingPath = e.Message;
-            timer = new Timer();
-            timer.Interval = 1000;
-            timer.Tick += OnTimerTick;
-            timer.Start();
+            StartCallDurationTimer();
+        }
+
+        private void StartCallDurationTimer()
+        {
+            callDurationTimer = new Timer();
+            callDurationTimer.Interval = 1000;
+            callDurationTimer.Tick += OnCallDurationTimerTick;
+            callDurationTimer.Start();
+        }
+
+        private void StartCallStartDurationTimer()
+        {
+            callStartDurationTimer = new Timer();
+            callStartDurationTimer.Interval = 1000;
+            callStartDurationTimer.Tick += OnCallStartDurationTimerTick;
+            callStartDurationTimer.Start();
         }
 
         private void OnSipClearedCall(object sender, EventArgs e)
         {
-            if (timer != null)
+            if (callDurationTimer != null)
             {
-                timer.Stop();
+                callDurationTimer.Stop();
             }
             SetCallHangUpSaveButtonState(false, false, true);
             SaveButton.Enabled = true;
@@ -153,7 +177,6 @@ namespace Agent
             StatusComboBox.SelectedValue = (int)StatusEnum.Fax;
             this.SaveCall();
             this.IncrementCallCount();
-            this.SaveQueuePhoneNumber();
 
             SetCallHangUpSaveButtonState(true, false, false);
 
@@ -163,9 +186,31 @@ namespace Agent
 
         #endregion
 
-        private void OnTimerTick(object sender, EventArgs e)
+        private void OnCallDurationTimerTick(object sender, EventArgs e)
         {
             callDuration++;
+        }
+
+        private void OnCallStartDurationTimerTick(object sender, EventArgs e)
+        {
+            callStartDuration++;
+
+            if (callStartDuration == this.callStartDurationThreshold)
+            {
+                this.sipPhone.HangUp();
+
+                StatusComboBox.SelectedValue = (int)StatusEnum.NuRaspunde;
+                this.currentQueue = QueueEnum.Priority;
+
+                this.SaveCall();
+                this.IncrementCallCount();
+                this.SaveQueuePhoneNumber();
+
+                this.ResetVariables();
+                this.ResetForm();
+                this.SetCallHangUpSaveButtonState(true, false, false);
+                this.callStartDurationTimer.Stop();
+            }
         }
 
         private void GetNextPhoneNumber()
@@ -186,6 +231,7 @@ namespace Agent
         private void ResetVariables()
         {
             this.callDuration = 0;
+            this.callStartDuration = 0;
             this.recordingPath = string.Empty;
         }
 
@@ -254,13 +300,6 @@ namespace Agent
                 EducationTextBox.Text = call.Education;
                 CityTextBox.Text = call.City;
                 CountyTextBox.Text = call.County;
-
-                NameTextBox.Enabled = false;
-                ForenameTextBox.Enabled = false;
-                AgeTextBox.Enabled = false;
-                EducationTextBox.Enabled = false;
-                CityTextBox.Enabled = false;
-                CountyTextBox.Enabled = false;
             }
         }
 

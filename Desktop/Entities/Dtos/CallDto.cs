@@ -23,5 +23,7 @@ namespace Entities.Dtos
         public DateTime DateTimeOfCall { get; set; }
 
         public string StatusName { get; set; }
+
+        public int Duration { get; set; }
     }
 }

@@ -21,7 +21,7 @@ export class CallOverviewComponent implements OnInit, AfterViewInit {
   callsDataSource: CallsDataSource;
   totalRecords = 0;
 
-  displayedColumns = ['UserName', 'PersonName', 'PhoneNumber', 'StatusName',
+  displayedColumns = ['UserName', 'PersonName', 'PhoneNumber', 'Duration', 'StatusName',
     'County', 'City', 'Education', 'Age', 'DateTimeOfCall', 'Notes'];
 
   constructor(private callService: CallService) { }
