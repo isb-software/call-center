@@ -67,8 +67,9 @@ namespace DataAccess.Services
             catch (Exception exception)
             {
                 Log.Error("Error on getting the next number", exception);
-                throw;
+                //throw;
             }
+            return null;
         }
 
         private void TryCreate(QueuePhoneNumber call, CallCenterDbContext context, DbContextTransaction dbContextTransaction)

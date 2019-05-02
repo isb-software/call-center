@@ -23,7 +23,7 @@ namespace DataAccess.Services
                 statuses = context.Statuses.ToList();
                 if (!statuses.Any())
                 {
-                    Log.Warn("No users found at all");
+                    Log.Warn("No statuses found at all");
                 }
             }
 

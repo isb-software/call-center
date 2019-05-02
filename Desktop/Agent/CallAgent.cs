@@ -48,20 +48,34 @@ namespace Agent
 
         private void SaveButtonClick(object sender, EventArgs e)
         {
-            if(StatusComboBox.SelectedIndex == -1)
+            if (!StatusComboBox.Enabled)
             {
-                this.StatusErrorLabel.Visible = true;
-                return;
-            }
-
-            this.SaveCall();
-            this.IncrementCallCount();
-
-            if((int)StatusComboBox.SelectedValue == (int)StatusEnum.NuRaspunde ||
-                (int)StatusComboBox.SelectedValue == (int)StatusEnum.Ocupat || 
-                (int)StatusComboBox.SelectedValue == (int)StatusEnum.Casuta)
-            {
+                // This branch is for Adding an ad-hoc number to queue.
+                this.currentCallAtempts = -1; // to avoid having call count being set to 1.
                 this.SaveQueuePhoneNumber();
+                this.currentCallAtempts = 0;
+                this.StatusComboBox.Enabled = true;
+                this.AddNumberButton.Text = "Adauga numar";
+                this.NotesTextBox.Enabled = true;
+                this.PhoneNumberTextBox.Enabled = false;
+            }
+            else
+            {
+
+                if (StatusComboBox.SelectedIndex == -1)
+                {
+                    this.StatusErrorLabel.Visible = true;
+                    return;
+                }
+
+                this.SaveCall();
+                this.IncrementCallCount();
+                if ((int)StatusComboBox.SelectedValue == (int)StatusEnum.NuRaspunde ||
+                    (int)StatusComboBox.SelectedValue == (int)StatusEnum.Ocupat ||
+                    (int)StatusComboBox.SelectedValue == (int)StatusEnum.Casuta)
+                {
+                    this.SaveQueuePhoneNumber();
+                }
             }
 
             this.ResetForm();
@@ -71,12 +85,12 @@ namespace Agent
 
         private void CallButtonClick(object sender, EventArgs e)
         {
-            this.StartCallStartDurationTimer();
             this.GetNextPhoneNumber();
             PhoneNumberTextBox.Text = phoneNumber;
             this.LoadDetailsForPhoneNumber();
 
             DisplayNotificationMessage($"Se apeleaza numarul {phoneNumber}");
+            this.StartCallStartDurationTimer();
             sipPhone.StartCall(phoneNumber);
             SetCallHangUpSaveButtonState(false, true, false);
         }
@@ -224,6 +238,11 @@ namespace Agent
                 currentQueue = QueueEnum.Normal;
             }
 
+            if (queuePhoneNumber == null)
+            {
+                //TODO add some graceful way of dealing with it.
+            }
+            
             this.phoneNumber = queuePhoneNumber.PhoneNumber;
             this.currentCallAtempts = queuePhoneNumber.CallAtempts;
         }
@@ -306,7 +325,7 @@ namespace Agent
         private void DisplayNotificationMessage(string message)
         {
             notificationsListBox.Items.Add(message);
-            notificationsListBox.TopIndex = notificationsListBox.Items.Count - 1; // scrol down
+            notificationsListBox.TopIndex = notificationsListBox.Items.Count - 1; // scroll down
         }
 
         private void IncrementCallCount()
@@ -361,12 +380,42 @@ namespace Agent
         {
             HangUpButton.Enabled = isHangUpButtonEnabled;
             CallButton.Enabled = isCallButtonEnabled;
+            AddNumberButton.Enabled = isCallButtonEnabled && !isHangUpButtonEnabled;
             SaveButton.Enabled = isSaveButtonEnabled;
         }
 
         private void CallAgent_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void AddNumberButton_Click(object sender, EventArgs e)
+        {
+            if (this.AddNumberButton.Text == "Adauga numar") {
+                this.StatusComboBox.Enabled = false;
+                this.PhoneNumberTextBox.Enabled = true;
+                this.NameTextBox.Enabled = false;
+                this.ForenameTextBox.Enabled = false;
+                this.AgeTextBox.Enabled = false;
+                this.EducationTextBox.Enabled = false;
+                this.CityTextBox.Enabled = false;
+                this.CountyTextBox.Enabled = false;
+                this.NotesTextBox.Enabled = false;
+                this.AddNumberButton.Text = "Anuleaza adaugare";
+            }
+            else
+            {
+                this.AddNumberButton.Text = "Adauga numar";
+                this.StatusComboBox.Enabled = true;
+                this.PhoneNumberTextBox.Enabled = true;
+                this.NameTextBox.Enabled = true;
+                this.ForenameTextBox.Enabled = true;
+                this.AgeTextBox.Enabled = true;
+                this.EducationTextBox.Enabled = true;
+                this.CityTextBox.Enabled = true;
+                this.NotesTextBox.Enabled = true;
+                this.CountyTextBox.Enabled = true;
+            }
         }
     }
 }

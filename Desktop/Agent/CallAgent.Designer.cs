@@ -60,6 +60,7 @@
             this.HangUpButton = new System.Windows.Forms.Button();
             this.StatusErrorLabel = new System.Windows.Forms.Label();
             this.DocumentRichTextBox = new System.Windows.Forms.RichTextBox();
+            this.AddNumberButton = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,16 +74,17 @@
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2,
             this.CallCountLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 564);
+            this.statusStrip.Location = new System.Drawing.Point(0, 701);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(905, 30);
+            this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip.Size = new System.Drawing.Size(1207, 30);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
             // UserNameLabel
             // 
             this.UserNameLabel.Name = "UserNameLabel";
-            this.UserNameLabel.Size = new System.Drawing.Size(91, 25);
+            this.UserNameLabel.Size = new System.Drawing.Size(116, 25);
             this.UserNameLabel.Text = "Nume agent";
             // 
             // LoggedSinceLabel
@@ -96,7 +98,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(69, 25);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(87, 25);
             this.toolStripStatusLabel1.Text = "Tel verde";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolStripStatusLabel1.ToolTipText = "Tel verde";
@@ -104,7 +106,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(110, 25);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(140, 25);
             this.toolStripStatusLabel2.Text = "Apeluri initiate:";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolStripStatusLabel2.ToolTipText = "Apeluri initiate";
@@ -112,38 +114,42 @@
             // CallCountLabel
             // 
             this.CallCountLabel.Name = "CallCountLabel";
-            this.CallCountLabel.Size = new System.Drawing.Size(17, 25);
+            this.CallCountLabel.Size = new System.Drawing.Size(22, 25);
             this.CallCountLabel.Text = "0";
             this.CallCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.CallCountLabel.ToolTipText = "Apeluri initiate";
             // 
             // CountyTextBox
             // 
-            this.CountyTextBox.Location = new System.Drawing.Point(80, 169);
+            this.CountyTextBox.Location = new System.Drawing.Point(107, 208);
+            this.CountyTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CountyTextBox.Name = "CountyTextBox";
-            this.CountyTextBox.Size = new System.Drawing.Size(100, 20);
+            this.CountyTextBox.Size = new System.Drawing.Size(132, 22);
             this.CountyTextBox.TabIndex = 7;
             // 
             // EducationTextBox
             // 
-            this.EducationTextBox.Location = new System.Drawing.Point(80, 117);
+            this.EducationTextBox.Location = new System.Drawing.Point(107, 144);
+            this.EducationTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.EducationTextBox.Name = "EducationTextBox";
-            this.EducationTextBox.Size = new System.Drawing.Size(135, 20);
+            this.EducationTextBox.Size = new System.Drawing.Size(179, 22);
             this.EducationTextBox.TabIndex = 5;
             // 
             // AgeTextBox
             // 
-            this.AgeTextBox.Location = new System.Drawing.Point(80, 91);
+            this.AgeTextBox.Location = new System.Drawing.Point(107, 112);
+            this.AgeTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.AgeTextBox.Name = "AgeTextBox";
-            this.AgeTextBox.Size = new System.Drawing.Size(49, 20);
+            this.AgeTextBox.Size = new System.Drawing.Size(64, 22);
             this.AgeTextBox.TabIndex = 4;
             this.AgeTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AgeTextBox_KeyPress);
             // 
             // CallButton
             // 
-            this.CallButton.Location = new System.Drawing.Point(581, 18);
+            this.CallButton.Location = new System.Drawing.Point(775, 21);
+            this.CallButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CallButton.Name = "CallButton";
-            this.CallButton.Size = new System.Drawing.Size(75, 43);
+            this.CallButton.Size = new System.Drawing.Size(100, 53);
             this.CallButton.TabIndex = 40;
             this.CallButton.Text = "Apeleaza";
             this.CallButton.UseVisualStyleBackColor = true;
@@ -153,34 +159,39 @@
             // 
             this.notificationsListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.notificationsListBox.FormattingEnabled = true;
-            this.notificationsListBox.Location = new System.Drawing.Point(581, 83);
+            this.notificationsListBox.ItemHeight = 16;
+            this.notificationsListBox.Location = new System.Drawing.Point(775, 102);
+            this.notificationsListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.notificationsListBox.Name = "notificationsListBox";
-            this.notificationsListBox.Size = new System.Drawing.Size(303, 132);
+            this.notificationsListBox.Size = new System.Drawing.Size(403, 162);
             this.notificationsListBox.TabIndex = 39;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(289, 12);
+            this.label9.Location = new System.Drawing.Point(385, 15);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(54, 13);
+            this.label9.Size = new System.Drawing.Size(72, 17);
             this.label9.TabIndex = 38;
             this.label9.Text = "Observatii";
             // 
             // NotesTextBox
             // 
-            this.NotesTextBox.Location = new System.Drawing.Point(292, 29);
+            this.NotesTextBox.Location = new System.Drawing.Point(389, 36);
+            this.NotesTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.NotesTextBox.Multiline = true;
             this.NotesTextBox.Name = "NotesTextBox";
-            this.NotesTextBox.Size = new System.Drawing.Size(240, 186);
+            this.NotesTextBox.Size = new System.Drawing.Size(319, 228);
             this.NotesTextBox.TabIndex = 9;
             // 
             // SaveButton
             // 
             this.SaveButton.Enabled = false;
-            this.SaveButton.Location = new System.Drawing.Point(15, 233);
+            this.SaveButton.Location = new System.Drawing.Point(20, 287);
+            this.SaveButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(75, 30);
+            this.SaveButton.Size = new System.Drawing.Size(100, 37);
             this.SaveButton.TabIndex = 32;
             this.SaveButton.Text = "Salveaza";
             this.SaveButton.UseVisualStyleBackColor = true;
@@ -189,9 +200,10 @@
             // StatusComboBox
             // 
             this.StatusComboBox.FormattingEnabled = true;
-            this.StatusComboBox.Location = new System.Drawing.Point(80, 195);
+            this.StatusComboBox.Location = new System.Drawing.Point(107, 240);
+            this.StatusComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.StatusComboBox.Name = "StatusComboBox";
-            this.StatusComboBox.Size = new System.Drawing.Size(135, 21);
+            this.StatusComboBox.Size = new System.Drawing.Size(179, 24);
             this.StatusComboBox.TabIndex = 8;
             // 
             // label8
@@ -200,9 +212,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 198);
+            this.label8.Location = new System.Drawing.Point(16, 244);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(37, 13);
+            this.label8.Size = new System.Drawing.Size(48, 17);
             this.label8.TabIndex = 36;
             this.label8.Text = "Status";
             // 
@@ -212,9 +225,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 120);
+            this.label7.Location = new System.Drawing.Point(16, 148);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(49, 13);
+            this.label7.Size = new System.Drawing.Size(63, 17);
             this.label7.TabIndex = 35;
             this.label7.Text = "Educatie";
             // 
@@ -224,9 +238,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 94);
+            this.label6.Location = new System.Drawing.Point(16, 116);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(33, 13);
+            this.label6.Size = new System.Drawing.Size(44, 17);
             this.label6.TabIndex = 34;
             this.label6.Text = "Virsta";
             // 
@@ -236,9 +251,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 172);
+            this.label5.Location = new System.Drawing.Point(16, 212);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(33, 13);
+            this.label5.Size = new System.Drawing.Size(43, 17);
             this.label5.TabIndex = 33;
             this.label5.Text = "Judet";
             // 
@@ -248,17 +264,19 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 146);
+            this.label4.Location = new System.Drawing.Point(16, 180);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 13);
+            this.label4.Size = new System.Drawing.Size(69, 17);
             this.label4.TabIndex = 30;
             this.label4.Text = "Localitate";
             // 
             // CityTextBox
             // 
-            this.CityTextBox.Location = new System.Drawing.Point(80, 143);
+            this.CityTextBox.Location = new System.Drawing.Point(107, 176);
+            this.CityTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CityTextBox.Name = "CityTextBox";
-            this.CityTextBox.Size = new System.Drawing.Size(100, 20);
+            this.CityTextBox.Size = new System.Drawing.Size(132, 22);
             this.CityTextBox.TabIndex = 6;
             // 
             // label3
@@ -267,17 +285,19 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 41);
+            this.label3.Location = new System.Drawing.Point(16, 50);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.Size = new System.Drawing.Size(45, 17);
             this.label3.TabIndex = 29;
             this.label3.Text = "Nume";
             // 
             // NameTextBox
             // 
-            this.NameTextBox.Location = new System.Drawing.Point(80, 38);
+            this.NameTextBox.Location = new System.Drawing.Point(107, 47);
+            this.NameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(191, 20);
+            this.NameTextBox.Size = new System.Drawing.Size(253, 22);
             this.NameTextBox.TabIndex = 2;
             // 
             // label2
@@ -286,25 +306,28 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 67);
+            this.label2.Location = new System.Drawing.Point(16, 82);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 13);
+            this.label2.Size = new System.Drawing.Size(65, 17);
             this.label2.TabIndex = 26;
             this.label2.Text = "Prenume";
             // 
             // ForenameTextBox
             // 
-            this.ForenameTextBox.Location = new System.Drawing.Point(80, 64);
+            this.ForenameTextBox.Location = new System.Drawing.Point(107, 79);
+            this.ForenameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ForenameTextBox.Name = "ForenameTextBox";
-            this.ForenameTextBox.Size = new System.Drawing.Size(191, 20);
+            this.ForenameTextBox.Size = new System.Drawing.Size(253, 22);
             this.ForenameTextBox.TabIndex = 3;
             // 
             // PhoneNumberTextBox
             // 
             this.PhoneNumberTextBox.Enabled = false;
-            this.PhoneNumberTextBox.Location = new System.Drawing.Point(80, 12);
+            this.PhoneNumberTextBox.Location = new System.Drawing.Point(107, 15);
+            this.PhoneNumberTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.PhoneNumberTextBox.Name = "PhoneNumberTextBox";
-            this.PhoneNumberTextBox.Size = new System.Drawing.Size(100, 20);
+            this.PhoneNumberTextBox.Size = new System.Drawing.Size(132, 22);
             this.PhoneNumberTextBox.TabIndex = 1;
             // 
             // label1
@@ -313,34 +336,38 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 15);
+            this.label1.Location = new System.Drawing.Point(16, 18);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.Size = new System.Drawing.Size(56, 17);
             this.label1.TabIndex = 23;
             this.label1.Text = "Telefon";
             // 
             // label10
             // 
             this.label10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label10.Location = new System.Drawing.Point(556, 7);
+            this.label10.Location = new System.Drawing.Point(741, 9);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(2, 266);
+            this.label10.Size = new System.Drawing.Size(3, 327);
             this.label10.TabIndex = 44;
             // 
             // label11
             // 
             this.label11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label11.Location = new System.Drawing.Point(0, 271);
+            this.label11.Location = new System.Drawing.Point(0, 334);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(1008, 2);
+            this.label11.Size = new System.Drawing.Size(1344, 2);
             this.label11.TabIndex = 45;
             // 
             // HangUpButton
             // 
             this.HangUpButton.Enabled = false;
-            this.HangUpButton.Location = new System.Drawing.Point(671, 18);
+            this.HangUpButton.Location = new System.Drawing.Point(895, 21);
+            this.HangUpButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.HangUpButton.Name = "HangUpButton";
-            this.HangUpButton.Size = new System.Drawing.Size(75, 43);
+            this.HangUpButton.Size = new System.Drawing.Size(100, 53);
             this.HangUpButton.TabIndex = 46;
             this.HangUpButton.Text = "Inchide";
             this.HangUpButton.UseVisualStyleBackColor = true;
@@ -350,27 +377,41 @@
             // 
             this.StatusErrorLabel.AutoSize = true;
             this.StatusErrorLabel.ForeColor = System.Drawing.Color.Red;
-            this.StatusErrorLabel.Location = new System.Drawing.Point(96, 242);
+            this.StatusErrorLabel.Location = new System.Drawing.Point(128, 298);
+            this.StatusErrorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.StatusErrorLabel.Name = "StatusErrorLabel";
-            this.StatusErrorLabel.Size = new System.Drawing.Size(145, 13);
+            this.StatusErrorLabel.Size = new System.Drawing.Size(193, 17);
             this.StatusErrorLabel.TabIndex = 47;
             this.StatusErrorLabel.Text = "Va rog sa completati statusul!";
             this.StatusErrorLabel.Visible = false;
             // 
             // DocumentRichTextBox
             // 
-            this.DocumentRichTextBox.Location = new System.Drawing.Point(15, 288);
+            this.DocumentRichTextBox.Location = new System.Drawing.Point(20, 354);
+            this.DocumentRichTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.DocumentRichTextBox.Name = "DocumentRichTextBox";
             this.DocumentRichTextBox.ReadOnly = true;
-            this.DocumentRichTextBox.Size = new System.Drawing.Size(869, 260);
+            this.DocumentRichTextBox.Size = new System.Drawing.Size(1157, 319);
             this.DocumentRichTextBox.TabIndex = 48;
             this.DocumentRichTextBox.Text = "";
             // 
+            // AddNumberButton
+            // 
+            this.AddNumberButton.Location = new System.Drawing.Point(1014, 21);
+            this.AddNumberButton.Margin = new System.Windows.Forms.Padding(4);
+            this.AddNumberButton.Name = "AddNumberButton";
+            this.AddNumberButton.Size = new System.Drawing.Size(115, 53);
+            this.AddNumberButton.TabIndex = 49;
+            this.AddNumberButton.Text = "Adauga numar";
+            this.AddNumberButton.UseVisualStyleBackColor = true;
+            this.AddNumberButton.Click += new System.EventHandler(this.AddNumberButton_Click);
+            // 
             // CallAgent
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(905, 594);
+            this.ClientSize = new System.Drawing.Size(1207, 731);
+            this.Controls.Add(this.AddNumberButton);
             this.Controls.Add(this.DocumentRichTextBox);
             this.Controls.Add(this.StatusErrorLabel);
             this.Controls.Add(this.HangUpButton);
@@ -398,7 +439,8 @@
             this.Controls.Add(this.PhoneNumberTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.statusStrip);
-            this.MinimumSize = new System.Drawing.Size(638, 478);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(845, 577);
             this.Name = "CallAgent";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Desktop Agent";
@@ -444,6 +486,7 @@
         private System.Windows.Forms.Button HangUpButton;
         private System.Windows.Forms.Label StatusErrorLabel;
         private System.Windows.Forms.RichTextBox DocumentRichTextBox;
+        private System.Windows.Forms.Button AddNumberButton;
     }
 }
 
