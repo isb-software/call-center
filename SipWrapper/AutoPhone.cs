@@ -36,7 +36,7 @@ namespace SipWrapper
 
         const string sipUserPwdKey = "pwd";
         static readonly string sipUserPwd = ConfigurationManager.AppSettings[sipUserPwdKey];
-        
+
         const string sipDomainKey = "sipDomain";
         static readonly string sipDomain = ConfigurationManager.AppSettings[sipDomainKey];
 
@@ -47,14 +47,13 @@ namespace SipWrapper
         static readonly string recordingFolderPath = ConfigurationManager.AppSettings[recordingFolderKey];
 
         private string cfgFileName = "phoneCfg.ini";
+
         private Timer timer;
         private long callStart;
         private long callStop;
         private bool hasTimedOut;
         private bool wasSuccessful;
         private string lastMessage;
-        private Func<RobotCallData> onCompletion;
-
         private string phoneNumber;
         private bool recordingStarted;
         private int currentLineId;
@@ -69,19 +68,9 @@ namespace SipWrapper
         public void StartCall(string phoneNumber)
         {
             this.phoneNumber = phoneNumber;
-            this.onCompletion = this.OnCompletion;
             this.timer.Start();
             this.abtoPhone.StartCall2(phoneNumber);
             callStart = DateTime.Now.Ticks;
-        }
-
-        public RobotCallData OnCompletion()
-        {
-            return new RobotCallData
-            {
-                Successful = wasSuccessful,
-                Status = lastMessage
-            };
         }
 
         private void Initialize()
@@ -132,8 +121,24 @@ namespace SipWrapper
             hangUpThePhone();
             this.wasSuccessful = true;
             this.lastMessage = message;
-            this.onCompletion();
+
+            this.Completion(
+                new RobotCallDataEventArgs
+                {
+                    Successful = wasSuccessful,
+                    Status = lastMessage,
+                    HasTimedOut = hasTimedOut,
+                    CallDuration = TimeSpan.FromTicks(callStop - callStart)
+                });
         }
+
+        private void Completion(RobotCallDataEventArgs e)
+        {
+            var handler = OnCompletion;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler<RobotCallDataEventArgs> OnCompletion;
 
         private void hangUpThePhone()
         {
@@ -248,6 +253,14 @@ namespace SipWrapper
             finally
             {
                 this.CleanUp();
+                this.Completion(
+                    new RobotCallDataEventArgs
+                    {
+                        Successful = wasSuccessful,
+                        Status = lastMessage,
+                        HasTimedOut = hasTimedOut,
+                        CallDuration = TimeSpan.FromTicks(callStop - callStart)
+                    });
             }
         }
 
@@ -258,7 +271,7 @@ namespace SipWrapper
                 timer.Stop();
                 timer.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex.ToString());
             }
@@ -266,10 +279,28 @@ namespace SipWrapper
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            this.hasTimedOut = true;
-            hangUpThePhone();
-            this.wasSuccessful = false;
-            this.lastMessage = "Has timed out.";
+            try
+            {
+                this.hasTimedOut = true;
+                hangUpThePhone();
+                this.wasSuccessful = false;
+                this.lastMessage = "Has timed out.";
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                this.Completion(
+                    new RobotCallDataEventArgs
+                    {
+                        Successful = wasSuccessful,
+                        Status = lastMessage,
+                        HasTimedOut = hasTimedOut,
+                        CallDuration = TimeSpan.FromTicks(callStop - callStart)
+                    });
+            }
         }
     }
 }

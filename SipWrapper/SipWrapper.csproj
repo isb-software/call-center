@@ -84,7 +84,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RobotCallData.cs" />
+    <Compile Include="RobotCallDataEventArgs.cs" />
     <Compile Include="EventHandlers\MessageEventArgs.cs" />
     <Compile Include="AutoPhone.cs" />
     <Compile Include="SipPhone.cs" />
