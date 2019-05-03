@@ -4,7 +4,6 @@ using Entities.Models;
 
 namespace Database
 {
-
     public class CallCenterDbContext : DbContext
     {
         public CallCenterDbContext() : base("DefaultConnection")
