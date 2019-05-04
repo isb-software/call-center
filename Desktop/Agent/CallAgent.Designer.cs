@@ -53,7 +53,6 @@
             this.NameTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.ForenameTextBox = new System.Windows.Forms.TextBox();
-            this.PhoneNumberTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -62,6 +61,7 @@
             this.DocumentRichTextBox = new System.Windows.Forms.RichTextBox();
             this.AddNumberButton = new System.Windows.Forms.Button();
             this.workDayErrorLabel = new System.Windows.Forms.Label();
+            this.PhoneNumberTextBox = new System.Windows.Forms.MaskedTextBox();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -301,14 +301,6 @@
             this.ForenameTextBox.Size = new System.Drawing.Size(191, 20);
             this.ForenameTextBox.TabIndex = 3;
             // 
-            // PhoneNumberTextBox
-            // 
-            this.PhoneNumberTextBox.Enabled = false;
-            this.PhoneNumberTextBox.Location = new System.Drawing.Point(80, 12);
-            this.PhoneNumberTextBox.Name = "PhoneNumberTextBox";
-            this.PhoneNumberTextBox.Size = new System.Drawing.Size(100, 20);
-            this.PhoneNumberTextBox.TabIndex = 1;
-            // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -389,11 +381,20 @@
             this.workDayErrorLabel.Text = "Puteti suna doar intre orele";
             this.workDayErrorLabel.Visible = false;
             // 
+            // PhoneNumberTextBox
+            // 
+            this.PhoneNumberTextBox.Location = new System.Drawing.Point(80, 12);
+            this.PhoneNumberTextBox.Mask = "4\\0.000.000.000";
+            this.PhoneNumberTextBox.Name = "PhoneNumberTextBox";
+            this.PhoneNumberTextBox.Size = new System.Drawing.Size(100, 20);
+            this.PhoneNumberTextBox.TabIndex = 51;
+            // 
             // CallAgent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(905, 594);
+            this.Controls.Add(this.PhoneNumberTextBox);
             this.Controls.Add(this.workDayErrorLabel);
             this.Controls.Add(this.AddNumberButton);
             this.Controls.Add(this.DocumentRichTextBox);
@@ -420,7 +421,6 @@
             this.Controls.Add(this.NameTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.ForenameTextBox);
-            this.Controls.Add(this.PhoneNumberTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.statusStrip);
             this.MinimumSize = new System.Drawing.Size(638, 476);
@@ -461,7 +461,6 @@
         private System.Windows.Forms.TextBox NameTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox ForenameTextBox;
-        private System.Windows.Forms.TextBox PhoneNumberTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
@@ -471,6 +470,7 @@
         private System.Windows.Forms.RichTextBox DocumentRichTextBox;
         private System.Windows.Forms.Button AddNumberButton;
         private System.Windows.Forms.Label workDayErrorLabel;
+        private System.Windows.Forms.MaskedTextBox PhoneNumberTextBox;
     }
 }
 
