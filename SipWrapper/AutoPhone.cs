@@ -1,12 +1,17 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
+using log4net;
 using SIPVoipSDK;
-
+using System.Timers;
+using System.Configuration;
 
 namespace SipWrapper
 {
     public class AutoPhone
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         private CAbtoPhone abtoPhone;
         private CConfig phoneCfg;
 
@@ -23,170 +28,279 @@ namespace SipWrapper
         const string LICENSE_USER_ID = "{Licensed_for_ISB_Software_Consulting-A4D8-475A-9AC9A63D-E2FD-1AC3-2B95-71CE19A3A3F1}";
         const string LICENSE_KEY = "{T+C/ve2txl8Gucgify5BcUuyEWXPdlxeHMI4ageygVBGGMRK0wdrGwg8IjGDTcOGUQj7YDL9lJSdSoCbQ4d86A==}";
 
-        //TODO: point to network share.
-        static readonly string RECORDINGS_PATH = @"c:\temp\recordings\";
-        static readonly string STAR_RECORDING_PATH = @"c:\temp\starrecordings\mozart.wav";
+        const string timerDelayKey = "timerDelaySeconds";
+        static readonly int timerDelay = Int32.Parse(ConfigurationManager.AppSettings[timerDelayKey]);
+
+        const string sipUserKey = "user";
+        static readonly string sipUser = ConfigurationManager.AppSettings[sipUserKey];
+
+        const string sipUserPwdKey = "pwd";
+        static readonly string sipUserPwd = ConfigurationManager.AppSettings[sipUserPwdKey];
+
+        const string sipDomainKey = "sipDomain";
+        static readonly string sipDomain = ConfigurationManager.AppSettings[sipDomainKey];
+
+        const string playFileKey = "playFileLocation";
+        static readonly string playFilePath = ConfigurationManager.AppSettings[playFileKey];
+
+        const string recordingFolderKey = "recordingFolder";
+        static readonly string recordingFolderPath = ConfigurationManager.AppSettings[recordingFolderKey];
+
         private string cfgFileName = "phoneCfg.ini";
 
-        const string SIP_USER = "99051000507121";
-        const string SIP_PWD = "5FSzPGcamwvhfw";
-
+        private Timer timer;
+        private long callStart;
+        private long callStop;
+        private bool hasTimedOut;
+        private bool wasSuccessful;
+        private string lastMessage;
         private string phoneNumber;
         private bool recordingStarted;
         private int currentLineId;
-        private bool playFinished;
+        private bool playStarted;
 
         public AutoPhone()
         {
             abtoPhone = new CAbtoPhone();
-            if(!this.Initialize())
-            {
-                throw new Exception("Ünable to initialize line");
-            }
+            this.Initialize();
         }
 
-        public bool Initialize()
+        public void StartCall(string phoneNumber)
         {
-            this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
-            this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
-            this.abtoPhone.OnRegistered += AbtoPhone_OnRegistered;
-            this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
-            this.abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
-            this.abtoPhone.OnDetectedAnswerTime += AbtoPhone_OnDetectedAnswerTime;
-            this.abtoPhone.OnPhoneNotify += AbtoPhone_OnPhoneNotify;
-            this.abtoPhone.OnSubscribeStatus += AbtoPhone_OnSubscribeStatus;
+            this.phoneNumber = phoneNumber;
+            this.timer.Start();
+            this.abtoPhone.StartCall2(phoneNumber);
+            callStart = DateTime.Now.Ticks;
+        }
 
-            phoneCfg = abtoPhone.Config;
-            phoneCfg.Load(cfgFileName);
-
-            phoneCfg.MP3RecordingEnabled = 1;
-
-            phoneCfg.LicenseUserId = LICENSE_USER_ID;
-            phoneCfg.LicenseKey = LICENSE_KEY;
-            phoneCfg.RegDomain = "sip.skype.com";
-            phoneCfg.RegUser = SIP_USER;
-            phoneCfg.RegPass = SIP_PWD;
-            phoneCfg.ListenPort = 5060;
-
-            phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
-
+        private void Initialize()
+        {
             try
             {
+                this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
+                this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
+                this.abtoPhone.OnRegistered += AbtoPhone_OnRegistered;
+                this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
+
+                phoneCfg = abtoPhone.Config;
+                phoneCfg.Load(cfgFileName);
+
+                phoneCfg.MP3RecordingEnabled = 1;
+
+                phoneCfg.LicenseUserId = LICENSE_USER_ID;
+                phoneCfg.LicenseKey = LICENSE_KEY;
+                phoneCfg.RegDomain = sipDomain;
+                phoneCfg.RegUser = sipUser;
+                phoneCfg.RegPass = sipUserPwd;
+                phoneCfg.ListenPort = 5060;
+
+                phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
+
                 abtoPhone.ApplyConfig();
                 abtoPhone.Initialize();
 
-                return true;
+                this.timer = new System.Timers.Timer(timerDelay * 1000);
+                this.timer.Enabled = false;
+                this.timer.Elapsed += Timer_Elapsed;
+                this.timer.AutoReset = false;
             }
             catch (Exception e)
             {
-                return false;
+                Log.Error(e.ToString());
             }
         }
 
-        private void AbtoPhone_OnSubscribeStatus(int subscriptionId, int statusCode, string statusMsg)
+        private void AbtoPhone_OnRegistered(string message)
         {
-            int a = 23;
+            Log.Info("Line registered : $message");
         }
 
-        private void AbtoPhone_OnPhoneNotify(string Msg)
+        private void AbtoPhone_OnPlayFinished(string message)
         {
-            int a = 23;
+            Log.Info("Play finished : $message");
+            hangUpThePhone();
+            this.wasSuccessful = true;
+            this.lastMessage = message;
+
+            this.Completion(
+                new RobotCallDataEventArgs
+                {
+                    Successful = wasSuccessful,
+                    Status = lastMessage,
+                    HasTimedOut = hasTimedOut,
+                    CallDuration = TimeSpan.FromTicks(callStop - callStart)
+                });
         }
 
-        private void AbtoPhone_OnRegistered(string Msg)
+        private void Completion(RobotCallDataEventArgs e)
         {
-            int a = 23;
+            var handler = OnCompletion;
+            handler?.Invoke(this, e);
         }
 
-        #region events
-        protected virtual void OnAnsweringMachine(EventArgs e)
+        public event EventHandler<RobotCallDataEventArgs> OnCompletion;
+
+        private void hangUpThePhone()
         {
-            EventHandler handler = AnsweringMachine;
-            if (handler != null)
+            try
             {
-                handler(this, e);
+                this.timer.Stop();
+                this.abtoPhone.HangUpCallLine(this.currentLineId);
+                callStop = DateTime.Now.Ticks;
+                this.stopRecording();
             }
-        }
-
-        public event EventHandler AnsweringMachine;
-
-        protected virtual void OnFaxMachine(EventArgs e)
-        {
-            EventHandler handler = FaxMachine;
-            if (handler != null)
+            catch (Exception ex)
             {
-                handler(this, e);
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                this.CleanUp();
             }
         }
 
-        public event EventHandler FaxMachine;
-        
-        #endregion events
-
-        private void AbtoPhone_OnDetectedAnswerTime(int timeSpanMs, int connectionId)
-        {
-            if (timeSpanMs > 3000) {
-                // means Answering Machine
-                OnAnsweringMachine(EventArgs.Empty);
-            }
-        }
-
-        private void AbtoPhone_OnToneReceived(int tone, int connectionId, int lineId)
-        {
-            if (tone == 70) {
-                this.abtoPhone.HangUpCallLine(lineId);
-                OnFaxMachine(EventArgs.Empty);
-            }// means Fax Machine
-        }
-
-        private void AbtoPhone_OnPlayFinished(string msg)
-        {
-            this.playFinished = true;
-        }
-
-        private void AbtoPhone_OnEstablishedCall(string msg, int lineId)
+        private void AbtoPhone_OnEstablishedCall(string message, int lineId)
         {
             this.currentLineId = lineId;
-            //var filename = $"{this.phoneNumber}_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")}.mp3";
 
-            //var filePath = Path.Combine(RECORDINGS_PATH, filename);
-            //this.abtoPhone.StartRecording(filePath);
-            //recordingStarted = true;
-
-            this.abtoPhone.PlayFileLine(STAR_RECORDING_PATH, lineId);
+            startRecording(message);
+            startPlayFile(message);
         }
 
-        private void AbtoPhone_OnClearedCall(string msg, int status, int lineId)
+        private void startRecording(string message)
         {
-            if (!playFinished) {
-                this.abtoPhone.StopPlaybackLine(lineId);
-            }
+            try
+            {
+                var filename = $"{this.phoneNumber}_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")}.mp3";
+                var filePath = Path.Combine(recordingFolderPath, filename);
+                this.abtoPhone.StartRecording(filePath);
+                recordingStarted = true;
 
+                Log.Info("Started recording on line : $this.currentLineId, message : $message");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+        }
+
+        private void startPlayFile(string message)
+        {
+            try
+            {
+                this.abtoPhone.PlayFileLine(playFilePath, this.currentLineId);
+                this.playStarted = true;
+
+                Log.Info("Play file started on line : $this.currentLineId, message : $message");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+        }
+
+        private void stopPlayback(int lineId)
+        {
+            if (this.playStarted)
+            {
+                try
+                {
+                    this.abtoPhone.StopPlaybackLine(lineId);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+            }
+        }
+
+        private void stopRecording()
+        {
             if (recordingStarted)
             {
-                this.abtoPhone.StopRecording();
-                recordingStarted = false;
+                try
+                {
+                    this.abtoPhone.StopRecording();
+                    recordingStarted = false;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.ToString());
+                }
             }
         }
 
-        public void StartCall(string phoneNumber) {
-            this.phoneNumber = phoneNumber;
-            this.abtoPhone.StartCall2(phoneNumber);
-        }
-
-        public void HangUp()
+        private void AbtoPhone_OnClearedCall(string message, int status, int lineId)
         {
-            if(this.abtoPhone.IsLineOccupied(this.currentLineId) != 0)
+            try
             {
-                this.abtoPhone.HangUpCallLine(this.currentLineId);
+                callStop = DateTime.Now.Ticks;
+                this.timer.Stop();
+
+                var msg = "Cleared call started on line : $lineId with status : $status and message : $message";
+                Log.Info(msg);
+
+                this.stopPlayback(lineId);
+                this.stopRecording();
+
+                this.wasSuccessful = false;
+                this.lastMessage = msg;
             }
-            
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                this.CleanUp();
+                this.Completion(
+                    new RobotCallDataEventArgs
+                    {
+                        Successful = wasSuccessful,
+                        Status = lastMessage,
+                        HasTimedOut = hasTimedOut,
+                        CallDuration = TimeSpan.FromTicks(callStop - callStart)
+                    });
+            }
         }
 
-        private void AbtoPhone_OnIncomingCall(string adress, int lineId)
+        private void CleanUp()
         {
-            //AbtoPhone.AnswerCallLine(lineId);
-            //else AbtoPhone.RejectCallLine(lineId);
+            try
+            {
+                timer.Stop();
+                timer.Close();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                this.hasTimedOut = true;
+                hangUpThePhone();
+                this.wasSuccessful = false;
+                this.lastMessage = "Has timed out.";
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                this.Completion(
+                    new RobotCallDataEventArgs
+                    {
+                        Successful = wasSuccessful,
+                        Status = lastMessage,
+                        HasTimedOut = hasTimedOut,
+                        CallDuration = TimeSpan.FromTicks(callStop - callStart)
+                    });
+            }
         }
     }
 }
