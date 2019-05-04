@@ -23,6 +23,8 @@ namespace Database
 
         public DbSet<CallCount> CallCounts { get; set; }
 
+        public DbSet<LegalHoliday> LegalHolidays { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();

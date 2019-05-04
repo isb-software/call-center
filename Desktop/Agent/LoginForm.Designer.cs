@@ -33,6 +33,7 @@
             this.LoginButton = new System.Windows.Forms.Button();
             this.InboundRadioButton = new System.Windows.Forms.RadioButton();
             this.OutboundRadioButton = new System.Windows.Forms.RadioButton();
+            this.legalHolidayLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // UsersComboBox
@@ -86,11 +87,23 @@
             this.OutboundRadioButton.Text = "Outbound";
             this.OutboundRadioButton.UseVisualStyleBackColor = true;
             // 
+            // legalHolidayLabel
+            // 
+            this.legalHolidayLabel.AutoSize = true;
+            this.legalHolidayLabel.ForeColor = System.Drawing.Color.Red;
+            this.legalHolidayLabel.Location = new System.Drawing.Point(207, 176);
+            this.legalHolidayLabel.Name = "legalHolidayLabel";
+            this.legalHolidayLabel.Size = new System.Drawing.Size(136, 13);
+            this.legalHolidayLabel.TabIndex = 5;
+            this.legalHolidayLabel.Text = "Astazi este zi de sarbatoare";
+            this.legalHolidayLabel.Visible = false;
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(588, 343);
+            this.Controls.Add(this.legalHolidayLabel);
             this.Controls.Add(this.OutboundRadioButton);
             this.Controls.Add(this.InboundRadioButton);
             this.Controls.Add(this.LoginButton);
@@ -111,5 +124,6 @@
         private System.Windows.Forms.Button LoginButton;
         private System.Windows.Forms.RadioButton InboundRadioButton;
         private System.Windows.Forms.RadioButton OutboundRadioButton;
+        private System.Windows.Forms.Label legalHolidayLabel;
     }
 }

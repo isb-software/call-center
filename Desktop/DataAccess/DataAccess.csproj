@@ -107,6 +107,7 @@
   <ItemGroup>
     <Compile Include="IServices\ICallCountService.cs" />
     <Compile Include="IServices\ICallService.cs" />
+    <Compile Include="IServices\ILegalHolidayService.cs" />
     <Compile Include="IServices\INormalQueueService.cs" />
     <Compile Include="IServices\IPriorityQueueService.cs" />
     <Compile Include="IServices\IStatusService.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CallCountService.cs" />
     <Compile Include="Services\CallService.cs" />
+    <Compile Include="Services\LegalHolidayService.cs" />
     <Compile Include="Services\NormalQueueService.cs" />
     <Compile Include="Services\PriorityQueueService.cs" />
     <Compile Include="Services\StatusService.cs" />

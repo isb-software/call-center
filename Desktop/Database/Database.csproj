@@ -111,6 +111,10 @@
     <Compile Include="Migrations\201904202041145_AddCallAtemptsAndNextTimeCall.Designer.cs">
       <DependentUpon>201904202041145_AddCallAtemptsAndNextTimeCall.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905041643393_AddLegalHolidaysTable.cs" />
+    <Compile Include="Migrations\201905041643393_AddLegalHolidaysTable.Designer.cs">
+      <DependentUpon>201905041643393_AddLegalHolidaysTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -150,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904202041145_AddCallAtemptsAndNextTimeCall.resx">
       <DependentUpon>201904202041145_AddCallAtemptsAndNextTimeCall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905041643393_AddLegalHolidaysTable.resx">
+      <DependentUpon>201905041643393_AddLegalHolidaysTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

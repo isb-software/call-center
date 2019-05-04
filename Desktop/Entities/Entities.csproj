@@ -95,6 +95,7 @@
     <Compile Include="Enums\StatusEnum.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\CallCount.cs" />
+    <Compile Include="Models\LegalHoliday.cs" />
     <Compile Include="Models\NormalQueue.cs" />
     <Compile Include="Models\PhoneNumber.cs" />
     <Compile Include="Models\PriorityQueue.cs" />

@@ -8,10 +8,12 @@ namespace Agent
     public partial class LoginForm : Form
     {
         private UserService userService;
+        private LegalHolidayService legalHolidayService;
 
         public LoginForm()
         {
             userService = new UserService();
+            legalHolidayService = new LegalHolidayService();
 
             InitializeComponent();
 
@@ -20,6 +22,12 @@ namespace Agent
 
         private void LoginButtonClick(object sender, EventArgs e)
         {
+            if (this.legalHolidayService.IsLegalHoliday())
+            {
+                legalHolidayLabel.Visible = true;
+                return;
+            }
+
             User selectedUser = (User)UsersComboBox.SelectedItem;
             string userName = $"{selectedUser.LastName} {selectedUser.FirstName}";
 
@@ -33,7 +41,6 @@ namespace Agent
             {
                 // TODO: open the other form
             }
-            
         }
 
         private void LoadUsers()
