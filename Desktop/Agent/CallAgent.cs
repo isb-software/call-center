@@ -20,6 +20,8 @@ namespace Agent
         private int currentCallAtempts = 0;
         private int currentUserId = 0;
         private int callStartDurationThreshold = 0;
+        private int workDayStartHour = 0;
+        private int workDayEndHour = 0;
 
         private Timer callDurationTimer;
         private Timer callStartDurationTimer;
@@ -40,6 +42,8 @@ namespace Agent
             this.InitializeStatus();
 
             this.callStartDurationThreshold = Convert.ToInt32(ConfigurationManager.AppSettings["SipCallStartThreshold"]);
+            this.workDayStartHour = Convert.ToInt32(ConfigurationManager.AppSettings["WorkDayStartHour"]);
+            this.workDayEndHour = Convert.ToInt32(ConfigurationManager.AppSettings["WorkDayEndHour"]);
             this.DocumentRichTextBox.LoadFile(ConfigurationManager.AppSettings["DocumentFileLocation"], RichTextBoxStreamType.RichText);
             this.LoggedSinceLabel.Text = $"De La: {DateTime.Now.ToString("HH:mm")}";
             this.currentUserId = userId;
@@ -85,6 +89,16 @@ namespace Agent
 
         private void CallButtonClick(object sender, EventArgs e)
         {
+            var currentDate = DateTime.Now;
+
+            if (currentDate.Hour < workDayStartHour || currentDate.Hour >= workDayEndHour)
+            {
+                workDayErrorLabel.Text = $"Puteti suna doar intre orele {workDayStartHour}:00 - {workDayEndHour}:00";
+                workDayErrorLabel.Visible = true;
+                return;
+            }
+
+            workDayErrorLabel.Visible = false;
             this.GetNextPhoneNumber();
             PhoneNumberTextBox.Text = phoneNumber;
             this.LoadDetailsForPhoneNumber();
