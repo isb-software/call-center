@@ -16,19 +16,19 @@ namespace Agent
             Application.ThreadException += ApplicationThreadException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
-            using (var mutex = new Mutex(false, "isbsoftware.com CallCenter"))
-            {
-                bool isAnotherInstanceOpen = !mutex.WaitOne(TimeSpan.Zero);
-                if (isAnotherInstanceOpen)
-                {
-                    Console.WriteLine(@"Only one instance of this app is allowed.");
-                    return;
-                }
+            //using (var mutex = new Mutex(false, "isbsoftware.com CallCenter"))
+            //{
+            //    bool isAnotherInstanceOpen = !mutex.WaitOne(TimeSpan.Zero);
+            //    if (isAnotherInstanceOpen)
+            //    {
+            //        Console.WriteLine(@"Only one instance of this app is allowed.");
+            //        return;
+            //    }
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new LoginForm());
-            }
+            //}
         }
 
         private static void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)

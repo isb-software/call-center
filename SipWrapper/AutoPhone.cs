@@ -46,6 +46,9 @@ namespace SipWrapper
         const string recordingFolderKey = "recordingFolder";
         static readonly string recordingFolderPath = ConfigurationManager.AppSettings[recordingFolderKey];
 
+        const string sipLogPathKey = "sipLogPath";
+        static readonly string sipLogFolder = ConfigurationManager.AppSettings[sipLogPathKey];
+
         private string cfgFileName = "phoneCfg.ini";
 
         private Timer timer;
@@ -67,10 +70,17 @@ namespace SipWrapper
 
         public void StartCall(string phoneNumber)
         {
-            this.phoneNumber = phoneNumber;
-            this.timer.Start();
-            this.abtoPhone.StartCall2(phoneNumber);
-            callStart = DateTime.Now.Ticks;
+            try
+            {
+                this.phoneNumber = phoneNumber;
+                this.timer.Start();
+                this.abtoPhone.StartCall(phoneNumber);
+                callStart = DateTime.Now.Ticks;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
         }
 
         private void Initialize()
@@ -81,6 +91,7 @@ namespace SipWrapper
                 this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
                 this.abtoPhone.OnRegistered += AbtoPhone_OnRegistered;
                 this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
+                this.abtoPhone.OnClearedConnection2 += AbtoPhone_OnClearedConnection2;
 
                 phoneCfg = abtoPhone.Config;
                 phoneCfg.Load(cfgFileName);
@@ -93,6 +104,8 @@ namespace SipWrapper
                 phoneCfg.RegUser = sipUser;
                 phoneCfg.RegPass = sipUserPwd;
                 phoneCfg.ListenPort = 5060;
+                phoneCfg.LogPath = sipLogFolder;
+                phoneCfg.LogLevel = LogLevelType.eLogCritical | LogLevelType.eLogError | LogLevelType.eLogWarning;
 
                 phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
@@ -110,14 +123,19 @@ namespace SipWrapper
             }
         }
 
+        private void AbtoPhone_OnClearedConnection2(int ConnectionId, int LineId, int status)
+        {
+            int a = 23;
+        }
+
         private void AbtoPhone_OnRegistered(string message)
         {
-            Log.Info("Line registered : $message");
+            Log.Info(String.Format("Line registered : {0}.", message));
         }
 
         private void AbtoPhone_OnPlayFinished(string message)
         {
-            Log.Info("Play finished : $message");
+            Log.Info(String.Format("Play finished : {0}", message));
             hangUpThePhone();
             this.wasSuccessful = true;
             this.lastMessage = message;
@@ -162,6 +180,7 @@ namespace SipWrapper
         private void AbtoPhone_OnEstablishedCall(string message, int lineId)
         {
             this.currentLineId = lineId;
+            this.timer.Stop();
 
             startRecording(message);
             startPlayFile(message);
@@ -171,12 +190,18 @@ namespace SipWrapper
         {
             try
             {
-                var filename = $"{this.phoneNumber}_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff")}.mp3";
+                var filename = String.Format("{0}_{1}.mp3",
+                    this.phoneNumber,
+                    DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff"));
+
                 var filePath = Path.Combine(recordingFolderPath, filename);
                 this.abtoPhone.StartRecording(filePath);
                 recordingStarted = true;
 
-                Log.Info("Started recording on line : $this.currentLineId, message : $message");
+                Log.Info(
+                    String.Format("Started recording on line : {0} : {1}",
+                        this.currentLineId, 
+                        message));
             }
             catch (Exception ex)
             {
@@ -191,7 +216,11 @@ namespace SipWrapper
                 this.abtoPhone.PlayFileLine(playFilePath, this.currentLineId);
                 this.playStarted = true;
 
-                Log.Info("Play file started on line : $this.currentLineId, message : $message");
+                Log.Info(
+                    String.Format(
+                        "Play file started on line : {0}, message : {1}.", 
+                        this.currentLineId, 
+                        message));
             }
             catch (Exception ex)
             {
@@ -237,7 +266,12 @@ namespace SipWrapper
                 callStop = DateTime.Now.Ticks;
                 this.timer.Stop();
 
-                var msg = "Cleared call started on line : $lineId with status : $status and message : $message";
+                var msg = String.Format(
+                    "Cleared call on line : {0} with status : {1} and message : {2}.",
+                        lineId,
+                        status,
+                        message);
+
                 Log.Info(msg);
 
                 this.stopPlayback(lineId);
