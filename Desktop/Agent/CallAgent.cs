@@ -238,7 +238,6 @@ namespace Agent
 
             if (callStartDuration == this.callStartDurationThreshold)
             {
-                this.DisplayNotificationMessage("OnCallStartDurationTimerTick");
                 this.sipPhone.HangUp();
 
                 StatusComboBox.SelectedValue = (int)StatusEnum.NuRaspunde;
