@@ -148,6 +148,7 @@ namespace Agent
             this.DisplayNotificationMessage("A raspuns");
             this.DisplayNotificationMessage("Incepe inregistrarea");
             recordingPath = e.Message;
+            StopCallStartDurationTimer();
             StartCallDurationTimer();
         }
 
@@ -173,13 +174,25 @@ namespace Agent
             {
                 callDurationTimer.Stop();
             }
+
+            StopCallStartDurationTimer();
             SetCallHangUpSaveButtonState(false, false, true);
             SaveButton.Enabled = true;
+        }
+
+        private void StopCallStartDurationTimer()
+        {
+            if (callStartDurationTimer != null)
+            {
+                callStartDurationTimer.Stop();
+            }
         }
 
         private void OnSipLineBusy(object sender, EventArgs e)
         {
             SetCallHangUpSaveButtonState(false, false, true);
+            StopCallStartDurationTimer();
+
             this.StatusComboBox.SelectedValue = (int)StatusEnum.Ocupat;
         }
 
@@ -225,6 +238,7 @@ namespace Agent
 
             if (callStartDuration == this.callStartDurationThreshold)
             {
+                this.DisplayNotificationMessage("OnCallStartDurationTimerTick");
                 this.sipPhone.HangUp();
 
                 StatusComboBox.SelectedValue = (int)StatusEnum.NuRaspunde;
