@@ -74,7 +74,7 @@ namespace SipWrapper
             {
                 this.phoneNumber = phoneNumber;
                 this.timer.Start();
-                this.abtoPhone.StartCall(phoneNumber);
+                this.abtoPhone.StartCall2(phoneNumber);
                 callStart = DateTime.Now.Ticks;
             }
             catch (Exception ex)
@@ -87,16 +87,16 @@ namespace SipWrapper
         {
             try
             {
-                this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
                 this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
                 this.abtoPhone.OnRegistered += AbtoPhone_OnRegistered;
                 this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
-                this.abtoPhone.OnClearedConnection2 += AbtoPhone_OnClearedConnection2;
+                this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
+                this.abtoPhone.OnClearedConnection += AbtoPhone_OnClearedConnection;
 
                 phoneCfg = abtoPhone.Config;
                 phoneCfg.Load(cfgFileName);
 
-                phoneCfg.MP3RecordingEnabled = 1;
+                //phoneCfg.MP3RecordingEnabled = 1;
 
                 phoneCfg.LicenseUserId = LICENSE_USER_ID;
                 phoneCfg.LicenseKey = LICENSE_KEY;
@@ -105,9 +105,9 @@ namespace SipWrapper
                 phoneCfg.RegPass = sipUserPwd;
                 phoneCfg.ListenPort = 5060;
                 phoneCfg.LogPath = sipLogFolder;
-                phoneCfg.LogLevel = LogLevelType.eLogCritical | LogLevelType.eLogError | LogLevelType.eLogWarning;
+                phoneCfg.LogLevel = (LogLevelType)11; //LogLevelType.eLogCritical | LogLevelType.eLogError | LogLevelType.eLogWarning;
 
-                phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
+                //phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
                 abtoPhone.ApplyConfig();
                 abtoPhone.Initialize();
@@ -123,9 +123,21 @@ namespace SipWrapper
             }
         }
 
+        private void AbtoPhone_OnSubscriptionTerminated(string fromUri)
+        {
+            int a = 23;
+        }
+
+        private void AbtoPhone_OnClearedConnection(int ConnectionId, int LineId)
+        {
+            int a = 23;
+
+        }
+
         private void AbtoPhone_OnClearedConnection2(int ConnectionId, int LineId, int status)
         {
             int a = 23;
+
         }
 
         private void AbtoPhone_OnRegistered(string message)
@@ -135,19 +147,24 @@ namespace SipWrapper
 
         private void AbtoPhone_OnPlayFinished(string message)
         {
-            Log.Info(String.Format("Play finished : {0}", message));
-            hangUpThePhone();
-            this.wasSuccessful = true;
-            this.lastMessage = message;
+            //var lineOccupied = this.abtoPhone.IsLineOccupied(this.currentLineId);
 
-            this.Completion(
-                new RobotCallDataEventArgs
-                {
-                    Successful = wasSuccessful,
-                    Status = lastMessage,
-                    HasTimedOut = hasTimedOut,
-                    CallDuration = TimeSpan.FromTicks(callStop - callStart)
-                });
+            //if (lineOccupied > 0) { }
+            //else { }
+
+            Log.Info(String.Format("Play finished : {0}", message));
+            //hangUpThePhone();
+        //    this.wasSuccessful = true;
+        //    this.lastMessage = message;
+
+        //    this.Completion(
+        //        new RobotCallDataEventArgs
+        //        {
+        //            Successful = wasSuccessful,
+        //            Status = lastMessage,
+        //            HasTimedOut = hasTimedOut,
+        //            CallDuration = TimeSpan.FromTicks(callStop - callStart)
+        //        });
         }
 
         private void Completion(RobotCallDataEventArgs e)
@@ -165,7 +182,6 @@ namespace SipWrapper
                 this.timer.Stop();
                 this.abtoPhone.HangUpCallLine(this.currentLineId);
                 callStop = DateTime.Now.Ticks;
-                this.stopRecording();
             }
             catch (Exception ex)
             {
@@ -182,31 +198,7 @@ namespace SipWrapper
             this.currentLineId = lineId;
             this.timer.Stop();
 
-            startRecording(message);
             startPlayFile(message);
-        }
-
-        private void startRecording(string message)
-        {
-            try
-            {
-                var filename = String.Format("{0}_{1}.mp3",
-                    this.phoneNumber,
-                    DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff"));
-
-                var filePath = Path.Combine(recordingFolderPath, filename);
-                this.abtoPhone.StartRecording(filePath);
-                recordingStarted = true;
-
-                Log.Info(
-                    String.Format("Started recording on line : {0} : {1}",
-                        this.currentLineId, 
-                        message));
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-            }
         }
 
         private void startPlayFile(string message)
@@ -243,22 +235,6 @@ namespace SipWrapper
             }
         }
 
-        private void stopRecording()
-        {
-            if (recordingStarted)
-            {
-                try
-                {
-                    this.abtoPhone.StopRecording();
-                    recordingStarted = false;
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.ToString());
-                }
-            }
-        }
-
         private void AbtoPhone_OnClearedCall(string message, int status, int lineId)
         {
             try
@@ -275,7 +251,6 @@ namespace SipWrapper
                 Log.Info(msg);
 
                 this.stopPlayback(lineId);
-                this.stopRecording();
 
                 this.wasSuccessful = false;
                 this.lastMessage = msg;
