@@ -13,6 +13,7 @@ namespace SipWrapper
         public bool Successful { get; internal set; }
         public TimeSpan TotalCallDuration { get; internal set; }
         public TimeSpan ConversationDuration { get; internal set; }
+        public string PhoneNumber { get; internal set; }
 
     }
 }

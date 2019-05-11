@@ -77,6 +77,7 @@ namespace SipWrapper
             {
                 this.phoneNumber = phoneNumber;
                 this.timer.Start();
+                this.phoneNumber = phoneNumber;
                 this.abtoPhone.StartCall2(phoneNumber);
                 callStart = DateTime.Now.Ticks;
             }
@@ -107,7 +108,7 @@ namespace SipWrapper
                 phoneCfg.RegPass = sipUserPwd;
                 phoneCfg.ListenPort = 5060;
                 phoneCfg.LogPath = sipLogFolder;
-                phoneCfg.LogLevel = (LogLevelType)11; //LogLevelType.eLogCritical | LogLevelType.eLogError | LogLevelType.eLogWarning;
+                phoneCfg.LogLevel = LogLevelType.eLogCritical | LogLevelType.eLogError; // | LogLevelType.eLogWarning; // (LogLevelType)11;
 
                 //phoneCfg.TonesTypesToDetect = (int)ToneType.eToneDtmf;
 
@@ -286,6 +287,7 @@ namespace SipWrapper
                     new RobotCallDataEventArgs
                     {
                         Successful = wasSuccessful,
+                        PhoneNumber = this.phoneNumber,
                         Status = lastMessage,
                         HasTimedOut = hasTimedOut,
                         ConversationDuration = this.callAnswered ? TimeSpan.FromTicks(callStop - conversationStart) :TimeSpan.Zero,
