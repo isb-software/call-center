@@ -53,12 +53,15 @@ namespace SipWrapper
 
         private Timer timer;
         private long callStart;
+        private bool appCalledHangup;
+        private long conversationStart;
+        private bool callAnswered;
         private long callStop;
         private bool hasTimedOut;
         private bool wasSuccessful;
         private string lastMessage;
         private string phoneNumber;
-        private bool recordingStarted;
+        private bool connectionCleared;
         private int currentLineId;
         private bool playStarted;
 
@@ -88,15 +91,14 @@ namespace SipWrapper
             try
             {
                 this.abtoPhone.OnEstablishedCall += AbtoPhone_OnEstablishedCall;
-                this.abtoPhone.OnRegistered += AbtoPhone_OnRegistered;
-                this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
-                this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
                 this.abtoPhone.OnClearedConnection += AbtoPhone_OnClearedConnection;
+                this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
+                this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
 
                 phoneCfg = abtoPhone.Config;
                 phoneCfg.Load(cfgFileName);
 
-                //phoneCfg.MP3RecordingEnabled = 1;
+                phoneCfg.MP3RecordingEnabled = 1;
 
                 phoneCfg.LicenseUserId = LICENSE_USER_ID;
                 phoneCfg.LicenseKey = LICENSE_KEY;
@@ -112,6 +114,8 @@ namespace SipWrapper
                 abtoPhone.ApplyConfig();
                 abtoPhone.Initialize();
 
+                //abtoPhone.SetCurrentLine(2);
+
                 this.timer = new System.Timers.Timer(timerDelay * 1000);
                 this.timer.Enabled = false;
                 this.timer.Elapsed += Timer_Elapsed;
@@ -121,50 +125,6 @@ namespace SipWrapper
             {
                 Log.Error(e.ToString());
             }
-        }
-
-        private void AbtoPhone_OnSubscriptionTerminated(string fromUri)
-        {
-            int a = 23;
-        }
-
-        private void AbtoPhone_OnClearedConnection(int ConnectionId, int LineId)
-        {
-            int a = 23;
-
-        }
-
-        private void AbtoPhone_OnClearedConnection2(int ConnectionId, int LineId, int status)
-        {
-            int a = 23;
-
-        }
-
-        private void AbtoPhone_OnRegistered(string message)
-        {
-            Log.Info(String.Format("Line registered : {0}.", message));
-        }
-
-        private void AbtoPhone_OnPlayFinished(string message)
-        {
-            //var lineOccupied = this.abtoPhone.IsLineOccupied(this.currentLineId);
-
-            //if (lineOccupied > 0) { }
-            //else { }
-
-            Log.Info(String.Format("Play finished : {0}", message));
-            //hangUpThePhone();
-        //    this.wasSuccessful = true;
-        //    this.lastMessage = message;
-
-        //    this.Completion(
-        //        new RobotCallDataEventArgs
-        //        {
-        //            Successful = wasSuccessful,
-        //            Status = lastMessage,
-        //            HasTimedOut = hasTimedOut,
-        //            CallDuration = TimeSpan.FromTicks(callStop - callStart)
-        //        });
         }
 
         private void Completion(RobotCallDataEventArgs e)
@@ -179,9 +139,7 @@ namespace SipWrapper
         {
             try
             {
-                this.timer.Stop();
                 this.abtoPhone.HangUpCallLine(this.currentLineId);
-                callStop = DateTime.Now.Ticks;
             }
             catch (Exception ex)
             {
@@ -195,8 +153,11 @@ namespace SipWrapper
 
         private void AbtoPhone_OnEstablishedCall(string message, int lineId)
         {
-            this.currentLineId = lineId;
             this.timer.Stop();
+
+            this.currentLineId = lineId;
+            this.conversationStart = DateTime.Now.Ticks;
+            this.callAnswered = true;
 
             startPlayFile(message);
         }
@@ -205,14 +166,17 @@ namespace SipWrapper
         {
             try
             {
-                this.abtoPhone.PlayFileLine(playFilePath, this.currentLineId);
-                this.playStarted = true;
+                if (!this.playStarted)
+                {
+                    this.abtoPhone.PlayFileLine(playFilePath, this.currentLineId);
+                    this.playStarted = true;
 
-                Log.Info(
-                    String.Format(
-                        "Play file started on line : {0}, message : {1}.", 
-                        this.currentLineId, 
-                        message));
+                    Log.Info(
+                        String.Format(
+                            "Play file started on line : {0}, message : {1}.",
+                            this.currentLineId,
+                            message));
+                }
             }
             catch (Exception ex)
             {
@@ -235,25 +199,80 @@ namespace SipWrapper
             }
         }
 
+        private void AbtoPhone_OnClearedConnection(int ConnectionId, int LineId)
+        {
+            this.timer.Stop();
+
+            Log.Info(String.Format("Connection cleared : {0} on line {1}", ConnectionId, LineId));
+            connectionCleared = true;
+
+            callStop = DateTime.Now.Ticks;
+        }
+
+        private void AbtoPhone_OnRegistered(string message)
+        {
+            Log.Info(String.Format("Line registered : {0}.", message));
+        }
+
+        private void AbtoPhone_OnPlayFinished(string message)
+        {
+            this.timer.Stop();
+
+            Log.Info(String.Format("Play finished : {0}", message));
+
+            if (!this.connectionCleared)
+            {
+                // This is the happy flow. Call completes properly, we need to hang up.
+                this.appCalledHangup = true;
+                this.lastMessage = "Call completed";
+
+                hangUpThePhone();
+            }
+            else
+            {
+                // this is the flow where third party answered, file play started, and third party hung up before
+                // file play completed.
+                this.lastMessage = "Hung up.";
+            }
+        }
+
         private void AbtoPhone_OnClearedCall(string message, int status, int lineId)
         {
             try
             {
-                callStop = DateTime.Now.Ticks;
                 this.timer.Stop();
+                
+                if (this.playStarted)
+                {
+                    this.stopPlayback(lineId);
+                }
 
-                var msg = String.Format(
+                Log.Info(String.Format(
                     "Cleared call on line : {0} with status : {1} and message : {2}.",
                         lineId,
                         status,
-                        message);
+                        message));
 
-                Log.Info(msg);
+                if (!this.hasTimedOut)
+                {
+                    this.wasSuccessful = this.appCalledHangup;
 
-                this.stopPlayback(lineId);
-
-                this.wasSuccessful = false;
-                this.lastMessage = msg;
+                    if(status > 0)
+                    {
+                        switch (status)
+                        {
+                            case 404:
+                                this.lastMessage = "Numar inexistent";
+                                break;
+                            case 486:
+                                this.lastMessage = "Apel refuzat";
+                                break;
+                            default:
+                                this.lastMessage = String.Format("Status {0}", status);
+                                break;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -262,13 +281,15 @@ namespace SipWrapper
             finally
             {
                 this.CleanUp();
+
                 this.Completion(
                     new RobotCallDataEventArgs
                     {
                         Successful = wasSuccessful,
                         Status = lastMessage,
                         HasTimedOut = hasTimedOut,
-                        CallDuration = TimeSpan.FromTicks(callStop - callStart)
+                        ConversationDuration = this.callAnswered ? TimeSpan.FromTicks(callStop - conversationStart) :TimeSpan.Zero,
+                        TotalCallDuration = TimeSpan.FromTicks(callStop - callStart)
                     });
             }
         }
@@ -277,7 +298,10 @@ namespace SipWrapper
         {
             try
             {
-                timer.Stop();
+                if (this.timer.Enabled)
+                {
+                    timer.Stop();
+                }
                 timer.Close();
             }
             catch (Exception ex)
@@ -291,24 +315,14 @@ namespace SipWrapper
             try
             {
                 this.hasTimedOut = true;
-                hangUpThePhone();
                 this.wasSuccessful = false;
                 this.lastMessage = "Has timed out.";
+
+                hangUpThePhone();
             }
             catch (Exception ex)
             {
                 Log.Error(ex.ToString());
-            }
-            finally
-            {
-                this.Completion(
-                    new RobotCallDataEventArgs
-                    {
-                        Successful = wasSuccessful,
-                        Status = lastMessage,
-                        HasTimedOut = hasTimedOut,
-                        CallDuration = TimeSpan.FromTicks(callStop - callStart)
-                    });
             }
         }
     }

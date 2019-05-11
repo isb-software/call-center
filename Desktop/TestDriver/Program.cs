@@ -18,7 +18,11 @@ namespace TestDriver
             AutoPhone autoPhone = new AutoPhone();
             autoPhone.OnCompletion += AutoPhone_OnCompletion;
 
+            //autoPhone.StartCall("40743677783");
+            //autoPhone.StartCall("40746233333");
             autoPhone.StartCall("40746294444");
+
+            int a = 23;
 
             Console.ReadLine();
         }
