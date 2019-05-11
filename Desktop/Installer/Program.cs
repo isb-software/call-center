@@ -9,9 +9,11 @@ namespace Installer
 
         static void Main(string[] args)
         {
-            new UpdateAgent().Update();
+            //TODO: Add exception handling and logging.
+            UpdateAgent.Update();
 
-            StartAgent();
+            //StartAgent();
+            int a = 23;
         }
 
         private static void StartAgent()

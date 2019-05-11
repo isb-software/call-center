@@ -1,62 +1,82 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Installer
 {
-    public class UpdateAgent
+    public static class UpdateAgent
     {
-        private readonly string sourceDirectoryPathKey = "SourceFolder";
-        private readonly string targetDirectoryPathKey = "TargetFolder";
-        private readonly string targetDirectoryPath;
-        private readonly string sourceDirectoryPath;
+        private static readonly string sourceDirectoryPathKey = "SourceFolder";
+        private static readonly string targetDirectoryPathKey = "TargetFolder";
 
-        private List<FileInfo> targetDirectoryFiles;
-        private List<FileInfo> sourceDirectoryFiles;
+        private static readonly string targetDirectoryPath = ConfigurationManager.AppSettings[targetDirectoryPathKey];
+        private static readonly string sourceDirectoryPath = ConfigurationManager.AppSettings[sourceDirectoryPathKey];
 
-        public UpdateAgent()
+        public static void Update()
         {
-            this.targetDirectoryPath = ConfigurationManager.AppSettings[this.targetDirectoryPathKey];
-            this.sourceDirectoryPath = ConfigurationManager.AppSettings[this.sourceDirectoryPathKey];
-        }
-
-        public void Update()
-        {
-            if (this.IsUpdateAvailable())
+            if(String.IsNullOrWhiteSpace(sourceDirectoryPath))
             {
-                this.CopyUpdateFiles();
+                throw new Exception("Source directory path cannot be null or white space.");
+            }
+
+            if (String.IsNullOrWhiteSpace(targetDirectoryPath))
+            {
+                throw new Exception("TArget directory path cannot be null or white space.");
+            }
+
+            if (!Directory.Exists(sourceDirectoryPath))
+            {
+                throw new Exception(
+                    String.Format(
+                        "Source directory {0} does not exist.",
+                        sourceDirectoryPath));
+            }
+
+            if (String.Equals(
+                sourceDirectoryPath,
+                targetDirectoryPath,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception("Cannot copy source directory over itself.");
+            }
+
+            Directory.CreateDirectory(targetDirectoryPath);
+
+            foreach(var sourceFile in Directory.EnumerateFiles(sourceDirectoryPath, "*.*", SearchOption.AllDirectories))
+            {
+                //var sourceFileSubdirectory = Path.GetFullPath
+                //TODO: Fix issue. Subfolders in source path are not carried over in target path.
+                var targetFile = Path.Combine(targetDirectoryPath, Path.GetFileName(sourceFile));
+
+                Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
+                                
+                if(!File.Exists(targetFile))
+                {
+                    File.Copy(sourceFile, targetFile);
+                    continue;
+                }
+                               
+                var sourceFileHash = CalculateMD5(sourceFile);
+                var targetFileHash = CalculateMD5(targetFile);
+
+                if(!sourceFileHash.SequenceEqual(targetFileHash))
+                {
+                    File.Copy(sourceFile, targetFile, true);
+                }
             }
         }
 
-        private List<FileInfo> GetFilesForUpdate(string path)
+        private static byte[] CalculateMD5(string filename)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(path);
-            List<FileInfo> directoryFiles = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories).ToList();
-
-            return directoryFiles;
-        }
-
-        private bool IsUpdateAvailable()
-        {
-            this.targetDirectoryFiles = this.GetFilesForUpdate(this.targetDirectoryPath);
-            this.sourceDirectoryFiles = this.GetFilesForUpdate(this.sourceDirectoryPath);
-
-            FileCompare myFileCompare = new FileCompare();
-
-            return !this.targetDirectoryFiles.SequenceEqual(this.sourceDirectoryFiles, myFileCompare);
-        }
-
-        private void CopyUpdateFiles()
-        {
-            foreach (FileInfo fileInfo in this.sourceDirectoryFiles)
+            using (var md5 = MD5.Create())
             {
-                string updateFileLocation = fileInfo.FullName.Replace(this.sourceDirectoryPath, string.Empty);
-                string location = Path.Combine(this.targetDirectoryPath, updateFileLocation);
-
-                new FileInfo(location).Directory.Create();
-
-                File.Copy(fileInfo.FullName, location, true);
+                using (var stream = File.OpenRead(filename))
+                {
+                    return md5.ComputeHash(stream);
+                }
             }
         }
     }
