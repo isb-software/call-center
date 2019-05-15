@@ -9,47 +9,46 @@ namespace Installer
 {
     public static class UpdateAgent
     {
-        private static readonly string sourceDirectoryPathKey = "SourceFolder";
-        private static readonly string targetDirectoryPathKey = "TargetFolder";
+        internal static readonly string SourceDirectoryPathKey = "SourceFolder";
+        internal static readonly string TargetDirectoryPathKey = "TargetFolder";
 
-        private static readonly string targetDirectoryPath = ConfigurationManager.AppSettings[targetDirectoryPathKey];
-        private static readonly string sourceDirectoryPath = ConfigurationManager.AppSettings[sourceDirectoryPathKey];
+        internal static readonly string TargetDirectoryPath = ConfigurationManager.AppSettings[TargetDirectoryPathKey];
+        internal static readonly string SourceDirectoryPath = ConfigurationManager.AppSettings[SourceDirectoryPathKey];
 
         public static void Update()
         {
-            if(String.IsNullOrWhiteSpace(sourceDirectoryPath))
+            if(String.IsNullOrWhiteSpace(SourceDirectoryPath))
             {
                 throw new Exception("Source directory path cannot be null or white space.");
             }
 
-            if (String.IsNullOrWhiteSpace(targetDirectoryPath))
+            if (String.IsNullOrWhiteSpace(TargetDirectoryPath))
             {
-                throw new Exception("TArget directory path cannot be null or white space.");
+                throw new Exception("Target directory path cannot be null or white space.");
             }
 
-            if (!Directory.Exists(sourceDirectoryPath))
+            if (!Directory.Exists(SourceDirectoryPath))
             {
                 throw new Exception(
                     String.Format(
                         "Source directory {0} does not exist.",
-                        sourceDirectoryPath));
+                        SourceDirectoryPath));
             }
 
             if (String.Equals(
-                sourceDirectoryPath,
-                targetDirectoryPath,
+                SourceDirectoryPath,
+                TargetDirectoryPath,
                 StringComparison.OrdinalIgnoreCase))
             {
                 throw new Exception("Cannot copy source directory over itself.");
             }
 
-            Directory.CreateDirectory(targetDirectoryPath);
+            Directory.CreateDirectory(TargetDirectoryPath);
 
-            foreach(var sourceFile in Directory.EnumerateFiles(sourceDirectoryPath, "*.*", SearchOption.AllDirectories))
+            foreach(var sourceFile in Directory.EnumerateFiles(SourceDirectoryPath, "*.*", SearchOption.AllDirectories))
             {
-                //var sourceFileSubdirectory = Path.GetFullPath
-                //TODO: Fix issue. Subfolders in source path are not carried over in target path.
-                var targetFile = Path.Combine(targetDirectoryPath, Path.GetFileName(sourceFile));
+                var targetFile = Path.GetFullPath(sourceFile)
+                    .Replace(SourceDirectoryPath, TargetDirectoryPath);
 
                 Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
                                 

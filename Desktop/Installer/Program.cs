@@ -5,15 +5,10 @@ namespace Installer
 {
     class Program
     {
-        private static readonly string sourceDirectoryPathKey = "SourceFolder";
-
         static void Main(string[] args)
         {
             //TODO: Add exception handling and logging.
             UpdateAgent.Update();
-
-            //StartAgent();
-            int a = 23;
         }
 
         private static void StartAgent()
@@ -23,9 +18,7 @@ namespace Installer
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
 
-            var sourceDirectoryPath = ConfigurationManager.AppSettings[sourceDirectoryPathKey];
-
-            startInfo.Arguments = $"/C start {sourceDirectoryPath}Agent.exe";
+            startInfo.Arguments = $"/C start {UpdateAgent.TargetDirectoryPath}Agent.exe";
             process.StartInfo = startInfo;
             process.Start();
         }
