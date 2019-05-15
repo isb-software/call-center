@@ -17,12 +17,13 @@ namespace TestDriver
         {
             AutoPhone autoPhone = new AutoPhone();
             autoPhone.OnCompletion += AutoPhone_OnCompletion;
-            autoPhone.StartCall("40746294444");
+            autoPhone.StartCall("40251412479");
+            //autoPhone.StartCall("40746294444");
 
 
-            AutoPhone autoPhone1 = new AutoPhone();
-            autoPhone1.OnCompletion += AutoPhone_OnCompletion1;
-            autoPhone1.StartCall("40743677783");
+            //AutoPhone autoPhone1 = new AutoPhone();
+            //autoPhone1.OnCompletion += AutoPhone_OnCompletion1;
+            //autoPhone1.StartCall("40743677783");
 
             //autoPhone.StartCall("40743677783");
             //autoPhone.StartCall("40746233333");

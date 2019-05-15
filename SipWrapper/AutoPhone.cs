@@ -95,6 +95,8 @@ namespace SipWrapper
                 this.abtoPhone.OnClearedConnection += AbtoPhone_OnClearedConnection;
                 this.abtoPhone.OnClearedCall += AbtoPhone_OnClearedCall;
                 this.abtoPhone.OnPlayFinished += AbtoPhone_OnPlayFinished;
+                this.abtoPhone.OnToneDetected += AbtoPhone_OnToneDetected;
+                this.abtoPhone.OnToneReceived += AbtoPhone_OnToneReceived;
 
                 phoneCfg = abtoPhone.Config;
                 phoneCfg.Load(cfgFileName);
@@ -126,6 +128,16 @@ namespace SipWrapper
             {
                 Log.Error(e.ToString());
             }
+        }
+
+        private void AbtoPhone_OnToneReceived(int Tone, int ConnectionId, int LineId)
+        {
+            int a = 23;
+        }
+
+        private void AbtoPhone_OnToneDetected(ToneType tType, string ToneStr, int ConnectionId, int LineId)
+        {
+            int a = 23;
         }
 
         private void Completion(RobotCallDataEventArgs e)
@@ -262,6 +274,9 @@ namespace SipWrapper
                     {
                         switch (status)
                         {
+                            case 403:
+                                this.lastMessage = "Fax machine";
+                                break;
                             case 404:
                                 this.lastMessage = "Numar inexistent";
                                 break;
