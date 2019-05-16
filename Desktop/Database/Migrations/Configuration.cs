@@ -10,13 +10,7 @@ namespace Database.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
-            // Note: if we add new procedures or change a procedure we need to add another empty migration so that the seed method will run
-            var migrator = new DbMigrator(this);
-            if (migrator.GetPendingMigrations().Any())
-            {
-                migrator.Update();
-            }
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(CallCenterDbContext context)
@@ -130,7 +124,7 @@ namespace Database.Migrations
                 x => x.Id,
                 new User
                 {
-                    Id = 3,
+                    Id = 1,
                     CreatedDate = DateTime.Now,
                     FirstName = "Test",
                     IsActive = true,

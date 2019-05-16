@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using Database.Migrations;
 using Entities.Models;
 
 namespace Database
@@ -8,7 +9,7 @@ namespace Database
     {
         public CallCenterDbContext() : base("DefaultConnection")
         {
-
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<CallCenterDbContext, Configuration>());
         }
 
         public DbSet<Status> Statuses { get; set; }
