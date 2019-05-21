@@ -9,5 +9,7 @@ namespace DataAccess.IServices
         void Create(Call call);
 
         CallDatasourceDto GetDatasource(TableQueryOptions queryOptions);
+
+        Call GetByPhoneNumber(string phoneNumber);
     }
 }
