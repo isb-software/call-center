@@ -5,7 +5,7 @@ namespace DataAccess.IServices
 {
     public interface IUserService
     {
-        List<User> GetAll();
+        List<User> GetAll(bool isActive);
 
         User GetById(int userId);
 

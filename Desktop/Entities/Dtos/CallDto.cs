@@ -18,10 +18,12 @@ namespace Entities.Dtos
 
         public string Education { get; set; }
 
-        public int Age { get; set; }
+        public string Age { get; set; }
 
         public DateTime DateTimeOfCall { get; set; }
 
         public string StatusName { get; set; }
+
+        public int Duration { get; set; }
     }
 }

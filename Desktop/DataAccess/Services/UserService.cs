@@ -14,13 +14,13 @@ namespace DataAccess.Services
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public List<User> GetAll()
+        public List<User> GetAll(bool isActive = true)
         {
             List<User> users;
 
             using (var context = new CallCenterDbContext())
             {
-                users = context.Users.ToList();
+                users = context.Users.Where(x => x.IsActive == isActive).ToList();
 
                 if (!users.Any())
                 {

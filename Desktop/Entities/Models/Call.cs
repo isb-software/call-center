@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Entities.Enums;
 
@@ -28,18 +29,11 @@ namespace Entities.Models
 
         public string Notes { get; set; }
 
+        [MaxLength(30)]
         public string PhoneNumber { get; set; }
 
-        public string Name { get; set; }
+        public InitialData InitialData { get; set; }
 
-        public string Forename { get; set; }
-
-        public string County { get; set; }
-
-        public string City { get; set; }
-
-        public int Age { get; set; }
-
-        public string Education { get; set; }
+        public int InitialDataId { get; set; }
     }
 }

@@ -1,0 +1,36 @@
+﻿1. Happy path
+Call is answered and it does not time out. Are the values returned proper? Are the events raised properly?
+The order in which events are raised is:
+
+a) OnEstablishedCall
+b) OnPlayFinished
+c) OnClearConnection
+d) OnClearedCall
+
+Pass
+
+2. Call times out
+Call times out. See configuration value. Are the values returned proper?
+
+a) OnEstablishedCall
+b) OnTimeout
+c) OnClearConnection
+d) OnClearedCall
+
+Pass
+
+3. Call is answered and it does not time out but third party hangs up on you. The order in which events are raised is:
+
+a) OnEstablishedCall
+b) OnClearConnection
+c) OnPlayFinished
+d) OnClearedCall
+
+Pass
+
+4. Call is refused. The order in which events are raised is:
+
+a) OnClearConnection
+b) OnClearedCall
+
+Pass

@@ -3,10 +3,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Agent;
-
 using log4net;
-
-using Polly;
 
 namespace AgentClient
 {
@@ -37,7 +34,7 @@ namespace AgentClient
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new CallAgent());
+                Application.Run(new LoginForm());
             }
         }
 

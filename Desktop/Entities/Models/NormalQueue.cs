@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace Entities.Models
 {
-    public class NormalQueue
+    public class NormalQueue : QueuePhoneNumber
     {
-        [Key]
-        [MaxLength(15)]
-        public string PhoneNumber { get; set; }
+        public int Id { get; set; }
     }
 }

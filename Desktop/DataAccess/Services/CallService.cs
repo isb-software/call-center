@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using DataAccess.IServices;
+using DataAccess.PollyPolicies;
 using Database;
 using Entities.Dtos;
 using Entities.Models;
@@ -19,22 +20,32 @@ namespace DataAccess.Services
         public void Create(Call call)
         {
             using (var context = new CallCenterDbContext())
-            using (var dbContextTransaction = context.Database.BeginTransaction())
             {
+                DbContextTransaction dbContextTransaction = null;
                 try
                 {
-                    context.Calls.Add(call);
-
-                    context.SaveChanges();
-                    dbContextTransaction.Commit();
+                    using (dbContextTransaction = context.Database.BeginTransaction())
+                    {
+                        PollyPolicy.WaitAndRetryThreeTimes.Execute(() => TryCreate(call, context, dbContextTransaction));
+                    }
                 }
                 catch (Exception exception)
                 {
-                    Log.Error($"Error on creating a new call for {call.PhoneNumber} - {call.Name} {call.Forename}", exception);
-                    dbContextTransaction.Rollback();
+                    Log.Error($"Error on creating a new call for {call?.PhoneNumber}", exception);
+
+                    dbContextTransaction?.Rollback();
                 }
             }
         }
+
+        private static void TryCreate(Call call, CallCenterDbContext context, DbContextTransaction dbContextTransaction)
+        {
+            context.Calls.Add(call);
+
+            context.SaveChanges();
+            dbContextTransaction.Commit();
+        }
+
 
         public CallDatasourceDto GetDatasource(TableQueryOptions queryOptions)
         {
@@ -46,15 +57,15 @@ namespace DataAccess.Services
             {
                 try
                 {
-                    IQueryable<Call> queryable = context.Calls.Include(x => x.Status).Include(x => x.User);
+                    IQueryable<Call> queryable = context.Calls.Include(x => x.Status).Include(x => x.User).Include(x => x.InitialData);
 
                     if (queryOptions.SearchTerm != null)
                     {
                         queryable = queryable
                             .Where(x => x.User.FirstName.ToLower().Contains(queryOptions.SearchTerm) ||
                                         x.User.LastName.ToLower().Contains(queryOptions.SearchTerm) ||
-                                        x.Name.ToLower().Contains(queryOptions.SearchTerm) ||
-                                        x.Forename.ToLower().Contains(queryOptions.SearchTerm) ||
+                                        x.InitialData.Name.ToLower().Contains(queryOptions.SearchTerm) ||
+                                        x.InitialData.Forename.ToLower().Contains(queryOptions.SearchTerm) ||
                                         x.PhoneNumber.ToLower().Contains(queryOptions.SearchTerm));
                     }
 
@@ -72,13 +83,14 @@ namespace DataAccess.Services
                                      DateTimeOfCall = x.DateTimeOfCall,
                                      PhoneNumber = x.PhoneNumber,
                                      Notes = x.Notes,
-                                     Age = x.Age,
-                                     City = x.City,
-                                     Education = x.Education,
-                                     County = x.County,
-                                     PersonName = x.Name + " " + x.Forename,
+                                     Age = x.InitialData.AgeRange.Range,
+                                     City = x.InitialData.City,
+                                     Education = x.InitialData.EducationType.Name,
+                                     County = x.InitialData.County,
+                                     PersonName = x.InitialData.Name + " " + x.InitialData.Forename,
                                      StatusName = x.Status.Description,
-                                     UserName = x.User.FirstName + " " + x.User.LastName
+                                     UserName = x.User.FirstName + " " + x.User.LastName,
+                                     Duration = x.Duration
                                  }).ToList();
 
                 }

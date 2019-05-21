@@ -1,14 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 
 namespace Entities.Models
 {
-    public class PriorityQueue
+    public class PriorityQueue : QueuePhoneNumber
     {
-        [Key]
         public int Id { get; set; }
 
-        [MaxLength(15)]
-        public string PhoneNumber { get; set; }
+        public DateTime NextTimeCall { get; set; }
     }
 }

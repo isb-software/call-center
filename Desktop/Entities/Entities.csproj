@@ -21,7 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -90,9 +91,17 @@
     <Compile Include="Dtos\CallDatasourceDto.cs" />
     <Compile Include="Dtos\CallDto.cs" />
     <Compile Include="Enums\CallType.cs" />
+    <Compile Include="Enums\QueueEnum.cs" />
+    <Compile Include="Enums\StatusEnum.cs" />
+    <Compile Include="Models\AgeRange.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\CallCount.cs" />
+    <Compile Include="Models\EducationType.cs" />
+    <Compile Include="Models\EmployeeType.cs" />
+    <Compile Include="Models\InitialData.cs" />
+    <Compile Include="Models\LegalHoliday.cs" />
     <Compile Include="Models\NormalQueue.cs" />
+    <Compile Include="Models\PhoneNumber.cs" />
     <Compile Include="Models\PriorityQueue.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\User.cs" />

@@ -21,8 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -105,15 +105,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IServices\IAgeRangeService.cs" />
     <Compile Include="IServices\ICallCountService.cs" />
     <Compile Include="IServices\ICallService.cs" />
+    <Compile Include="IServices\IEducationTypeService.cs" />
+    <Compile Include="IServices\IEmployeeTypeService.cs" />
+    <Compile Include="IServices\IInitialDataService.cs" />
+    <Compile Include="IServices\ILegalHolidayService.cs" />
+    <Compile Include="IServices\INormalQueueService.cs" />
     <Compile Include="IServices\IPriorityQueueService.cs" />
     <Compile Include="IServices\IStatusService.cs" />
     <Compile Include="IServices\IUserService.cs" />
     <Compile Include="PollyPolicies\PollyPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AgeRangeService.cs" />
     <Compile Include="Services\CallCountService.cs" />
     <Compile Include="Services\CallService.cs" />
+    <Compile Include="Services\EducationTypeService.cs" />
+    <Compile Include="Services\EmployeeTypeService.cs" />
+    <Compile Include="Services\InitialDataService.cs" />
+    <Compile Include="Services\LegalHolidayService.cs" />
+    <Compile Include="Services\NormalQueueService.cs" />
     <Compile Include="Services\PriorityQueueService.cs" />
     <Compile Include="Services\StatusService.cs" />
     <Compile Include="Services\UserService.cs" />

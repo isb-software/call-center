@@ -8,5 +8,6 @@ export class Call {
     Education: string;
     Age: number;
     DateTimeOfCall: Date;
+    Duration: number;
     StatusName: string;
 }

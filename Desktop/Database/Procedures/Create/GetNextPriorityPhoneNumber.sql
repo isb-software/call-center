@@ -4,9 +4,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	WITH cte AS (
-    SELECT TOP(1) PhoneNumber
+      SELECT TOP(1) PhoneNumber, CallAtempts
       FROM PriorityQueues WITH (ROWLOCK, READPAST)
-    ORDER BY Id)
+	  WHERE NextTimeCall < GETDATE()
+    ORDER BY NextTimeCall)
   DELETE FROM cte
-    OUTPUT deleted.PhoneNumber;
+    OUTPUT deleted.PhoneNumber, deleted.CallAtempts;
 END

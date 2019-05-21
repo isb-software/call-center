@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Entities.Dtos;
+﻿using Entities.Dtos;
 using Entities.Models;
 using Entities.QueryOptions;
 
