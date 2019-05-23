@@ -14,19 +14,19 @@ namespace Agent
     public partial class CallAgent : Form
     {
         private string phoneNumber = string.Empty;
-        private int callDuration = 0;
-        private int callStartDuration = 0;
+        private int callDuration;
+        private int callStartDuration;
         private string recordingPath = string.Empty;
-        private int currentCallAtempts = 0;
-        private int currentUserId = 0;
-        private int callStartDurationThreshold = 0;
-        private int workDayStartHour = 0;
-        private int workDayEndHour = 0;
+        private int currentCallAtempts;
+        private readonly int currentUserId;
+        private readonly int callStartDurationThreshold;
+        private readonly int workDayStartHour;
+        private readonly int workDayEndHour;
 
         private Timer callDurationTimer;
         private Timer callStartDurationTimer;
         private SipPhone sipPhone;
-        private QueueEnum currentQueue;
+        private InitialData currentIntialData;
 
         private PriorityQueueService priorityQueueService;
         private CallService callService;
@@ -77,6 +77,7 @@ namespace Agent
                 }
 
                 this.SaveCall();
+                this.UpdateInitialData();
                 this.IncrementCallCount();
                 if ((int)StatusComboBox.SelectedValue == (int)StatusEnum.NuRaspunde ||
                     (int)StatusComboBox.SelectedValue == (int)StatusEnum.Ocupat ||
@@ -116,10 +117,7 @@ namespace Agent
         private void HangUpButtonClick(object sender, EventArgs e)
         {
             sipPhone.HangUp();
-            if (callStartDurationTimer != null)
-            {
-                callStartDurationTimer.Stop();
-            }
+            this.callStartDurationTimer?.Stop();
 
             DisplayNotificationMessage($"Apel inchis");
             SetCallHangUpSaveButtonState(false, false, true);
@@ -245,7 +243,6 @@ namespace Agent
                 this.sipPhone.HangUp();
 
                 StatusComboBox.SelectedValue = (int)StatusEnum.NuRaspunde;
-                this.currentQueue = QueueEnum.Priority;
 
                 this.SaveCall();
                 this.IncrementCallCount();
@@ -260,18 +257,11 @@ namespace Agent
 
         private void GetNextPhoneNumber()
         {
-            var queuePhoneNumber = priorityQueueService.GetNextNumber();
-            currentQueue = QueueEnum.Priority;
+            var queuePhoneNumber = this.priorityQueueService.GetNextNumber() ?? this.normalQueueService.GetNextNumber();
 
             if (queuePhoneNumber == null)
             {
-                queuePhoneNumber = normalQueueService.GetNextNumber();
-                currentQueue = QueueEnum.Normal;
-            }
-
-            if (queuePhoneNumber == null)
-            {
-                //TODO add some graceful way of dealing with it.
+                // TODO add some graceful way of dealing with it.
             }
             
             this.phoneNumber = queuePhoneNumber.PhoneNumber;
@@ -359,13 +349,14 @@ namespace Agent
 
         private void LoadDetailsForPhoneNumber()
         {
-            InitialData initialData = initialDataService.GetByPhoneNumber(this.phoneNumber);
-            if (initialData != null)
+            this.currentIntialData = initialDataService.GetByPhoneNumber(this.phoneNumber);
+            if (currentIntialData != null)
             {
-                AgeRangeComboBox.SelectedValue = initialData.AgeRangeId;
-                EducationComboBox.SelectedValue = initialData.EducationTypeId;
-                CityTextBox.Text = initialData.City;
-                CountyTextBox.Text = initialData.County;
+                AgeRangeComboBox.SelectedValue = currentIntialData.AgeRangeId;
+                EducationComboBox.SelectedValue = currentIntialData.EducationTypeId;
+                CityTextBox.Text = currentIntialData.City;
+                CountyTextBox.Text = currentIntialData.County;
+                EmployeeTypeComboBox.SelectedValue = currentIntialData.EmployeeTypeId;
             }
         }
 
@@ -385,24 +376,35 @@ namespace Agent
 
         private void SaveCall()
         {
-            //Call call = new Call
-            //{
-            //    Age = string.IsNullOrEmpty(AgeTextBox.Text) ? 0 : Convert.ToInt32(AgeTextBox.Text),
-            //    CallType = CallType.Outbound,
-            //    City = CityTextBox.Text,
-            //    County = CountyTextBox.Text,
-            //    DateTimeOfCall = DateTime.Now.AddSeconds(-callDuration),
-            //    Duration = callDuration,
-            //    Education = EducationTextBox.Text,
-            //    Forename = ForenameTextBox.Text,
-            //    Name = NameTextBox.Text,
-            //    Notes = NotesTextBox.Text,
-            //    PhoneNumber = this.phoneNumber,
-            //    StatusId = Convert.ToInt32(this.StatusComboBox.SelectedValue),
-            //    UserId = this.currentUserId,
-            //    RecordingPath = recordingPath
-            //};
-            //callService.Create(call);
+            Call call = new Call
+            {
+                CallType = CallType.Outbound,
+                DateTimeOfCall = DateTime.Now.AddSeconds(-callDuration),
+                Duration = callDuration,
+                Notes = NotesTextBox.Text,
+                PhoneNumber = this.phoneNumber,
+                StatusId = Convert.ToInt32(this.StatusComboBox.SelectedValue),
+                UserId = this.currentUserId,
+                RecordingPath = recordingPath
+            };
+
+            callService.Create(call);
+        }
+
+        private void UpdateInitialData()
+        {
+            InitialData initialDataToUpdate = new InitialData
+                                          {
+                                              Id = this.currentIntialData.Id,
+                                              EmployeeTypeId = Convert.ToInt32(this.EmployeeTypeComboBox.SelectedValue),
+                                              AgeRangeId = Convert.ToInt32(this.AgeRangeComboBox.SelectedValue),
+                                              City = this.CityTextBox.Text,
+                                              County = this.CountyTextBox.Text,
+                                              EducationTypeId = Convert.ToInt32(this.EducationComboBox.SelectedValue),
+                                              PhoneNumber = this.phoneNumber
+                                          };
+
+            this.initialDataService.Update(initialDataToUpdate);
         }
 
         private void SaveQueuePhoneNumber()
@@ -413,14 +415,7 @@ namespace Agent
                 PhoneNumber = phoneNumber
             };
 
-            if (currentQueue == QueueEnum.Priority)
-            {
-                priorityQueueService.Create(queuePhoneNumber);
-            }
-            else
-            {
-                normalQueueService.Create(queuePhoneNumber);
-            }
+            priorityQueueService.Create(queuePhoneNumber);
         }
 
         private void SetCallHangUpSaveButtonState(bool isCallButtonEnabled, bool isHangUpButtonEnabled, bool isSaveButtonEnabled)
