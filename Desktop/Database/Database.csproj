@@ -127,6 +127,10 @@
     <Compile Include="Migrations\201905191632121_ChangeIndexPhoneNumber.Designer.cs">
       <DependentUpon>201905191632121_ChangeIndexPhoneNumber.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905292101083_makeNullableInitialData.cs" />
+    <Compile Include="Migrations\201905292101083_makeNullableInitialData.Designer.cs">
+      <DependentUpon>201905292101083_makeNullableInitialData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -135,12 +139,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Procedures\Create\GetNextNormalPhoneNumber.sql">
+    <EmbeddedResource Include="Procedures\Create\GetNextNormalPhoneNumber.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Procedures\Create\GetNextPriorityPhoneNumber.sql">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Procedures\Create\GetNextPriorityPhoneNumber.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Procedures\Delete\GetNextNormalPhoneNumber.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -178,6 +182,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905191632121_ChangeIndexPhoneNumber.resx">
       <DependentUpon>201905191632121_ChangeIndexPhoneNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905292101083_makeNullableInitialData.resx">
+      <DependentUpon>201905292101083_makeNullableInitialData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

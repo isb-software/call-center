@@ -76,8 +76,8 @@ namespace Agent
                     return;
                 }
 
-                this.SaveCall();
                 this.UpdateInitialData();
+                this.SaveCall();
                 this.IncrementCallCount();
                 if ((int)StatusComboBox.SelectedValue == (int)StatusEnum.NuRaspunde ||
                     (int)StatusComboBox.SelectedValue == (int)StatusEnum.Ocupat ||
@@ -352,11 +352,11 @@ namespace Agent
             this.currentIntialData = initialDataService.GetByPhoneNumber(this.phoneNumber);
             if (currentIntialData != null)
             {
-                AgeRangeComboBox.SelectedValue = currentIntialData.AgeRangeId;
-                EducationComboBox.SelectedValue = currentIntialData.EducationTypeId;
+                AgeRangeComboBox.SelectedValue = currentIntialData.AgeRangeId != null ? currentIntialData.AgeRangeId : 0;
+                EducationComboBox.SelectedValue = currentIntialData.EducationTypeId != null ? currentIntialData.EducationTypeId : 0;
                 CityTextBox.Text = currentIntialData.City;
                 CountyTextBox.Text = currentIntialData.County;
-                EmployeeTypeComboBox.SelectedValue = currentIntialData.EmployeeTypeId;
+                EmployeeTypeComboBox.SelectedValue = currentIntialData.EmployeeTypeId != null ? currentIntialData.EmployeeTypeId : 0;
             }
         }
 
@@ -385,7 +385,8 @@ namespace Agent
                 PhoneNumber = this.phoneNumber,
                 StatusId = Convert.ToInt32(this.StatusComboBox.SelectedValue),
                 UserId = this.currentUserId,
-                RecordingPath = recordingPath
+                RecordingPath = recordingPath,
+                InitialDataId = this.currentIntialData.Id
             };
 
             callService.Create(call);

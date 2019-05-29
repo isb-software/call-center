@@ -22,14 +22,14 @@ namespace Entities.Models
 
         public AgeRange AgeRange { get; set; }
 
-        public int AgeRangeId { get; set; }
+        public int? AgeRangeId { get; set; }
 
         public EducationType EducationType { get; set; }
 
-        public int EducationTypeId { get; set; }
+        public int? EducationTypeId { get; set; }
 
         public EmployeeType EmployeeType { get; set; }
 
-        public int EmployeeTypeId { get; set; }
+        public int? EmployeeTypeId { get; set; }
     }
 }
